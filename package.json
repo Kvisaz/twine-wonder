@@ -1,0 +1,23 @@
+{
+  "name": "twine-wonder",
+  "version": "0.0.1",
+  "description": "Twine Wonder Format",
+  "main": "",
+  "scripts": {
+    "start": "webpack && webpack-dev-server",
+    "build": "webpack --mode production",
+    "server": "webpack-dev-server"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.5.2",
+    "html-webpack-plugin": "^4.0.0-alpha",
+    "ts-loader": "^5.3.2",
+    "typescript": "^3.2.2",
+    "webpack": "^4.28.2",
+    "webpack-cli": "^3.1.0",
+    "webpack-concat-plugin": "^3.0.0",
+    "webpack-dev-server": "^3.1.5",
+    "webpack-watch-files-plugin": "^1.0.2"
+  },
+  "dependencies": {}
+}
