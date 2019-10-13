@@ -11,7 +11,7 @@ function startParsing() {
 
     const PASSAGE_SELECTOR = "tw-passagedata";
 
-    const passagElCollection = document.querySelectorAll("PASSAGE_SELECTOR");
+    const passagElCollection = document.querySelectorAll(PASSAGE_SELECTOR);
     const passageElemenst: Array<Element> = Array.prototype.slice.call(passagElCollection);
 
     passageElemenst.forEach(el => {
@@ -20,6 +20,6 @@ function startParsing() {
     });
 }
 
-export function getParserCode(): string {
+export function getParserStarterCode(): string {
     return "(" + startParsing + ")()";
 }

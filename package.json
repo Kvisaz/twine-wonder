@@ -2,14 +2,14 @@
   "name": "twine-wonder",
   "nameFormat": "Wonder",
   "author": "Kvisaz [Sergey Tokarev]",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "Twine Wonder Format",
   "main": "",
   "repository": "https://github.com",
   "scripts": {
     "start": "webpack && webpack-dev-server",
     "build": "webpack --mode production",
-    "server": "http-server"
+    "server": "webpack --mode production && http-server"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^4.5.2",

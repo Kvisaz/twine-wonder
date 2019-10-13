@@ -4,7 +4,8 @@ const PACKAGE = require("../../package.json");
 
 // @ts-ignore
 import {installTwineFormat} from "./ts/TwineUtils";
-import {getParserCode} from "./ts/parser/TwineParser";
+import {getParserStarterCode} from "./ts/parser/TwineParser";
+import {testParser} from "./ts/parser/testParser";
 
 console.log(`Версия ${PACKAGE.version}`);
 console.log(`Репозиторий: ${PACKAGE.repository}`);
@@ -15,7 +16,9 @@ console.log(`Репозиторий: ${PACKAGE.repository}`);
  *  2. проект - вот это вот
  */
 
-const PARSER_SCRIPT = getParserCode();
+const TESTING = true;
+
+const PARSER_SCRIPT = getParserStarterCode();
 
 installTwineFormat({
     name: `${PACKAGE.nameFormat}`, // Короткое название SAMPLE: "Twison"
@@ -27,3 +30,7 @@ installTwineFormat({
     image: "assets/wonder-icon.svg", // ссылка на картинку, в svg, относительно уже готового скрипта, 256 на 256 можно
     source: createTwineSource(PARSER_SCRIPT, ""),
 });
+
+if (TESTING) {
+    testParser(PARSER_SCRIPT);
+}

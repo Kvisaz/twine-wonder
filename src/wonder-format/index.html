@@ -5,6 +5,67 @@
     <title>Title</title>
 </head>
 <body>
+<!-- test data -->
+
+<tw-storydata name="2019-10-12-clicker" startnode="1" creator="Twine" creator-version="2.3.2" ifid="0015E4DE-EEA5-4D56-A42F-0C1CAB51D81F" zoom="1" format="Wonder" format-version="0.0.5" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">
+
+
+</style><script role="script" id="twine-user-script" type="text/twine-javascript">window.state = {
+	gold: 0,
+	goldMine1: {
+		gold: 200
+	}
+}
+
+window.ifThen = function ifThen(booleanValue, textIf, textElse){
+	if(booleanValue) return textIf;
+	else return textElse;
+}
+
+window.paramView = function(){
+	var text = "";
+	text += "Золото: " +  window.state.gold
+	return text;
+}
+
+window.addEventListener('sm.story.started', function(event, eventObject) {
+  // window.story
+    console.log(eventObject.story);
+});
+
+</script><tw-passagedata pid="1" name="goldMine1" tags="" position="723,830" size="100,100">&lt;% if (window.state.goldMine1.gold &gt; 0) { %&gt;
+    &lt;h2&gt;&lt;%= &quot;Золото: &quot; + window.state.goldMine1.gold %&gt;&lt;/h2&gt;
+    &lt;% } else { %&gt;
+    &lt;%= &quot;Шахта пуста&quot; %&gt;
+    &lt;% } %&gt;
+
+    &lt;%
+    var step= 10;
+    var income = window.state.goldMine1.gold &gt;= step ? step : window.state.goldMine1.gold;
+
+    window.state.gold += income;
+    window.state.goldMine1.gold -= income;
+    %&gt;
+
+    &lt;%= window.paramView() %&gt;
+
+    &lt;%= window.ifThen(
+    window.state.goldMine1.gold &gt; 0,
+    &quot;В шахте осталось золота &quot; + window.state.goldMine1.gold,
+    &quot;Шахта пуста&quot;)
+    %&gt;
+
+
+
+    [[Еще золота|goldMine1]]
+
+    [[Выйти из шахты |worldMap]]</tw-passagedata><tw-passagedata pid="2" name="worldMap" tags="" position="860,549" size="100,100">Перед вами расстилается бескрайняя пустыня, на которой там и сям разбросаны шахты и жилища гоблинов. Вдалеке вы видите лавку гоблина.
+
+    [[Зайти в лавку гоблина|goblin]]
+    [[Золотая шахта 1|goldMine1]]
+    [[Золотая шахта 2|goldMine2]]
+    [[Золотая шахта 3|goldMine3]]
+    [[Золотая шахта 4|goldMine4]]</tw-passagedata><tw-passagedata pid="3" name="goblin" tags="" position="560,699" size="100,100">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="4" name="goldMine2" tags="" position="860,699" size="100,100">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="5" name="goldMine3" tags="" position="1010,699" size="100,100">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="6" name="goldMine4" tags="" position="1160,699" size="100,100">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="7" name="header" tags="header" position="1184,447" size="100,100">Заголовок</tw-passagedata></tw-storydata>
 
 </body>
 </html>
