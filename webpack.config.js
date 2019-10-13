@@ -6,11 +6,12 @@ const PACKAGE = require("./package");
 
 const webpack = require('webpack');
 const VERSION = ("" + PACKAGE.version).toLowerCase();
+const REPO_URL = (PACKAGE.repository).toLowerCase();
 
 const VERSION_INFO = `game version ${VERSION}`;
 
 const SRC = path.join(__dirname, "src");
-const DIST = path.join(__dirname, "dist");
+const DIST = path.join(__dirname, "dist" + "/v." + VERSION);
 const DIR_NODE = path.join(__dirname, "node_modules");
 
 /**
@@ -20,16 +21,16 @@ const DIR_NODE = path.join(__dirname, "node_modules");
 
 const projects = [
     {
-        bundleName: `bundleName-js-01.${VERSION}`,
+        src: "wonder-format",
+        dist: "wonder",         // папка выгрузки в dist
+
         title: "Twine Wonder Format",
-        dist: "wonder",
-        src: "wonder",
         htmlTemplate: "index.html",
         htmlDistrIndex: "index.html", // название html в папке дистрибутива
         entry: "start.ts",
         watch: true,
         copy: [
-            // "assets",
+            "assets",
         ]
     }
 ];
@@ -46,6 +47,7 @@ plugins.push(new webpack.DefinePlugin({
     // (c) If the value is a string it will be used as a code fragment
     // и это ломает как минимум работу игры на webpack-dev-server
     VERSION_INFO: JSON.stringify(VERSION_INFO),
+    REPO_URL: JSON.stringify(REPO_URL),
 }));
 
 projects.forEach((project) => {
@@ -64,8 +66,6 @@ projects.forEach((project) => {
             template: path.join(dirSrc, project.htmlTemplate),
             filename: path.join(project.dist, project.htmlDistrIndex),
             // кастомные строки, которую можно передать в шаблон :
-            bundleName: project.bundleName,
-            versionInfo: VERSION_INFO,
             title: project.title,
         }));
     }
