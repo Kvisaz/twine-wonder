@@ -1,23 +1,10 @@
 import {Story} from "./models/Story";
 import {Passage} from "./models/Passage";
 
-export function getParserStarterCode(): string {
-    return "(" + startParsing + ")()";
-}
-
 const STORY_SELECTOR = "tw-storydata";
 const PASSAGE_SELECTOR = "tw-passagedata";
 
-
-export function startParsing() {
-    console.log(`Hello, it\`s Wonder parser`);
-
-    const story = parseStory(STORY_SELECTOR);
-
-    console.log(`story parsed = `, story);
-}
-
-export function parseStory(selector: string): Story {
+export function parseStory(selector: string = STORY_SELECTOR): Story {
     const el = document.body.querySelector(selector);
 
     const passageCollection = el.querySelectorAll(PASSAGE_SELECTOR);

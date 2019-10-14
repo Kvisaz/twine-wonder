@@ -2,7 +2,7 @@
  *  Верхний класс, который должен передаваться в window.storyFormat
  *  чтобы инсталлировать формат в twine
  */
-export class TwineFormat {
+export interface ITwineFormat {
     name: string; // Короткое название SAMPLE: "Twison"
     version: string;    //   SAMPLE: "0.0.1"
     author: string;     //   SAMPLE: "Mike Lazer-Walker"
