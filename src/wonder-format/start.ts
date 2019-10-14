@@ -1,6 +1,6 @@
 import { parseStory } from "./ts/parser/TwineParser";
 
-console.log(`Hello, it\`s Wonder parser`);
+console.log('Hello, it\`s Twine Wonder parser ${version}');
 
 const story = parseStory();
 

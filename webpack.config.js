@@ -9,9 +9,10 @@ const VERSION = ("" + PACKAGE.version).toLowerCase();
 const REPO_URL = (PACKAGE.repository).toLowerCase();
 
 const VERSION_INFO = `game version ${VERSION}`;
+const VERSION_PATH = PACKAGE["versionPath"];
 
 const SRC = path.join(__dirname, "src");
-const DIST = path.join(__dirname, "dist" + "/v." + VERSION);
+const DIST = path.join(__dirname, "dist" + "/" + VERSION_PATH);
 const DIR_NODE = path.join(__dirname, "node_modules");
 
 /**
@@ -30,7 +31,7 @@ const projects = [
         entry: "start.ts",
         watch: true,
         copy: [
-            "assets",
+            "icon.svg"
         ]
     }
 ];

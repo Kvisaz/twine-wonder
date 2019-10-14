@@ -1,0 +1,20 @@
+{
+  "src": {
+    "format": "src/wonder-format/wonderFormat.js",
+    "script": "dist/${versionPath}/wonder/wonder.js",
+    "style": ""
+  },
+  "output": "dist/${versionPath}/wonder/wonderFormat.js",
+  "marker": {
+    "style": "${style}",
+    "script": "${script}",
+    "versionPath": "${versionPath}",
+    "version": "${version}",
+    "author": "${author}",
+    "name": "${name}",
+    "nameFormat": "${nameFormat}",
+    "repository": "${repository}",
+    "description": "${description}",
+    "icon": "${icon}"
+  }
+}

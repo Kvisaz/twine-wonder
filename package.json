@@ -3,13 +3,15 @@
   "nameFormat": "Wonder",
   "author": "Kvisaz [Sergey Tokarev]",
   "version": "0.0.6",
+  "versionPath": "v.0.0.6",
   "description": "Twine Wonder Format",
+  "icon": "icon.svg",
   "main": "",
   "repository": "https://github.com",
   "scripts": {
     "start": "webpack && webpack-dev-server",
-    "build": "webpack --mode production",
-    "server": "webpack --mode production && webpack-dev-server"
+    "build": "webpack --mode production && node twineFormatBuild.js",
+    "server": "webpack --mode production && node twineFormatBuild && webpack-dev-server"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^4.5.2",
