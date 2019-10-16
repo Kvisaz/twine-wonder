@@ -12,6 +12,13 @@ const VERSION_INFO = `game version ${VERSION}`;
 const VERSION_PATH = PACKAGE["versionPath"];
 
 const SRC = path.join(__dirname, "src");
+
+/**
+ * помни!
+ * build раскладывается в DIST
+ * а webpack-dev-server показывает localhost c корнем в DIST
+ */
+
 const DIST = path.join(__dirname, "dist" + "/" + VERSION_PATH);
 const DIR_NODE = path.join(__dirname, "node_modules");
 
@@ -29,7 +36,6 @@ const projects = [
         htmlTemplate: "index.html",
         htmlDistrIndex: "index.html", // название html в папке дистрибутива
         entry: "start.ts",
-        watch: true,
         copy: [
             "icon.svg"
         ]
@@ -92,7 +98,7 @@ module.exports = (env, argv) => {
             filename: `[name]/[name].js`
         },
         devServer: {
-            contentBase: "dist",
+            contentBase: DIST,
             disableHostCheck: true
         },
         resolve: {
@@ -109,6 +115,6 @@ module.exports = (env, argv) => {
         },
 
         plugins: plugins,
-        // watch: false,
+       // watch: false,
     };
 };

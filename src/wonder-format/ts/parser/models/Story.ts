@@ -6,15 +6,15 @@ export class Story {
      * @param el
      */
     constructor(
-        private name:string,
-        private startNode: number,
-        private creator: string,
-        private creatorVersion: string,
-        private format: string,
-        private formatVersion: string,
-        private options: string,
-        private starterScript: string,
-        private passages: Array<Passage>
+        public name:string,
+        public startNode: number,
+        public creator: string,
+        public creatorVersion: string,
+        public format: string,
+        public formatVersion: string,
+        public options: string,
+        public starterScript: string,
+        public passages: Array<Passage>
     ){
 
     }
