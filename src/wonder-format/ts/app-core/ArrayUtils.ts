@@ -37,6 +37,12 @@ export class ArrayUtils {
         }
     }
 
+    static remove<T>(arr: Array<T>, index: number): T {
+        if (index > -1) {
+            return arr.splice(index, 1)[0];
+        } else return null;
+    }
+
     static removeLast<T>(arr: Array<T>, amount: number) {
         while (amount-- > 0) arr.pop();
     }
@@ -52,7 +58,7 @@ export class ArrayUtils {
         const seed2 = 31; // оба сида должны быть простыми числами
         let randomI: number;
         for (i = 0; i < length; i++) {
-            randomI = (seed*i + seed2) % length;
+            randomI = (seed * i + seed2) % length;
             tmp = arr[randomI];
             arr[randomI] = arr[i];
             arr[i] = tmp;
@@ -62,7 +68,7 @@ export class ArrayUtils {
 
     /**
      *  перемешать массив, мутабельно
-      */
+     */
     static shuffle<T>(arr: Array<T>, order: string = ArrayShuffleOrder.random): Array<T> {
         switch (order) {
             case ArrayShuffleOrder.same:

@@ -15,6 +15,8 @@ export class GameLogic {
         this.story = story;
         EventBus.emit(GameEvents.onStoryLoaded, story);
         EventBus.emit(GameEvents.preparePassage, this.getPassage(this.story.startNode));
+
+        // todo if format - emit FormatLoaded
     }
 
     /*********

@@ -1,8 +1,6 @@
 import {Story} from "./models/Story";
 import {Passage} from "./models/Passage";
-
-const STORY_SELECTOR = "tw-storydata";
-const PASSAGE_SELECTOR = "tw-passagedata";
+import {PASSAGE_SELECTOR, STORY_SELECTOR} from "../Constants";
 
 export function parseStory(selector: string = STORY_SELECTOR): Story {
     const el = document.body.querySelector(selector);
