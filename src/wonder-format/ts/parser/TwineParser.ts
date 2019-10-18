@@ -12,7 +12,7 @@ export function parseStory(selector: string = STORY_SELECTOR): Story {
     const passageArray = Array.prototype.slice.call(passageCollection);
 
     const STARTER_SCRIPT = el.querySelector("script").innerHTML;
-    const passageHash = {}
+    const passageHash = {};
     const passages = passageArray.map(el => {
         const passage = parsePassage(el);
         if (passageHash[passage.id]) {

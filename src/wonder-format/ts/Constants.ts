@@ -20,6 +20,11 @@ export const WONDER = {
     },
     command: {
         show: "=",
+    },
+    passages: { // todo
+        pageFormat: "wonder.format.page",
+        choiceFormat: "wonder.format.choice",
+        textFormat: "wonder.format.text",
     }
 };
 
