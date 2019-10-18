@@ -1,6 +1,8 @@
 export enum GameEvents {
     onStoryLoaded = "onStoryLoaded",
-    onFormatLoaded = "onFormatLoaded",
+    onPageFormatLoaded = "onPageFormatLoaded",
+    onContentFormatLoaded = "onPassageFormatLoaded",
+    onCssLoaded = "onCssLoaded",
 
     preparePassage = "preparePassage", // подготовить пассаж перед показом
     onPassagePrepared = "onPassagePrepared", // пассаж подготовлен

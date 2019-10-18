@@ -1,22 +1,29 @@
 import {PagePairView} from "./PagePairView";
 import {Passage} from "../../parser/models/Passage";
-import {PageFormat} from "./PageFormat";
 import {EventBus} from "../../app-core/EventBus";
 import {GameEvents} from "../GameEvents";
-import {DomUtils} from "../../app-core/DomUtils";
 import {COMMON_CSS} from "../../app-core/COMMON_CSS";
+import {ViewBuilder} from "./ViewBuilder";
+import {PAGE_TEMPLATE, PASSAGE_TEMPLATE} from "../../Constants";
+import {twinePassageFormatter} from "../../parser/TwinePassageFormatter";
 
 export class WonderPageView {
 
     private pageView: PagePairView;
-    private pageFormat: PageFormat;
+    private pageBuilder: ViewBuilder;
+    private contentBuilder: ViewBuilder;
 
     constructor(private parent: Element) {
         this.pageView = new PagePairView();
-        this.pageFormat = new PageFormat();
+        this.pageBuilder = new ViewBuilder(PAGE_TEMPLATE);
+        this.contentBuilder = new ViewBuilder(PASSAGE_TEMPLATE);
+        this.contentBuilder.setContentFormatter(twinePassageFormatter);
 
         EventBus.getInstance()
-            .sub(GameEvents.onFormatLoaded, (message, format) => this.pageFormat.setFormat(format))
+            .sub(GameEvents.onPageFormatLoaded,
+                (message, format) => this.pageBuilder.setTemplate(format))
+            .sub(GameEvents.onContentFormatLoaded,
+                (message, format) => this.contentBuilder.setTemplate(format))
     }
 
     addNextPage(passage: Passage) {
@@ -34,14 +41,15 @@ export class WonderPageView {
      *********************/
 
     private buildPageView(passage: Passage): Element {
-        const pageView = this.pageFormat.buildPage(this.buildPassageView(passage));
+        const SOURCE = passage.content;
+
+        const passageView = this.contentBuilder.build(SOURCE);
+        const pageView: Element = this.pageBuilder.build();
+
         pageView.classList.add(COMMON_CSS.displayNone);
+        pageView.appendChild(passageView);
+
         this.parent.appendChild(pageView);
         return <Element>pageView;
-    }
-
-    private buildPassageView(passage: Passage): Element {
-        // todo формат!
-        return <Element>DomUtils.elementFromTemplate(`<div>${passage.content}</div>`);
     }
 }
