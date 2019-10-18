@@ -5,22 +5,37 @@ import {PASSAGE_SELECTOR, STORY_SELECTOR} from "../Constants";
 export function parseStory(selector: string = STORY_SELECTOR): Story {
     const el = document.body.querySelector(selector);
 
+    const startNodePid = parseFloat(el.getAttribute("startnode"));
+    let startNodeName = '';
+
     const passageCollection = el.querySelectorAll(PASSAGE_SELECTOR);
     const passageArray = Array.prototype.slice.call(passageCollection);
 
     const STARTER_SCRIPT = el.querySelector("script").innerHTML;
-    const passages = passageArray.map(el => parsePassage(el));
+    const passageHash = {}
+    const passages = passageArray.map(el => {
+        const passage = parsePassage(el);
+        if (passageHash[passage.id]) {
+            console.warn(`duplicate passage id ${passage.id}`);
+        }
+        passageHash[passage.name] = passage;
+        if (startNodePid == passage.id) {
+            startNodeName = passage.name;
+        }
+        return passage;
+    });
 
     return new Story(
         el.getAttribute("name"),
-        parseFloat(el.getAttribute("startnode")),
+        startNodeName,
         el.getAttribute("creator"),
         el.getAttribute("creator-version"),
         el.getAttribute("format"),
         el.getAttribute("format-version"),
         el.getAttribute("options"),
         STARTER_SCRIPT,
-        passages
+        passages,
+        passageHash
     )
 }
 

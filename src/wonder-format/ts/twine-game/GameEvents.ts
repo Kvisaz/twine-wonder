@@ -9,4 +9,6 @@ export enum GameEvents {
 
     showPassage = "showPassage",        // показа пассаж
 
+    onLinkClick = "onLinkClick",        // показа пассаж
+
 }

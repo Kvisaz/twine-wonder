@@ -9,12 +9,13 @@ export class GameLogic {
     constructor() {
         EventBus.getInstance()
             .sub(GameEvents.onPassagePrepared, (message, data) => this.onPassagePrepared(data))
+            .sub(GameEvents.onLinkClick, (message, id: string) => this.onLinkClick(id))
     }
 
     loadStory(story: Story) {
         this.story = story;
         EventBus.emit(GameEvents.onStoryLoaded, story);
-        EventBus.emit(GameEvents.preparePassage, this.getPassage(this.story.startNode));
+        EventBus.emit(GameEvents.preparePassage, this.getPassage(this.story.startPassageName));
 
         // todo if format - emit FormatLoaded
     }
@@ -36,7 +37,12 @@ export class GameLogic {
      * helpers
      *********/
 
-    private getPassage(id: number): Passage {
-        return this.story.passages[id];
+    private getPassage(name: string): Passage {
+        return this.story.passageHash[name];
+    }
+
+    private onLinkClick(name: string) {
+        console.log(`onLinkClick ${name }`);
+        EventBus.emit(GameEvents.preparePassage, this.getPassage(name));
     }
 }

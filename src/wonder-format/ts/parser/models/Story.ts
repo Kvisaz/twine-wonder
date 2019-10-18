@@ -7,14 +7,15 @@ export class Story {
      */
     constructor(
         public name:string,
-        public startNode: number,
+        public startPassageName: string,
         public creator: string,
         public creatorVersion: string,
         public format: string,
         public formatVersion: string,
         public options: string,
         public starterScript: string,
-        public passages: Array<Passage>
+        public passages: Array<Passage>,
+        public passageHash: object  // по name хранит passage c таким же name
     ){
 
     }
