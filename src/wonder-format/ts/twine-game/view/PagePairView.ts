@@ -11,9 +11,9 @@ export class PagePairView extends PageView {
     addPage(el: Element) {
         super.addPage(el);
         if (this.pages.length > this.limit) {
-            console.warn(`add over limit page!`);
+            this.currentPage--; // так как массив сдвигается в начало
             this.dropPage(0);
         }
     }
-    
+
 }

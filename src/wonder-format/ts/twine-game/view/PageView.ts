@@ -23,7 +23,7 @@ export class PageView {
      */
     next() {
         const PREV = this.getCurrent();
-        this.currentPage++
+        this.currentPage++;
         this.setCurrent(this.currentPage);
         const NEXT = this.getCurrent();
 
@@ -35,7 +35,7 @@ export class PageView {
      */
     previous() {
         const PREV = this.getCurrent();
-        this.currentPage--
+        this.currentPage--;
         this.setCurrent(this.currentPage);
         const NEXT = this.getCurrent();
 
