@@ -2,9 +2,12 @@ import {Story} from "../parser/models/Story";
 import {EventBus} from "../app-core/EventBus";
 import {GameEvents} from "./GameEvents";
 import {Passage} from "../parser/models/Passage";
+import {REGEXP, WONDER} from "../Constants";
 
 export class GameLogic {
     private story: Story;
+
+    private gameState = {};
 
     constructor() {
         EventBus.getInstance()
@@ -15,7 +18,7 @@ export class GameLogic {
     loadStory(story: Story) {
         this.story = story;
         EventBus.emit(GameEvents.onStoryLoaded, story);
-        EventBus.emit(GameEvents.preparePassage, this.getPassage(this.story.startPassageName));
+        EventBus.emit(GameEvents.preparePassage, this.getViewPassage(this.story.startPassageName));
 
         // todo if format - emit FormatLoaded
     }
@@ -33,16 +36,54 @@ export class GameLogic {
         EventBus.emit(GameEvents.showPassage, passage);
     }
 
+
+    private onLinkClick(name: string) {
+        console.log(`onLinkClick ${name}`);
+        EventBus.emit(GameEvents.preparePassage, this.getViewPassage(name));
+    }
+
     /*********
      * helpers
      *********/
 
-    private getPassage(name: string): Passage {
-        return this.story.passageHash[name];
+    /**
+     * Формирует viewPassage для отображения
+     * + исполняет логику
+     * @param name
+     */
+    private getViewPassage(name: string): Passage {
+        const viewPassage = {
+            ...this.story.passageHash[name]
+        };
+
+        this.execScripts(viewPassage);
+
+        return viewPassage;
     }
 
-    private onLinkClick(name: string) {
-        console.log(`onLinkClick ${name }`);
-        EventBus.emit(GameEvents.preparePassage, this.getPassage(name));
+    /**
+     * Исполнить скрипты и вывести их результат, если нужно
+     * @param viewPassage
+     */
+    private execScripts(viewPassage: Passage) {
+        console.log(`execScripts........`);
+        console.log(`viewPassage.content`, viewPassage.content);
+
+        viewPassage.content = viewPassage.content
+            .replace(REGEXP.exeScript,
+                (match, catched) => {
+                    //console.log(`match`, match);
+                    let command = catched.trim();
+                    const mustRender = command[0] == WONDER.command.show;
+                    if (mustRender) command = "return " + command.substring(1);
+
+                    console.log(`command`, command);
+                    const func = new Function(command).bind(this.gameState);
+                    const result = func();
+                    const render = mustRender ? result : "";
+                    return render;
+                });
+        console.log(`....... /execScripts`);
     }
+
 }

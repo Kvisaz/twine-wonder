@@ -44,6 +44,13 @@ function parsePassage(el: Element): Passage {
         parseFloat(el.getAttribute("pid")),
         el.getAttribute("name"),
         el.getAttribute("tags"),
-        el.innerHTML,
+        htmlDecode(el.innerHTML),
     )
+}
+
+function htmlDecode(input): string {
+    const e = document.createElement('textarea');
+    e.innerHTML = input;
+    // handle case of empty input
+    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
 }

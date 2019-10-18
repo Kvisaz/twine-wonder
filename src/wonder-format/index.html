@@ -33,29 +33,12 @@ window.addEventListener('sm.story.started', function(event, eventObject) {
     console.log(eventObject.story);
 });
 
-</script><tw-passagedata pid="1" name="goldMine1" tags="" position="723,830" size="100,100">&lt;% if (window.state.goldMine1.gold &gt; 0) { %&gt;
-    &lt;h2&gt;&lt;%= &quot;Золото: &quot; + window.state.goldMine1.gold %&gt;&lt;/h2&gt;
-    &lt;% } else { %&gt;
-    &lt;%= &quot;Шахта пуста&quot; %&gt;
-    &lt;% } %&gt;
-
-    &lt;%
-    var step= 10;
-    var income = window.state.goldMine1.gold &gt;= step ? step : window.state.goldMine1.gold;
-
-    window.state.gold += income;
-    window.state.goldMine1.gold -= income;
-    %&gt;
-
-    &lt;%= window.paramView() %&gt;
-
-    &lt;%= window.ifThen(
-    window.state.goldMine1.gold &gt; 0,
-    &quot;В шахте осталось золота &quot; + window.state.goldMine1.gold,
-    &quot;Шахта пуста&quot;)
-    %&gt;
-
-
+</script><tw-passagedata pid="1" name="goldMine1" tags="" position="723,830" size="100,100">
+    <w>
+        if(this.gold==undefined) this.gold = 100;
+        else this.gold++;
+        console.log("Hello from template"); </w>
+    В шахте <w>= this.gold </w> золота.
 
     [[Еще золота|goldMine1]]
 

@@ -1,4 +1,4 @@
-import {LINK_TEMPLATE, WONDER} from "../Constants";
+import {LINK_TEMPLATE, REGEXP, WONDER} from "../Constants";
 
 export function twinePassageFormatter(content: string, template: string): string {
     console.log(`twinePassageFormatter....`);
@@ -13,7 +13,7 @@ export function twinePassageFormatter(content: string, template: string): string
         .replace(MARKER.choiceEnd, '');
 
     // 1. убираем линки
-    content = content.replace(/\[\[(.*?)\]\]/g, function (match, catched) {
+    content = content.replace(REGEXP.twineLink, function (match, catched) {
         links.push(buildLink(catched));
         return ""; // чистим
     })

@@ -17,7 +17,18 @@ export const WONDER = {
         choiceEnd: "</choice>", // конец повторяющегося блока
         choiceText: "<choice-text/>", // текст выбора
         choiceId: "<choice-id/>", // текст выбора
+    },
+    command: {
+        show: "=",
     }
+};
+
+// regexps
+export const REGEXP = {
+    exeScript: new RegExp("<w>([\\s\\S]*?)<\/w>", "gs"),
+
+    // /\[\[(.*?)\]\]/g - при переводе в строку удваивем  \
+    twineLink: new RegExp("\\[\\[(.*?)\\]\\]", "g"),
 };
 
 // templates
