@@ -36,7 +36,7 @@ export const WONDER = {
 
 // regexps
 export const REGEXP = {
-    exeScript: new RegExp("<w>([\\s\\S]*?)<\/w>", "gs"),
+    exeScript: new RegExp("<w>([\\s\\S]*?)<\/w>", "g"),
 
     // /\[\[(.*?)\]\]/g - при переводе в строку удваивем  \
     twineLink: new RegExp("\\[\\[(.*?)\\]\\]", "g"),
