@@ -1,3 +1,5 @@
+import {Passage} from "../parser/models/Passage";
+
 export enum GameEvents {
     onStoryLoaded = "onStoryLoaded",
     onPageFormatLoaded = "onPageFormatLoaded",
@@ -11,4 +13,11 @@ export enum GameEvents {
 
     onLinkClick = "onLinkClick",        // показа пассаж
 
+}
+
+export class PageViewData {
+    constructor(
+        public passage: Passage,
+    ) {
+    }
 }

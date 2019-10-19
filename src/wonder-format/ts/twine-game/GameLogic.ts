@@ -1,6 +1,6 @@
 import {Story} from "../parser/models/Story";
 import {EventBus} from "../app-core/EventBus";
-import {GameEvents} from "./GameEvents";
+import {GameEvents, PageViewData} from "./GameEvents";
 import {Passage} from "../parser/models/Passage";
 import {REGEXP, WONDER} from "../Constants";
 
@@ -28,6 +28,7 @@ export class GameLogic {
      *********/
     private onPassagePrepared(passage: Passage) {
         console.log(`onPassagePrepared`, passage);
+        // TODO вот сейчас можно ЗАИНЖЕКТИТЬ ПАРАМЕТРЫ
         this.showPassage(passage);
     }
 
@@ -51,14 +52,14 @@ export class GameLogic {
      * + исполняет логику
      * @param name
      */
-    private getViewPassage(name: string): Passage {
+    private getViewPassage(name: string): PageViewData {
         const viewPassage = {
             ...this.story.passageHash[name]
         };
 
         this.execScripts(viewPassage);
 
-        return viewPassage;
+        return new PageViewData(viewPassage);
     }
 
     /**

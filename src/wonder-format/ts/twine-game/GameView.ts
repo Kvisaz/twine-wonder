@@ -1,5 +1,5 @@
 import {EventBus} from "../app-core/EventBus";
-import {GameEvents} from "./GameEvents";
+import {GameEvents, PageViewData} from "./GameEvents";
 import {Story} from "../parser/models/Story";
 import {Passage} from "../parser/models/Passage";
 import {WONDER} from "../Constants";
@@ -43,7 +43,9 @@ export class GameView {
 
     }
 
-    private preparePassage(passage: Passage) {
+    private preparePassage(pageViewData: PageViewData) {
+        const passage = pageViewData.passage;
+
         console.log(`preparePassage`, passage);
         this.pageView.addNextPage(passage);
         EventBus.emit(GameEvents.onPassagePrepared, passage);
