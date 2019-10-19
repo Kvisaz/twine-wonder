@@ -3,10 +3,13 @@ import {EventBus} from "../app-core/EventBus";
 import {GameEvents, PageViewData} from "./GameEvents";
 import {Passage} from "../parser/models/Passage";
 import {REGEXP, WONDER} from "../Constants";
+import {GameConfig} from "./logic/GameConfig";
+import {WonderStoryParser} from "./logic/WonderStoryParser";
 
 export class GameLogic {
     private story: Story;
 
+    private gameConfig = new GameConfig();
     private gameState = {};
 
     constructor() {
@@ -17,6 +20,10 @@ export class GameLogic {
 
     loadStory(story: Story) {
         this.story = story;
+
+        WonderStoryParser.parse(story, this.gameState, this.gameConfig);
+        console.log(` loadStory `, this.gameState, this.gameConfig)
+
         EventBus.emit(GameEvents.onStoryLoaded, story);
         EventBus.emit(GameEvents.preparePassage, this.getViewPassage(this.story.startPassageName));
 
@@ -59,7 +66,10 @@ export class GameLogic {
 
         this.execScripts(viewPassage);
 
-        return new PageViewData(viewPassage);
+        return new PageViewData(
+            viewPassage,
+            this.gameState,
+            this.gameConfig);
     }
 
     /**

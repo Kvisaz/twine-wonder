@@ -35,10 +35,11 @@ window.addEventListener('sm.story.started', function(event, eventObject) {
 
 </script><tw-passagedata pid="1" name="goldMine1" tags="" position="723,830" size="100,100">
     <w>
-        if(this.gold==undefined) this.gold = 100;
-        else this.gold++;
+        if(this.goldMine1==undefined) this.goldMine1 = 100;
+        this.gold++;
+        this.goldMine1--;
         console.log("Hello from template"); </w>
-    В шахте <w>= this.gold </w> золота.
+    В шахте <w>= this.goldMine1 </w> золота.
 
     [[Еще золота|goldMine1]]
 
@@ -48,7 +49,11 @@ window.addEventListener('sm.story.started', function(event, eventObject) {
     [[Золотая шахта 1|goldMine1]]
     [[Золотая шахта 2|goldMine2]]
     [[Золотая шахта 3|goldMine3]]
-    [[Золотая шахта 4|goldMine4]]</tw-passagedata><tw-passagedata pid="3" name="goblin" tags="" position="560,699" size="100,100">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="4" name="goldMine2" tags="" position="860,699" size="100,100">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="5" name="goldMine3" tags="" position="1010,699" size="100,100">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="6" name="goldMine4" tags="" position="1160,699" size="100,100">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="7" name="header" tags="header" position="1184,447" size="100,100">Заголовок</tw-passagedata></tw-storydata>
+    [[Золотая шахта 4|goldMine4]]</tw-passagedata><tw-passagedata pid="3" name="goblin" tags="" position="560,699" size="100,100">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="4" name="goldMine2" tags="" position="860,699" size="100,100">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="5" name="goldMine3" tags="" position="1010,699" size="100,100">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="6" name="goldMine4" tags="" position="1160,699" size="100,100">Double-click this passage to edit it.</tw-passagedata><tw-passagedata pid="7" name="header" tags="header" position="1184,447" size="100,100">Заголовок</tw-passagedata>
+    <tw-passagedata pid="99" name="wonder.config" tags="">
+        var : gold: 77 : #gold
+    </tw-passagedata>
+</tw-storydata>
 
 </body>
 </html>

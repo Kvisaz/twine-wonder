@@ -21,10 +21,16 @@ export const WONDER = {
     command: {
         show: "=",
     },
-    passages: { // todo
+    passages: {
+        config: "wonder.config",
+        // todo
         pageFormat: "wonder.format.page",
         choiceFormat: "wonder.format.choice",
         textFormat: "wonder.format.text",
+    },
+    markLang: {
+        varStart: "var",
+        commandSplitter: ":"
     }
 };
 
@@ -42,6 +48,9 @@ export const PAGE_TEMPLATE = `<div class="${WONDER.pageClass}"></div>`;
 export const LINK_TEMPLATE = `<li class="${WONDER.linkClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</li>`;
 
 export const PASSAGE_TEMPLATE = `<div>
+<div class="params">
+<div id="gold"></div>
+</div>
 <div class="${WONDER.textClass}"><text/></div>
 <ul class="wonder-choices">
 ${WONDER.template.choices}

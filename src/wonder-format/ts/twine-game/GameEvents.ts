@@ -1,4 +1,5 @@
 import {Passage} from "../parser/models/Passage";
+import {GameConfig} from "./logic/GameConfig";
 
 export enum GameEvents {
     onStoryLoaded = "onStoryLoaded",
@@ -18,6 +19,8 @@ export enum GameEvents {
 export class PageViewData {
     constructor(
         public passage: Passage,
+        public state: object,
+        public config: GameConfig,
     ) {
     }
 }

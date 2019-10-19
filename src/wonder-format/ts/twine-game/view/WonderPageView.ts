@@ -29,6 +29,7 @@ export class WonderPageView {
     addNextPage(passage: Passage) {
         const page = this.buildPageView(passage);
         this.pageView.addPage(page);
+        return page;
     }
 
     showNextPage() {

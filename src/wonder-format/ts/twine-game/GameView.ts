@@ -5,6 +5,7 @@ import {Passage} from "../parser/models/Passage";
 import {WONDER} from "../Constants";
 import {WonderPageView} from "./view/WonderPageView";
 import {DomUtils} from "../app-core/DomUtils";
+import {VisibleParams} from "./logic/GameConfig";
 
 export class GameView {
     private el: Element;
@@ -47,7 +48,12 @@ export class GameView {
         const passage = pageViewData.passage;
 
         console.log(`preparePassage`, passage);
-        this.pageView.addNextPage(passage);
+        const page: Element = this.pageView.addNextPage(passage);
+
+        // страница добавлена, но еще не видима, можно менять DOM
+        this.injectParams(page, pageViewData.config.uiParams, pageViewData.state);
+
+
         EventBus.emit(GameEvents.onPassagePrepared, passage);
     }
 
@@ -57,4 +63,13 @@ export class GameView {
     }
 
 
+    private injectParams(page: Element, uiParams: VisibleParams, state: object) {
+        uiParams.forEach(uP => {
+            const paramValue = state[uP.name];
+            const el = page.querySelector(uP.selector);
+            if (el) {
+                el.innerHTML = paramValue;
+            }
+        })
+    }
 }
