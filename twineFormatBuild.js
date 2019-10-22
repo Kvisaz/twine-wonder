@@ -33,12 +33,14 @@ function main() {
     const scriptContent = getFileContent(CONFIG.src.script)
         .replace(CONFIG.marker.version, PACKAGE.version);
 
+    const stringedScript = JSON.stringify(scriptContent);
+
     const styleContent = getFileContent(CONFIG.src.style);
     const templateContent = getFileContent(CONFIG.src.format);
 
     const formatContent = templateContent
         .replace(CONFIG.marker.style, styleContent)
-        .replace(CONFIG.marker.script, scriptContent)
+        .replace(CONFIG.marker.script, stringedScript)
         .replace(CONFIG.marker.name, PACKAGE.name)
         .replace(CONFIG.marker.author, PACKAGE.author)
         .replace(CONFIG.marker.version, PACKAGE.version)

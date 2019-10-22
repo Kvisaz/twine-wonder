@@ -19,11 +19,8 @@ var SOURCE = '<!DOCTYPE html>\n' +
     '            <style>${style}</style>\n' +
     '        </head>\n' +
     '        <body>\n' +
-    '            <h1>Hello World!</h1>\n' +
     '            <tw-story tags></tw-story>\n' +
     '            {{STORY_DATA}}\n' +
-    '            <script>\n' +
-    '            ${script}\n' +
-    '            </script>\n' +
+    '            <script>' + ${script}+ '</script>' +
     '        </body>\n' +
     '    </html>';
