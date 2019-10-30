@@ -60,6 +60,6 @@ Just add some script to string `source` after `{{STORY_DATA}}`.
 
 ## Json Export 
 
-Simple JSON exporter to textArea - [twine-to-json.js](twine-to-json.js)
+Simple JSON exporter to textArea - [twine-to-json.js](json/twine-to-json.js)
 
 Just download it and install from local path or your own server.
