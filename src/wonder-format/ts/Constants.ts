@@ -48,7 +48,7 @@ export const PAGE_TEMPLATE = `<div class="${WONDER.pageClass}"></div>`;
 export const LINK_TEMPLATE = `<li class="${WONDER.linkClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</li>`;
 
 export const PASSAGE_TEMPLATE = `<div>
-<div class="params">
+<div class="params"> 
 <div id="gold"></div>
 </div>
 <div class="${WONDER.textClass}"><text/></div>

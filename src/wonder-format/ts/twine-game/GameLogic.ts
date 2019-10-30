@@ -80,6 +80,7 @@ export class GameLogic {
         console.log(`execScripts........`);
         console.log(`viewPassage.content`, viewPassage.content);
 
+        // ищем строки, которые должны исполняться
         viewPassage.content = viewPassage.content
             .replace(REGEXP.exeScript,
                 (match, catched) => {
@@ -89,8 +90,8 @@ export class GameLogic {
                     if (mustRender) command = "return " + command.substring(1);
 
                     console.log(`command`, command);
-                    const func = new Function(command).bind(this.gameState);
-                    const result = func();
+                    const func = new Function(command).bind(this.gameState); // создаю функцию из строки
+                    const result = func(); // исполняю функцию
                     const render = mustRender ? result : "";
                     return render;
                 });
