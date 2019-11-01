@@ -10,7 +10,6 @@ export interface ITwineStory {
      formatVersion: string,
      ifid: string,
      options: string,
-     starterScript: string,
      passages: Array<ITwinePassage>,
      passageHash: object,  // по name хранит passage c таким же name
      zoom: string  // по name хранит passage c таким же name
@@ -50,7 +49,6 @@ export class Story implements ITwineStory{
         public formatVersion: string,
         public ifid: string,
         public options: string,
-        public starterScript: string,
         public passages: Array<ITwinePassage>,
         public passageHash: object,  // по name хранит passage c таким же name
         public zoom: string  // по name хранит passage c таким же name

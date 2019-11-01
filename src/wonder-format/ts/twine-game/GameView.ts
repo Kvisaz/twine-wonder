@@ -34,6 +34,15 @@ export class GameView {
         }
     }
 
+
+    injectStyle(style: string) {
+        if (style.length == 0) return;
+
+        const styleElement = document.createElement('style');
+        styleElement.innerHTML = style;
+        document.getElementsByTagName('head')[0].appendChild(styleElement);
+    }
+
     /**********************
      *   events
      *********************/

@@ -29,6 +29,13 @@ export class GameLogic {
         // todo if format - emit FormatLoaded
     }
 
+    // выполнить скрипт, забинденный на gameState
+    exeScript(script: string) {
+        const func = new Function(script).bind(this.gameState); // создаю функцию из строки
+        const result = func(); // исполняю функцию
+        return result;
+    }
+
     /*********
      * LOGIC
      *********/
@@ -89,8 +96,7 @@ export class GameLogic {
                     if (mustRender) command = "return " + command.substring(1);
 
                     console.log(`command`, command);
-                    const func = new Function(command).bind(this.gameState); // создаю функцию из строки
-                    const result = func(); // исполняю функцию
+                    const result = this.exeScript(command);
                     const render = mustRender ? result : "";
                     return render;
                 });
