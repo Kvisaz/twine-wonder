@@ -1,4 +1,4 @@
-import {parseStory} from "./ts/parser/TwineParser";
+import {parseTwineData} from "./ts/parser/TwineParser";
 import {GameLogic} from "./ts/twine-game/GameLogic";
 import {GameView} from "./ts/twine-game/GameView";
 
@@ -6,7 +6,7 @@ import {GameView} from "./ts/twine-game/GameView";
 const VERSION = VERSION_INFO;
 
 console.log(`Hello 1, it\`s Twine Wonder parser ${VERSION}`);
-const story = parseStory();
+const story = parseTwineData();
 console.log(`story parsed = `, story);
 
 const logic = new GameLogic();

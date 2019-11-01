@@ -2,24 +2,20 @@
  *  Парсинг параметров, переданных через специальные passage
  */
 import {GameConfig, VisibleParameter} from "./GameConfig";
-import {Story} from "../../parser/models/Story";
 import {WONDER} from "../../Constants";
-import {Passage} from "../../parser/models/Passage";
+import {ITwinePassage, ITwineStory} from "../../parser/models/TwineModels";
 
 export class WonderStoryParser {
-    static parse(story: Story, state: object, config: GameConfig) {
+    static parse(story: ITwineStory, state: object, config: GameConfig) {
 
         parseConfig(story.passageHash[WONDER.passages.config], state, config)
 
     }
 }
 
-interface IPassageParser {
-    (passage: Passage, state: object, config: GameConfig): void;
-}
 
 
-function parseConfig(passage: Passage, state: object, config: GameConfig) {
+function parseConfig(passage: ITwinePassage, state: object, config: GameConfig) {
     if (passage == null) return;
 
     const lines = splitLines(passage.content);

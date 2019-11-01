@@ -10,6 +10,7 @@ Done
 - вывод параметров
 
 ## Документация
+- [Изменить дизайн игры](src/wonder-format/doc/Design.md)
 - [Twine Format](src/wonder-format/doc/TwineFormat.md)
 
 

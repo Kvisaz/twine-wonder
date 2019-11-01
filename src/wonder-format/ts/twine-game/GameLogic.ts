@@ -1,13 +1,12 @@
-import {Story} from "../parser/models/Story";
 import {EventBus} from "../app-core/EventBus";
 import {GameEvents, PageViewData} from "./GameEvents";
-import {Passage} from "../parser/models/Passage";
 import {REGEXP, WONDER} from "../Constants";
 import {GameConfig} from "./logic/GameConfig";
 import {WonderStoryParser} from "./logic/WonderStoryParser";
+import {ITwinePassage, ITwineStory} from "../parser/models/TwineModels";
 
 export class GameLogic {
-    private story: Story;
+    private story: ITwineStory;
 
     private gameConfig = new GameConfig();
     private gameState = {};
@@ -18,7 +17,7 @@ export class GameLogic {
             .sub(GameEvents.onLinkClick, (message, id: string) => this.onLinkClick(id))
     }
 
-    loadStory(story: Story) {
+    loadStory(story: ITwineStory) {
         this.story = story;
 
         WonderStoryParser.parse(story, this.gameState, this.gameConfig);
@@ -33,13 +32,13 @@ export class GameLogic {
     /*********
      * LOGIC
      *********/
-    private onPassagePrepared(passage: Passage) {
+    private onPassagePrepared(passage: ITwinePassage) {
         console.log(`onPassagePrepared`, passage);
         // TODO вот сейчас можно ЗАИНЖЕКТИТЬ ПАРАМЕТРЫ
         this.showPassage(passage);
     }
 
-    private showPassage(passage: Passage) {
+    private showPassage(passage: ITwinePassage) {
         console.log(`showPassage`, passage);
         EventBus.emit(GameEvents.showPassage, passage);
     }
@@ -76,7 +75,7 @@ export class GameLogic {
      * Исполнить скрипты и вывести их результат, если нужно
      * @param viewPassage
      */
-    private execScripts(viewPassage: Passage) {
+    private execScripts(viewPassage: ITwinePassage) {
         console.log(`execScripts........`);
         console.log(`viewPassage.content`, viewPassage.content);
 

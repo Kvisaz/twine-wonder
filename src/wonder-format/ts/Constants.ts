@@ -7,9 +7,11 @@ export const PASSAGE_SELECTOR = "tw-passagedata";
 // wonder selector
 export const WONDER = {
     contentId: "wonder-content",
-    pageClass: "wonder-page",
-    textClass: "wonder-text",
-    linkClass: "wonder-link",
+    pageClass: "page",
+    textClass: "text",
+    choicesClass: "choices",
+    choiceClass: "choice",
+    linkClass: "link",
     template: {
         text: "<text/>",
         choices: "<choices/>",    // начало повторяющегося блока
@@ -52,7 +54,7 @@ export const PASSAGE_TEMPLATE = `<div>
 <div id="gold"></div>
 </div>
 <div class="${WONDER.textClass}"><text/></div>
-<ul class="wonder-choices">
+<ul class="${WONDER.choicesClass}">
 ${WONDER.template.choices}
 </ul>
 </div>`;

@@ -1,11 +1,10 @@
 import {EventBus} from "../app-core/EventBus";
 import {GameEvents, PageViewData} from "./GameEvents";
-import {Story} from "../parser/models/Story";
-import {Passage} from "../parser/models/Passage";
 import {WONDER} from "../Constants";
 import {WonderPageView} from "./view/WonderPageView";
 import {DomUtils} from "../app-core/DomUtils";
 import {VisibleParams} from "./logic/GameConfig";
+import {ITwinePassage, ITwineStory} from "../parser/models/TwineModels";
 
 export class GameView {
     private el: Element;
@@ -39,7 +38,7 @@ export class GameView {
      *   events
      *********************/
 
-    private onStoryLoaded(story: Story) {
+    private onStoryLoaded(story: ITwineStory) {
         console.log(`onStoryLoaded`, story);
 
     }
@@ -57,7 +56,7 @@ export class GameView {
         EventBus.emit(GameEvents.onPassagePrepared, passage);
     }
 
-    private showPassage(passage: Passage) {
+    private showPassage(passage: ITwinePassage) {
         console.log(`showPassage`, passage);
         this.pageView.showNextPage();
     }

@@ -1,11 +1,11 @@
 import {PagePairView} from "./PagePairView";
-import {Passage} from "../../parser/models/Passage";
 import {EventBus} from "../../app-core/EventBus";
 import {GameEvents} from "../GameEvents";
 import {COMMON_CSS} from "../../app-core/COMMON_CSS";
 import {ViewBuilder} from "./ViewBuilder";
 import {PAGE_TEMPLATE, PASSAGE_TEMPLATE} from "../../Constants";
 import {twinePassageFormatter} from "../../parser/TwinePassageFormatter";
+import {ITwinePassage} from "../../parser/models/TwineModels";
 
 export class WonderPageView {
 
@@ -26,7 +26,7 @@ export class WonderPageView {
                 (message, format) => this.contentBuilder.setTemplate(format))
     }
 
-    addNextPage(passage: Passage) {
+    addNextPage(passage: ITwinePassage) {
         const page = this.buildPageView(passage);
         this.pageView.addPage(page);
         return page;
@@ -41,7 +41,7 @@ export class WonderPageView {
      *   show page
      *********************/
 
-    private buildPageView(passage: Passage): Element {
+    private buildPageView(passage: ITwinePassage): Element {
         const SOURCE = passage.content;
 
         const passageView = this.contentBuilder.build(SOURCE);
