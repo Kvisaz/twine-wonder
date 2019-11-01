@@ -34,10 +34,10 @@ var SOURCE = '{{STORY_DATA}} <script>' + script + '; exportToJson()</script>';
 
 
 window.storyFormat({
-    name: 'twine-wonder',
+    name: 'twine-json',
     version: '0.0.1',
     author: 'Kvisaz [Sergey Tokarev]',
-    description: 'Twine Wonder Format',
+    description: 'Twine Json Format',
     proofing: false,
     url: 'https://github.com',
     image: 'icon.svg',
