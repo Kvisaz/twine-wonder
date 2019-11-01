@@ -92,7 +92,7 @@ export class GameLogic {
                 (match, catched) => {
                     //console.log(`match`, match);
                     let command = catched.trim();
-                    const mustRender = command[0] == WONDER.command.show;
+                    const mustRender = command[0] == WONDER.inlineStart;
                     if (mustRender) command = "return " + command.substring(1);
 
                     console.log(`command`, command);

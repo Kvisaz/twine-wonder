@@ -9,9 +9,9 @@ export const WONDER = {
     contentId: "wonder-content",
     pageClass: "page",
     textClass: "text",
-    choicesClass: "choices",
     choiceClass: "choice",
     linkClass: "link",
+    linkInlineClass: "inline",
     noSelectClass: "noselect",
     selectClass: "select",
     template: {
@@ -22,9 +22,6 @@ export const WONDER = {
         choiceText: "<choice-text/>", // текст выбора
         choiceId: "<choice-id/>", // текст выбора
     },
-    command: {
-        show: "=",
-    },
     passages: {
         config: "wonder.config",
         // todo
@@ -34,8 +31,9 @@ export const WONDER = {
     },
     markLang: {
         varStart: "var",
-        commandSplitter: ":"
-    }
+        commandSplitter: ":",
+    },
+    inlineStart: "="
 };
 
 // regexps
@@ -49,16 +47,15 @@ export const REGEXP = {
 // templates
 export const PAGE_TEMPLATE = `<div class="${WONDER.noSelectClass} ${WONDER.pageClass}"></div>`;
 
-export const LINK_TEMPLATE = `<li class="${WONDER.linkClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</li>`;
+export const LINK_TEMPLATE = `<div class="${WONDER.linkClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</div>`;
+
+export const LINK_INLINE_TEMPLATE = `<span class="${WONDER.linkClass} ${WONDER.linkInlineClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`
 
 export const PASSAGE_TEMPLATE = `<div>
 <div class="params" > 
 <div id="gold"></div>
 </div>
 <div class="${WONDER.selectClass} ${WONDER.textClass}"><text/></div>
-<ul class="${WONDER.choicesClass}">
-${WONDER.template.choices}
-</ul>
 </div>`;
 
 //language=CSS
@@ -75,7 +72,7 @@ export const DEFAULT_STYLE = `
     }
     
     .select {
-        -webkit-touch-callout: text; /* iOS Safari */
+        -webkit-touch-callout: default; /* iOS Safari */
         -webkit-user-select: text; /* Safari */
         -khtml-user-select: text; /* Konqueror HTML */
         -moz-user-select: text; /* Old versions of Firefox */
@@ -113,16 +110,9 @@ export const DEFAULT_STYLE = `
         line-height: 1.2em;
     }
     
-    .${WONDER.choicesClass} {
-        margin: 12px 0 0 0;
-        padding: 0;
-        list-style: none;
-    }
-    
     .${WONDER.linkClass}{
         cursor: pointer;
-        margin-bottom: 16px;
-        border-radius: 8px;
+        margin: 16px 0;
         text-decoration: underline;
     }
         

@@ -12,6 +12,8 @@ Done
 ## Документация
 - [Изменить дизайн игры](src/wonder-format/doc/Design.md)
 - [Twine Format](src/wonder-format/doc/TwineFormat.md)
+- [Основа формата](src/wonder-format/doc/CoreFormat.md)
+
 
 
 ##Todo!!

@@ -1,10 +1,9 @@
-import {LINK_TEMPLATE, REGEXP, WONDER} from "../Constants";
+import {LINK_INLINE_TEMPLATE, LINK_TEMPLATE, REGEXP, WONDER} from "../Constants";
 
 export function twinePassageFormatter(content: string, template: string): string {
     console.log(`twinePassageFormatter....`);
-    const links: Array<Link> = [];
     const MARKER = WONDER.template;
-    
+
     // 1. вынимаем из шаблона шаблон линков
     let linkTemplate: string = innerTexts(template, MARKER.choiceStart, MARKER.choiceEnd)[0];
     template = template
@@ -12,23 +11,25 @@ export function twinePassageFormatter(content: string, template: string): string
         .replace(MARKER.choiceStart, '')
         .replace(MARKER.choiceEnd, '');
 
-    // 1. убираем линки
+    // 2. традиционные линки
     content = content.replace(REGEXP.twineLink, function (match, catched) {
-        links.push(buildLink(catched));
-        return ""; // чистим
+        catched = catched.trim();
+        // линки могут быть встроенные или с новой строки
+        const isInline = catched[0] == WONDER.inlineStart;
+        const TEMPLATE = isInline ? LINK_INLINE_TEMPLATE : LINK_TEMPLATE;
+        if(isInline){
+            catched = catched.substring(1)
+        }
+        const link = buildLink(catched);
+        return getLinkHtml(link, TEMPLATE); // чистим
     })
         .trim();
+
 
     // 99. вставляем текст
     let code = template;
     code = code.replace(MARKER.text, content.trim());
 
-    // 100. вставляем линки
-    let linkCode = "";
-    links.forEach(link => {
-        linkCode += getLinkHtml(link);
-    });
-    code = code.replace(MARKER.choices, linkCode);
     return code;
 }
 
@@ -45,8 +46,8 @@ function buildLink(source: string): Link {
     )
 }
 
-function getLinkHtml(link: Link): string {
-    let code = LINK_TEMPLATE
+function getLinkHtml(link: Link, linkTemplate: string): string {
+    let code = linkTemplate
         .replace(WONDER.template.choiceId, link.id)
         .replace(WONDER.template.choiceText, link.text)
     return code;
