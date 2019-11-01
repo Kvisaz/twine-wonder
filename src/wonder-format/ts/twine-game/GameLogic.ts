@@ -90,14 +90,11 @@ export class GameLogic {
         viewPassage.content = viewPassage.content
             .replace(REGEXP.exeScript,
                 (match, catched) => {
-                    //console.log(`match`, match);
                     let command = catched.trim();
-                    const mustRender = command[0] == WONDER.inlineStart;
-                    if (mustRender) command = "return " + command.substring(1);
-
-                    console.log(`command`, command);
+                    const isInline = command[0] == WONDER.inlineStart;
+                    if (isInline) command = "return " + command.substring(1);
                     const result = this.exeScript(command);
-                    const render = mustRender ? result : "";
+                    const render = isInline ? result : "";
                     return render;
                 });
         console.log(`....... /execScripts`);
