@@ -40,13 +40,13 @@ window.addEventListener('sm.story.started', function(event, eventObject) {
 
     </script>
     <tw-passagedata name="goldMine1" pid="1" position="723,830" size="100,100" tags="">
-        <w>
+        {{
             if(this.goldMine1==undefined) this.goldMine1 = 100;
             this.gold++;
             this.goldMine1--;
             console.log("Hello from template");
-        </w>
-        В шахте <w>= this.goldMine1</w> золота. [[= Копать еще|goldMine1]].  Не, отдохну.
+        }}
+        В шахте {{= this.goldMine1}} золота. [[= Копать еще|goldMine1]].  Не, отдохну.
 
         [[Еще золота|goldMine1]]
         [[Выйти из шахты |worldMap]]

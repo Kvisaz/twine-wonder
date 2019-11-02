@@ -38,7 +38,7 @@ export const WONDER = {
 
 // regexps
 export const REGEXP = {
-    exeScript: new RegExp("<w>([\\s\\S]*?)<\/w>", "g"),
+    exeScript: new RegExp("{{([\\s\\S]*?)}}", "g"),
 
     // /\[\[(.*?)\]\]/g - при переводе в строку удваивем  \
     twineLink: new RegExp("\\[\\[(.*?)\\]\\]", "g"),
@@ -51,6 +51,10 @@ export const LINK_TEMPLATE = `<div class="${WONDER.linkClass}" data-id="${WONDER
 
 export const LINK_INLINE_TEMPLATE = `<span class="${WONDER.linkClass} ${WONDER.linkInlineClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`
 
+// done 0 скрипты через {{}}
+// todo 1 произвольное создание параметров, инжектирование в params
+// todo 2 общий шаблон Passage-Template
+// todo 3 flex css для page
 export const PASSAGE_TEMPLATE = `<div>
 <div class="params" > 
 <div id="gold"></div>
