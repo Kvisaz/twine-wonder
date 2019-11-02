@@ -1,5 +1,4 @@
 // twine tags
-import {StyleInjector} from "./app-core/StyleInjector";
 
 export const STORY_SELECTOR = "tw-storydata";
 export const PASSAGE_SELECTOR = "tw-passagedata";
@@ -8,12 +7,14 @@ export const PASSAGE_SELECTOR = "tw-passagedata";
 export const WONDER = {
     contentId: "wonder-content",
     pageClass: "page",
+    pageContentClass: "page-content",
     textClass: "text",
     choiceClass: "choice",
     linkClass: "link",
     linkInlineClass: "inline",
     noSelectClass: "noselect",
     selectClass: "select",
+    paramClass: 'params',
     template: {
         text: "<text/>",
         choices: "<choices/>",    // начало повторяющегося блока
@@ -33,7 +34,13 @@ export const WONDER = {
         varStart: "var",
         commandSplitter: ":",
     },
-    inlineStart: "="
+    inlineStart: "=",
+
+};
+
+export const COMMON_CSS = {
+    displayNone: "displayNone",
+    pointerOver: "pointerOver",
 };
 
 // regexps
@@ -53,12 +60,10 @@ export const LINK_INLINE_TEMPLATE = `<span class="${WONDER.linkClass} ${WONDER.l
 
 // done 0 скрипты через {{}}
 // todo 1 произвольное создание параметров, инжектирование в params
-// todo 2 общий шаблон Passage-Template
-// todo 3 flex css для page
-export const PASSAGE_TEMPLATE = `<div>
-<div class="params" > 
-<div id="gold"></div>
-</div>
+// rejected 2 общий шаблон Passage-Template - конфликт display: none с flex
+// done 3 flex css для page
+export const PASSAGE_TEMPLATE = `<div class="${WONDER.pageContentClass}">
+<div class="${WONDER.paramClass}" ><div id="gold"></div></div>
 <div class="${WONDER.selectClass} ${WONDER.textClass}"><text/></div>
 </div>`;
 
@@ -85,6 +90,14 @@ export const DEFAULT_STYLE = `
                                   supported by Chrome, Opera and Firefox */
     }
     
+    .page .displayNone, .displayNone {
+        display: none; 
+    }
+    
+    .pointerOver {
+        cursor: pointer;
+    }
+    
     ul, li {
         margin: 0;
         padding: 0;
@@ -104,12 +117,20 @@ export const DEFAULT_STYLE = `
           padding: 12px;  
           background: beige;
           border-radius: 8px;
-        }
+     }
+     
+     .${WONDER.pageContentClass} {
+          display: flex;
+          flex-direction: column;
+     }
+        
+    .${WONDER.paramClass}{
+        margin-bottom: 12px;
+    }
         
         
     .${WONDER.textClass} {
-        margin-bottom: 24px;
-        margin-top: 48px;
+        margin: 0;
         font-size: 18px;
         line-height: 1.2em;
     }
@@ -122,5 +143,13 @@ export const DEFAULT_STYLE = `
         
     .${WONDER.linkClass}:hover{
         color: #313298;
+    }
+    
+    @media screen and (max-width: 800px){
+        .${WONDER.pageClass} {
+             width: 100%;
+             margin: 0;
+             border-radius: 0;
+        }
     }
 `;

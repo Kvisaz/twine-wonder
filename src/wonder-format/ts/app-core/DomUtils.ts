@@ -2,9 +2,14 @@
 export class DomUtils {
     static canvas; // утилитный канвас
 
-    static elementFromTemplate(template: string): Node {
+    static divWith(content: string): Element {
         let div = document.createElement(`div`);
-        div.innerHTML = template;
+        div.innerHTML = content;
+        return div;
+    }
+
+    static elementFromTemplate(template: string): Node {
+        let div = DomUtils.divWith(template);
         return div.firstChild;
     }
 

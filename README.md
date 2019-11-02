@@ -13,6 +13,8 @@ Done
 - [Изменить дизайн игры](src/wonder-format/doc/Design.md)
 - [Twine Format](src/wonder-format/doc/TwineFormat.md)
 - [Основа формата](src/wonder-format/doc/CoreFormat.md)
+- [Переменные](src/wonder-format/doc/Params.md)
+- [Скрипты](src/wonder-format/doc/Scripts.md)
 
 
 

@@ -1,9 +1,8 @@
 import {PagePairView} from "./PagePairView";
 import {EventBus} from "../../app-core/EventBus";
 import {GameEvents} from "../GameEvents";
-import {COMMON_CSS} from "../../app-core/COMMON_CSS";
 import {ViewBuilder} from "./ViewBuilder";
-import {PAGE_TEMPLATE, PASSAGE_TEMPLATE} from "../../Constants";
+import {COMMON_CSS, PASSAGE_TEMPLATE, PAGE_TEMPLATE} from "../../Constants";
 import {twinePassageFormatter} from "../../parser/TwinePassageFormatter";
 import {ITwinePassage} from "../../parser/models/TwineModels";
 

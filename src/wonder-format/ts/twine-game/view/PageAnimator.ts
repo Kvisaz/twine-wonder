@@ -1,4 +1,4 @@
-import {COMMON_CSS} from "../../app-core/COMMON_CSS";
+import {COMMON_CSS} from "../../Constants";
 
 export class PageAnimator {
     show(el: Element, duration = 0) {
