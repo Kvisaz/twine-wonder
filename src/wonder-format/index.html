@@ -14,30 +14,9 @@
 
 
     </style>
-    <script id="twine-user-script" role="script" type="text/twine-javascript">window.state = {
-	gold: 0,
-	goldMine1: {
-		gold: 200
-	}
-}
-
-window.ifThen = function ifThen(booleanValue, textIf, textElse){
-	if(booleanValue) return textIf;
-	else return textElse;
-}
-
-window.paramView = function(){
-	var text = "";
-	text += "Золото: " +  window.state.gold
-	return text;
-}
-
-window.addEventListener('sm.story.started', function(event, eventObject) {
-  // window.story
-    console.log(eventObject.story);
-});
-
-
+    <script id="twine-user-script" role="script" type="text/twine-javascript">
+    this.gold = 100;
+    this.goldMine1 = 100;
     </script>
     <tw-passagedata name="goldMine1" pid="1" position="723,830" size="100,100" tags="">
         {{
