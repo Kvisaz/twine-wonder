@@ -18,11 +18,16 @@ function main() {
 
     const PACKAGE = getJSONContent("package.json");
 
-    const VERSION_PATH = PACKAGE["versionPath"];
+    const VERSION = PACKAGE["version"];
+
+    const BUNDLE_SCRIPT = PACKAGE['bundleScript'];
 
 
-    CONFIG.src.script = CONFIG.src.script.replace(CONFIG.marker.versionPath, VERSION_PATH);
-    CONFIG.output = CONFIG.output.replace(CONFIG.marker.versionPath, VERSION_PATH);
+    CONFIG.src.script = CONFIG.src.script.replace(CONFIG.marker.version, VERSION);
+    CONFIG.src.script = CONFIG.src.script.replace(CONFIG.marker.bundleScript, BUNDLE_SCRIPT);
+
+    CONFIG.output = CONFIG.output.replace(CONFIG.marker.version, VERSION);
+    CONFIG.output = CONFIG.output.replace(CONFIG.marker.version, VERSION);
 
 
     if (noExist(CONFIG.src.script)) {

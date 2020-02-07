@@ -2,6 +2,8 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
 const ConcatPlugin = require("webpack-concat-plugin");
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
 const PACKAGE = require("./package");
 
 const webpack = require('webpack');
@@ -9,7 +11,9 @@ const VERSION = ("" + PACKAGE.version).toLowerCase();
 const REPO_URL = (PACKAGE.repository).toLowerCase();
 
 const VERSION_INFO = `game version ${VERSION}`;
-const VERSION_PATH = PACKAGE["versionPath"];
+const VERSION_PATH = VERSION;
+
+const BUNDLE_SCRIPT = PACKAGE['bundleScript'];
 
 const SRC = path.join(__dirname, "src");
 
@@ -45,6 +49,8 @@ const projects = [
 const entries = {};
 const copyData = [];
 const plugins = [];
+
+plugins.push(new CleanWebpackPlugin()); // очистка dist
 
 // одним плагином задаем общие константы в файлах из entry point
 plugins.push(new webpack.DefinePlugin({
@@ -95,7 +101,7 @@ module.exports = (env, argv) => {
         target: "web",
         output: {
             path: DIST,
-            filename: `[name]/[name].js`
+            filename: `[name]/${BUNDLE_SCRIPT}`
         },
         devServer: {
             contentBase: DIST,
