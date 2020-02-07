@@ -2,7 +2,15 @@
 
 Чтобы установить формат, используйте ссылку:
 ```
-https://kvisaz.github.io/twine-wonder/format/wonder.1.js
+https://kvisaz.github.io/twine-wonder/format/wonder.0.9.1.js
+```
+
+## Архив форматов
+
+### Версия 0.9.1 
+Базовый функционал, добавлены переменные.
+```
+https://kvisaz.github.io/twine-wonder/format/wonder.0.9.1.js
 ```
 
 
