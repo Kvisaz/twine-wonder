@@ -2,7 +2,6 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
 const ConcatPlugin = require("webpack-concat-plugin");
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const PACKAGE = require("./package");
 
@@ -49,8 +48,6 @@ const projects = [
 const entries = {};
 const copyData = [];
 const plugins = [];
-
-plugins.push(new CleanWebpackPlugin()); // очистка dist
 
 // одним плагином задаем общие константы в файлах из entry point
 plugins.push(new webpack.DefinePlugin({

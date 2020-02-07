@@ -58,6 +58,8 @@ export class GameView {
         console.log(`preparePassage`, passage);
         const page: Element = this.pageView.addNextPage(passage);
 
+        page.id = pageViewData.passage.name;
+
         // страница добавлена, но еще не видима, можно менять DOM
         this.injectParams(page, pageViewData.config.uiParams, pageViewData.state);
 

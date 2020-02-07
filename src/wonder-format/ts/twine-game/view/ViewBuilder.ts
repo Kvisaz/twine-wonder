@@ -6,7 +6,7 @@ export interface ContentFormatter {
 
 /**
  *  Универсальный форматтер
- *  - устанавливает выбранный шаблонк
+ *  - устанавливает выбранный шаблон
  */
 export class ViewBuilder {
 

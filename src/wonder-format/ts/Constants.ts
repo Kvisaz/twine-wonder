@@ -112,9 +112,8 @@ export const DEFAULT_STYLE = `
     }
     
     .${WONDER.pageClass} {
-          width: 800px;
+          max-width: 800px;
           margin: 15px auto;
-          padding: 12px;  
           background: beige;
           border-radius: 8px;
      }
@@ -122,6 +121,7 @@ export const DEFAULT_STYLE = `
      .${WONDER.pageContentClass} {
           display: flex;
           flex-direction: column;
+          margin: 12px;
      }
         
     .${WONDER.paramClass}{
