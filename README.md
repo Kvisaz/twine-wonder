@@ -10,11 +10,11 @@ Done
 - вывод параметров
 
 ## Документация
-- [Изменить дизайн игры](doc/Design.md)
-- [Twine Format](doc/TwineFormat.md)
-- [Основа формата](doc/CoreFormat.md)
-- [Переменные](doc/Params.md)
-- [Скрипты](doc/Scripts.md)
+- [Изменить дизайн игры](docs/Design.md)
+- [Twine Format](docs/TwineFormat.md)
+- [Основа формата](docs/CoreFormat.md)
+- [Переменные](docs/Params.md)
+- [Скрипты](docs/Scripts.md)
 
 
 
