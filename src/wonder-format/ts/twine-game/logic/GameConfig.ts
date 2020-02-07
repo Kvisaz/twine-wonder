@@ -14,8 +14,8 @@ export type VisibleParams = Array<VisibleParameter>;
 
 export class VisibleParameter {
     constructor(
-        public name: string,
-        public selector: string
+        public name: string, // имя переменной - оно же id переменной
+        public label: string // что видит пользовател
     ) {
     }
 }

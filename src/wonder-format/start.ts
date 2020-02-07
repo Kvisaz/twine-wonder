@@ -17,6 +17,5 @@ const view = new GameView();
 
 view.injectStyle(DEFAULT_STYLE);
 view.injectStyle(story.style);
-logic.exeScript(story.script);
 
 logic.loadStory(story);

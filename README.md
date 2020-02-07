@@ -10,11 +10,11 @@ Done
 - вывод параметров
 
 ## Документация
-- [Изменить дизайн игры](src/wonder-format/doc/Design.md)
-- [Twine Format](src/wonder-format/doc/TwineFormat.md)
-- [Основа формата](src/wonder-format/doc/CoreFormat.md)
-- [Переменные](src/wonder-format/doc/Params.md)
-- [Скрипты](src/wonder-format/doc/Scripts.md)
+- [Изменить дизайн игры](src/doc/Design.md)
+- [Twine Format](src/doc/TwineFormat.md)
+- [Основа формата](src/doc/CoreFormat.md)
+- [Переменные](src/doc/Params.md)
+- [Скрипты](src/doc/Scripts.md)
 
 
 

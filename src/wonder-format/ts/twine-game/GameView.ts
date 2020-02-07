@@ -73,10 +73,12 @@ export class GameView {
 
     private injectParams(page: Element, uiParams: VisibleParams, state: object) {
         uiParams.forEach(uP => {
+            console.log(`uP`, uP);
+            const paramName = uP.name;
             const paramValue = state[uP.name];
-            const el = page.querySelector(uP.selector);
+            const el = page.querySelector(uP.name);
             if (el) {
-                el.innerHTML = paramValue;
+                el.innerHTML = paramName + ":" + paramValue;
             }
         })
     }

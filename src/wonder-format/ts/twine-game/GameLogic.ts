@@ -20,45 +20,43 @@ export class GameLogic {
     loadStory(story: ITwineStory) {
         this.story = story;
 
-        WonderStoryParser.parse(story, this.gameState, this.gameConfig);
-        console.log(` loadStory `, this.gameState, this.gameConfig)
+        this.exeScript(story.script);
 
+        console.log('loadStory 1');
+        WonderStoryParser.parse(story, this.gameState, this.gameConfig);
+        console.log('loadStory 2');
         EventBus.emit(GameEvents.onStoryLoaded, story);
         EventBus.emit(GameEvents.preparePassage, this.getViewPassage(this.story.startPassageName));
 
         // todo if format - emit FormatLoaded
     }
 
-    // выполнить скрипт, забинденный на gameState
-    exeScript(script: string) {
-        const func = new Function(script).bind(this.gameState); // создаю функцию из строки
-        const result = func(); // исполняю функцию
-        return result;
-    }
-
     /*********
      * LOGIC
      *********/
     private onPassagePrepared(passage: ITwinePassage) {
-        console.log(`onPassagePrepared`, passage);
-        // TODO вот сейчас можно ЗАИНЖЕКТИТЬ ПАРАМЕТРЫ
         this.showPassage(passage);
     }
 
     private showPassage(passage: ITwinePassage) {
-        console.log(`showPassage`, passage);
         EventBus.emit(GameEvents.showPassage, passage);
     }
 
 
     private onLinkClick(name: string) {
-        console.log(`onLinkClick ${name}`);
         EventBus.emit(GameEvents.preparePassage, this.getViewPassage(name));
     }
 
     /*********
      * helpers
      *********/
+
+    // выполнить скрипт, забинденный на gameState
+    private exeScript(script: string) {
+        const func = new Function(script).bind(this.gameState); // создаю функцию из строки
+        const result = func(); // исполняю функцию
+        return result;
+    }
 
     /**
      * Формирует viewPassage для отображения
