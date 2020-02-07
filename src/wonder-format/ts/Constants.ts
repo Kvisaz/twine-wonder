@@ -109,19 +109,42 @@ export const DEFAULT_STYLE = `
         padding: 0;
         background: #ceceb7;
         font-family: "Verdana", "Roboto", "Open Sans", sans-serif;
+        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+   /* #goldMine1 {
+        background: black;
+    }
+    
+    #goldMine1 .text {
+        background: beige;
+        padding: 12px;
+        margin-top: 400px;
+    }
+    
+    #goldMine1 .page {
+        font-family: monospace;
+        background: url(img/image-castle-web.jpg) no-repeat;
+        background-size: cover;
+    }*/
+    
+    #${WONDER.contentId} {
+        width: 800px;
+        border-radius: 0 0 8px 8px;
+        overflow: hidden;
     }
     
     .${WONDER.pageClass} {
-          max-width: 800px;
-          margin: 15px auto;
-          background: beige;
-          border-radius: 8px;
+          background: beige;          
      }
      
      .${WONDER.pageContentClass} {
           display: flex;
           flex-direction: column;
-          margin: 12px;
+          padding: 12px;
      }
         
     .${WONDER.paramClass}{
@@ -146,7 +169,7 @@ export const DEFAULT_STYLE = `
     }
     
     @media screen and (max-width: 800px){
-        .${WONDER.pageClass} {
+        .${WONDER.contentId} {
              width: 100%;
              margin: 0;
              border-radius: 0;
