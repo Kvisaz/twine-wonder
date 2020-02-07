@@ -1,7 +1,9 @@
 # Wonder - Twine format
 
-Последняя версия на сервере
-- https://keeperofwonderland.com/tmp/v.0.0.1/wonder/wonderFormat.js
+Чтобы установить формат, используйте ссылку:
+```
+https://kvisaz.github.io/twine-wonder/format/wonder.1.js
+```
 
 
 Я тут пилю свой твайн-формат, чтобы редактировать и понимать все.
