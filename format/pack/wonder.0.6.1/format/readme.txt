@@ -1,1 +1,0 @@
-insert full path to wonder.js in Twine format import

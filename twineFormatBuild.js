@@ -8,40 +8,62 @@
  ************************************/
 
 const fs = require("fs");
+const Path = require("path");
+const {zip} = require('zip-a-folder');
+
+const CONFIG = require("./twineFormatBuild.json");
+const PACKAGE = require("./package.json");
+
 main();
+
 
 /*************************************
  *      main
  ************************************/
-function main() {
-    const CONFIG = getJSONContent("twineFormatBuild.json");
+async function main() {
 
-    const PACKAGE = getJSONContent("package.json");
+    setVersionFolders();
 
-    const VERSION = PACKAGE["version"];
+    const fileFormatFrom = Path.resolve(CONFIG.src.dir, PACKAGE.bundleScript);
+    const fileFormatTo = Path.resolve(CONFIG.out.dir, CONFIG.out.format);
 
-    const BUNDLE_SCRIPT = PACKAGE['bundleScript'];
-
-
-    CONFIG.src.script = CONFIG.src.script.replace(CONFIG.marker.version, VERSION);
-    CONFIG.src.script = CONFIG.src.script.replace(CONFIG.marker.bundleScript, BUNDLE_SCRIPT);
-
-    CONFIG.output = CONFIG.output.replace(CONFIG.marker.version, VERSION);
-    CONFIG.output = CONFIG.output.replace(CONFIG.marker.version, VERSION);
-
-
-    if (noExist(CONFIG.src.script)) {
-        console.log(`ERROR: no file at `, CONFIG.src.script);
+    if (noExist(fileFormatFrom)) {
+        console.log(`ERROR: no file at `, fileFormatFrom);
         return;
     }
 
-    const scriptContent = getFileContent(CONFIG.src.script)
+    const templateContent = getFileContent(Path.resolve(CONFIG.src.dir, CONFIG.src.format));
+
+    const formatContent = buildTwineFormat(fileFormatFrom, templateContent);
+
+    saveFileContent(fileFormatTo, formatContent);
+
+    copyIcon();
+
+    const zipName = CONFIG.out.dir + ".zip";
+    await zip(CONFIG.out.dir, zipName);
+
+    console.log("success....");
+}
+
+/*************************************
+ *      main functions
+ ************************************/
+
+function setVersionFolders() {
+    CONFIG.src.dir = CONFIG.src.dir.replace(CONFIG.marker.version, PACKAGE.version);
+    CONFIG.out.dir = CONFIG.out.dir.replace(CONFIG.marker.version, PACKAGE.version);
+
+    if (noExist(CONFIG.out.dir)) fs.mkdirSync(CONFIG.out.dir);
+}
+
+function buildTwineFormat(srcFile, templateContent) {
+    const scriptContent = getFileContent(srcFile)
         .replace(CONFIG.marker.version, PACKAGE.version);
 
     const stringedScript = JSON.stringify(scriptContent);
 
     const styleContent = getFileContent(CONFIG.src.style);
-    const templateContent = getFileContent(CONFIG.src.format);
 
     const formatContent = templateContent
         .replace(CONFIG.marker.style, styleContent)
@@ -51,11 +73,15 @@ function main() {
         .replace(CONFIG.marker.version, PACKAGE.version)
         .replace(CONFIG.marker.description, PACKAGE.description)
         .replace(CONFIG.marker.repository, PACKAGE.repository)
-        .replace(CONFIG.marker.icon, PACKAGE.icon)
+        .replace(CONFIG.marker.icon, PACKAGE.icon);
 
-    saveFileContent(CONFIG.output, formatContent);
+    return formatContent;
+}
 
-    console.log("success....");
+function copyIcon() {
+    const iconFrom = Path.resolve(CONFIG.src.dir, PACKAGE.icon);
+    const iconTo = Path.resolve(CONFIG.out.dir, CONFIG.out.icon);
+    copy(iconFrom, iconTo);
 }
 
 /*************************************
@@ -98,10 +124,6 @@ function getFileContent(filename, encoding) {
     return content;
 }
 
-function getJSONContent(filename) {
-    return JSON.parse(getFileContent(filename));
-}
-
 /**
  *
  * @param fileName
@@ -112,3 +134,36 @@ function saveFileContent(fileName, content, encoding) {
     encoding = encoding | "utf-8";
     fs.writeFileSync(fileName, content, {encoding: encoding});
 }
+
+/***
+ *   COPY FILES
+ * */
+
+function readDir(dir) {
+    return fs.readdirSync(dir);
+}
+
+function isFile(fileName) {
+    return !fs.lstatSync(fileName).isDirectory();
+}
+
+function copy(source, target) {
+    if (isFile(source)) copyFile(source, target);
+    else copyDir(source, target);
+}
+
+function copyFile(source, target) {
+    fs.copyFileSync(source, target);
+}
+
+function copyDir(source, target) {
+    if (noExist(target)) fs.mkdirSync(target);
+
+    const filesInDir = readDir(source);
+    for (let i = 0; i < filesInDir.length; i++) {
+        const nextSource = Path.join(source, filesInDir[i]);
+        const nextTarget = Path.join(target, filesInDir[i]);
+        if (isFile(nextSource)) copyFile(nextSource, nextTarget);
+        else copyDir(nextSource, nextTarget);
+    }
+};
