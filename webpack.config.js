@@ -2,6 +2,7 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
 const ConcatPlugin = require("webpack-concat-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 
 const PACKAGE = require("./package");
 
@@ -118,7 +119,20 @@ module.exports = (env, argv) => {
             ],
         },
 
+        optimization: {
+            minimize: true,
+            minimizer: [
+                new TerserPlugin({
+                    terserOptions: {
+                        compress: {
+                            drop_console: true
+                        }
+                    }
+                })
+            ]
+        },
+
         plugins: plugins,
-       // watch: false,
+        // watch: false,
     };
 };

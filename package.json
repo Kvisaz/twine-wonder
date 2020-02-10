@@ -2,12 +2,12 @@
   "name": "twine-wonder",
   "nameFormat": "Wonder",
   "author": "Kvisaz [Sergey Tokarev]",
-  "version": "0.6.2",
+  "version": "0.6.4",
   "description": "Twine Wonder Format",
   "icon": "icon.svg",
   "bundleScript": "index.js",
   "main": "",
-  "repository": "https://github.com",
+  "repository": "https://github.com/Kvisaz/twine-wonder",
   "scripts": {
     "start": "webpack && webpack-dev-server",
     "build": "webpack --mode production && node twineFormatBuild.js",
@@ -16,6 +16,7 @@
   "devDependencies": {
     "copy-webpack-plugin": "^4.5.2",
     "html-webpack-plugin": "^4.0.0-alpha",
+    "terser-webpack-plugin": "^2.3.4",
     "ts-loader": "^5.3.2",
     "typescript": "^3.2.2",
     "webpack": "^4.28.2",

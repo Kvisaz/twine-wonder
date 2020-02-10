@@ -10,6 +10,7 @@
     "format": "wonder.js"
   },
   "marker": {
+    "icon": "${icon}",
     "style": "${style}",
     "script": "${script}",
     "version": "${version}",
