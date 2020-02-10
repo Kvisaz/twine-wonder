@@ -53,8 +53,18 @@ export class GameLogic {
 
     // выполнить скрипт, забинденный на gameState
     private exeScript(script: string) {
-        const func = new Function(script).bind(this.gameState); // создаю функцию из строки
-        const result = func(); // исполняю функцию
+        let result = null;
+
+        try {
+            const func = new Function(script).bind(this.gameState); // создаю функцию из строки
+            result = func(); // исполняю функцию
+        }catch (e) {
+            // todo сделать вывод без консоли, оповещение
+            // м.б. запись в историю ошибок
+            // потому что сейчас весь консольный лог в продакшене чистится
+            console.warn(' Wonder - UserScript error:'+e)
+        }
+
         return result;
     }
 
