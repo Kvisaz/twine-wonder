@@ -67,7 +67,7 @@ export const LINK_INLINE_TEMPLATE = `<span class="${WONDER.linkClass} " data-id=
 // done 3 flex css для page
 export const PASSAGE_TEMPLATE = `<div class="${WONDER.pageContentClass}">
 <div class="${WONDER.paramClass}" ><div id="gold"></div></div>
-<div class="${WONDER.selectClass} ${WONDER.textClass}"><text/></div>
+<div class="${WONDER.textClass}"><text/></div>
 </div>`;
 
 //language=CSS

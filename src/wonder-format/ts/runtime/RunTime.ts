@@ -7,11 +7,15 @@ export class RunTime {
         this.audioPlayer = new AudioPlayer();
     }
 
-    music(url: string) {
-        this.audioPlayer.music(url);
+    music(url: string, volume = 1) {
+        this.audioPlayer.music(url, volume);
     }
 
-    musicStop(){
+    sound(url: string, volume = 1) {
+        this.audioPlayer.sound(url, volume);
+    }
+
+    musicStop() {
         this.audioPlayer.stop();
     }
 
@@ -29,16 +33,25 @@ class AudioPlayer {
         this.audioElement = new Audio();
     }
 
-    music(url: string) {
-        this.play(url);
+    music(url: string, volume) {
+        this.audioElement.loop = true;
+        this.play(url, volume);
     }
 
-    play(url: string) {
+    sound(url: string, volume) {
+        this.audioElement.loop = false;
+        this.play(url, volume);
+    }
+
+    play(url: string, volume) {
         const soundUrl = url.trim();
-        if (!this.audioElement.paused && soundUrl == this.lastUrl) return;
 
         this.lastUrl = soundUrl;
         this.audioElement.src = this.lastUrl;
+        this.audioElement.volume = volume;
+
+        if (!this.audioElement.paused && soundUrl == this.lastUrl) return;
+
         this.audioElement.play().then(value => console.log('play Then', value));
     }
 
