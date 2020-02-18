@@ -11,6 +11,10 @@ export class RunTime {
         this.audioPlayer.music(url);
     }
 
+    musicStop(){
+        this.audioPlayer.stop();
+    }
+
     onLocation(location: IWonderLocation) {
         console.log('location', location)
     }
@@ -36,5 +40,9 @@ class AudioPlayer {
         this.lastUrl = soundUrl;
         this.audioElement.src = this.lastUrl;
         this.audioElement.play().then(value => console.log('play Then', value));
+    }
+
+    stop() {
+        this.audioElement.pause();
     }
 }
