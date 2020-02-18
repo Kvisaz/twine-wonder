@@ -11,7 +11,7 @@ export class RunTime {
         this.audioPlayer.music(url);
     }
 
-    onLocation(location: IWonderLocation){
+    onLocation(location: IWonderLocation) {
         console.log('location', location)
     }
 }
@@ -19,6 +19,7 @@ export class RunTime {
 
 class AudioPlayer {
     private audioElement: HTMLAudioElement;
+    private lastUrl: string;
 
     constructor() {
         this.audioElement = new Audio();
@@ -29,7 +30,11 @@ class AudioPlayer {
     }
 
     play(url: string) {
-        this.audioElement.src = url.trim();
-        this.audioElement.play().then(value => console.log('play Then', value))
+        const soundUrl = url.trim();
+        if (!this.audioElement.paused && soundUrl == this.lastUrl) return;
+
+        this.lastUrl = soundUrl;
+        this.audioElement.src = this.lastUrl;
+        this.audioElement.play().then(value => console.log('play Then', value));
     }
 }
