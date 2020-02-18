@@ -16,10 +16,12 @@ export function twinePassageFormatter(content: string, template: string): string
         catched = catched.trim();
         // линки могут быть встроенные или с новой строки
         const isInline = catched[0] == WONDER.inlineStart;
-        const TEMPLATE = isInline ? LINK_INLINE_TEMPLATE : LINK_TEMPLATE;
-        if(isInline){
+        if (isInline) {
             catched = catched.substring(1)
         }
+
+        const TEMPLATE = isInline ? LINK_INLINE_TEMPLATE : LINK_TEMPLATE;
+
         const link = buildLink(catched);
         return getLinkHtml(link, TEMPLATE); // чистим
     })

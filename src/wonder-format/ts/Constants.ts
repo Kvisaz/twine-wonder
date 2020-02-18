@@ -11,6 +11,7 @@ export const WONDER = {
     textClass: "text",
     choiceClass: "choice",
     linkClass: "link",
+    newLineClass: "newLine",
     linkInlineClass: "inline",
     noSelectClass: "noselect",
     selectClass: "select",
@@ -43,20 +44,22 @@ export const COMMON_CSS = {
     pointerOver: "pointerOver",
 };
 
+const REGEXP_ANY = '([\\s\\S]*?)';
+
 // regexps
 export const REGEXP = {
-    exeScript: new RegExp("{{([\\s\\S]*?)}}", "g"),
+    exeScript: new RegExp('{{' + REGEXP_ANY + '}}', "g"),
 
     // /\[\[(.*?)\]\]/g - при переводе в строку удваивем  \
-    twineLink: new RegExp("\\[\\[(.*?)\\]\\]", "g"),
+    twineLink: new RegExp('\\[\\[' + REGEXP_ANY + '\\]\\]', "g"),
 };
 
 // templates
 export const PAGE_TEMPLATE = `<div class="${WONDER.noSelectClass} ${WONDER.pageClass}"></div>`;
 
-export const LINK_TEMPLATE = `<div class="${WONDER.linkClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</div>`;
+export const LINK_TEMPLATE = `<span class="${WONDER.linkClass} ${WONDER.newLineClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`;
 
-export const LINK_INLINE_TEMPLATE = `<span class="${WONDER.linkClass} ${WONDER.linkInlineClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`
+export const LINK_INLINE_TEMPLATE = `<span class="${WONDER.linkClass} " data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`
 
 // done 0 скрипты через {{}}
 // todo 1 произвольное создание параметров, инжектирование в params
@@ -113,6 +116,10 @@ export const DEFAULT_STYLE = `
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+    
+    .${WONDER.newLineClass} {
+        display: block;
     }
     
    /* #goldMine1 {
