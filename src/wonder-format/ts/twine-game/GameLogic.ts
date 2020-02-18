@@ -45,6 +45,7 @@ export class GameLogic {
      *********/
     private onPassagePrepared(passage: ITwinePassage) {
         this.showPassage(passage);
+        this.runTime.onLocation(passage);
     }
 
     private showPassage(passage: ITwinePassage) {

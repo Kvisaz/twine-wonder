@@ -1,4 +1,5 @@
 import {IWonderLocation} from '../parser/models/WonderTwineModels';
+import {ITwinePassage} from '../parser/models/TwineModels';
 
 export class RunTime {
     private audioPlayer: AudioPlayer;
@@ -11,6 +12,10 @@ export class RunTime {
         this.audioPlayer.music(url, volume);
     }
 
+    musicFor(hashName: string, url: string, volume = 1) {
+        this.audioPlayer.musicFor(hashName, url, volume);
+    }
+
     sound(url: string, volume = 1) {
         this.audioPlayer.sound(url, volume);
     }
@@ -19,8 +24,9 @@ export class RunTime {
         this.audioPlayer.stop();
     }
 
-    onLocation(location: IWonderLocation) {
-        console.log('location', location)
+    onLocation(location: ITwinePassage) {
+        console.log('location', location);
+        this.audioPlayer.musicCheck(location.name);
     }
 }
 
@@ -29,7 +35,10 @@ class AudioPlayer {
     private audioElement: HTMLAudioElement;
     private lastUrl: string;
 
+    private musicHash: ISoundHash; // список урлов для локаций
+
     constructor() {
+        this.musicHash = {};
         this.audioElement = new Audio();
     }
 
@@ -41,6 +50,16 @@ class AudioPlayer {
     sound(url: string, volume) {
         this.audioElement.loop = false;
         this.play(url, volume);
+    }
+
+    musicFor(hashName: string, url: string, volume: number) {
+        this.musicHash[hashName] = {url, volume};
+    }
+
+    musicCheck(hashName: string) {
+        const sound: ISound = this.musicHash[hashName];
+        if (sound == null) return;
+        this.music(sound.url, sound.volume);
     }
 
     play(url: string, volume) {
@@ -58,4 +77,13 @@ class AudioPlayer {
     stop() {
         this.audioElement.pause();
     }
+}
+
+interface ISound {
+    url: string;
+    volume: number;
+}
+
+interface ISoundHash {
+    [key: string]: ISound
 }
