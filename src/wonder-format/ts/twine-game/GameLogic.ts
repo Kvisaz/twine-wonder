@@ -4,6 +4,7 @@ import {REGEXP, WONDER} from "../Constants";
 import {GameConfig} from "./logic/GameConfig";
 import {WonderStoryParser} from "./logic/WonderStoryParser";
 import {ITwinePassage, ITwineStory} from "../parser/models/TwineModels";
+import {RunTime} from '../runtime/RunTime';
 
 export class GameLogic {
     private story: ITwineStory;
@@ -11,7 +12,15 @@ export class GameLogic {
     private gameConfig = new GameConfig();
     private gameState = {};
 
+    private runTime: RunTime;
+
     constructor() {
+        this.runTime = new RunTime();
+        // @ts-ignore
+        window.w = this.runTime;
+        // @ts-ignore
+        window.Wonder = window.w;
+
         EventBus.getInstance()
             .sub(GameEvents.onPassagePrepared, (message, data) => this.onPassagePrepared(data))
             .sub(GameEvents.onLinkClick, (message, id: string) => this.onLinkClick(id))

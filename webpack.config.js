@@ -41,6 +41,7 @@ const projects = [
         htmlDistrIndex: "index.html", // название html в папке дистрибутива
         entry: "start.ts",
         copy: [
+            "assets",
             "icon.svg",
             "wonderFormat.js"
         ]

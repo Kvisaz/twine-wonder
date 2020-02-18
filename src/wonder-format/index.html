@@ -19,6 +19,8 @@
     this.gold = 100;
     this.goldMine1 = 100;
 
+    console.log('Hello from userScript');
+
     console.touch(200);
     </script>
     <tw-passagedata name="goldMine1" pid="1" position="723,830" size="100,100" tags="">
@@ -26,6 +28,9 @@
             if(this.goldMine1==undefined) this.goldMine1 = 100;
             this.gold++;
             this.goldMine1--;
+
+            w.music('assets/andys-report.mp3');
+
             console.log("Hello from template");
         }}
         В шахте {{= this.goldMine1}} золота. [[= Копать еще|goldMine1]]. Не, отдохну.
