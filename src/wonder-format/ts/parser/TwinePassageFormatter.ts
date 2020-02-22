@@ -27,6 +27,9 @@ export function twinePassageFormatter(content: string, template: string): string
     })
         .trim();
 
+    // переводы строк в br
+    content = content.replace(/(?:\r\n|\r|\n)/g, '<br>');
+
 
     // 99. вставляем текст
     let code = template;

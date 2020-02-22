@@ -54,6 +54,7 @@ export class GameLogic {
 
 
     private onLinkClick(name: string) {
+        console.log('onLinkClick', name);
         EventBus.emit(GameEvents.preparePassage, this.getViewPassage(name));
     }
 
@@ -87,6 +88,8 @@ export class GameLogic {
         const viewPassage = {
             ...this.story.passageHash[name]
         };
+
+        console.log('getViewPassage', name, viewPassage);
 
         this.execScripts(viewPassage);
 

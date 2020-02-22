@@ -11,6 +11,7 @@ export const WONDER = {
     textClass: "text",
     choiceClass: "choice",
     linkClass: "link",
+    linkAloneClass: "link-alone",
     newLineClass: "newLine",
     linkInlineClass: "inline",
     noSelectClass: "noselect",
@@ -57,9 +58,9 @@ export const REGEXP = {
 // templates
 export const PAGE_TEMPLATE = `<div class="${WONDER.noSelectClass} ${WONDER.pageClass}"></div>`;
 
-export const LINK_TEMPLATE = `<span class="${WONDER.linkClass} ${WONDER.newLineClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`;
+export const LINK_TEMPLATE = `<span class="${WONDER.linkClass}  ${WONDER.linkAloneClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`;
 
-export const LINK_INLINE_TEMPLATE = `<span class="${WONDER.linkClass} " data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`
+export const LINK_INLINE_TEMPLATE = `<span class="${WONDER.linkClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`
 
 // done 0 скрипты через {{}}
 // todo 1 произвольное создание параметров, инжектирование в params
@@ -162,17 +163,27 @@ export const DEFAULT_STYLE = `
     .${WONDER.textClass} {
         margin: 0;
         font-size: 18px;
-        line-height: 1.2em;
+        line-height: 26px;
     }
     
     .${WONDER.linkClass}{
+        display: block;
         cursor: pointer;
-        margin: 16px 0;
-        text-decoration: underline;
+        padding: 5px 35px;
+        border-radius: 5px;
+        background: #d5c695;
     }
         
     .${WONDER.linkClass}:hover{
-        color: #313298;
+        color: #4b0d1e;
+        background: #d5b562;
+        margin-top: -4px;
+        margin-bottom: 4px;
+        box-shadow: 2px 2px 1px #414141;
+    }
+    
+    .${WONDER.linkAloneClass}{
+        
     }
     
     @media screen and (max-width: 800px){
