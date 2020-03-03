@@ -1,4 +1,4 @@
-Wonder.SOURCE = '<!DOCTYPE html>\n' +
+SOURCE = '<!DOCTYPE html>\n' +
     '    <html>\n' +
     '        <head>\n' +
     '            <meta name="viewport" content="width=device-width, initial-scale=1">\n' +
@@ -22,5 +22,5 @@ window.storyFormat({
     proofing: false,
     url: '${repository}',
     image: '${icon}',
-    source: Wonder.SOURCE,
+    source: SOURCE,
 });
