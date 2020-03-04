@@ -14,7 +14,7 @@
 
 URL:
 ```html
-https://kvisaz.github.io/twine-wonder/format/format/0.6.5/wonder.js
+https://kvisaz.github.io/twine-wonder/format/format/0.6.7/wonder.js
 ```
 
 ![Вставьте полный путь к файлу](docs/img/2020-02-07_184349.png)
@@ -24,7 +24,7 @@ https://kvisaz.github.io/twine-wonder/format/format/0.6.5/wonder.js
 ## Установка из локального файла
 Если не хотите зависеть от качества связи или доступности GitHub - рекомендую [скачать архив с форматом](format/format/0.6.5.zip), распаковать его в любую удобную папку на своем компьютере и указать при установке полный путь к файлу. К примеру, 
 ```html
-D:\work\PLAYTEXT\wonder-format\0.6.5\wonder.js
+D:\work\PLAYTEXT\wonder-format\0.6.7\wonder.js
 ```
 
 Редактор Twine загружает кастомные форматы при запуске каждый раз - поэтому установка из локального файла, который лежит на вашем компьютере - гарантирует  стабильность проекта и его независимость от сети, внезапных апдейтов формата или доступности GitHub
