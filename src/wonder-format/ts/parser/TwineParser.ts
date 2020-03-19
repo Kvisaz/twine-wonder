@@ -1,4 +1,4 @@
-import {ITwinePassage, ITwineStory} from "./models/TwineModels";
+import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
 
 export function parseTwineData(): ITwineStory {
     const storyEl = document.body.querySelector('tw-storydata');

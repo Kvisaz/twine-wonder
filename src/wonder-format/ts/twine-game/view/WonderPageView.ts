@@ -4,7 +4,7 @@ import {GameEvents} from "../GameEvents";
 import {ViewBuilder} from "./ViewBuilder";
 import {COMMON_CSS, PASSAGE_TEMPLATE, PAGE_TEMPLATE} from "../../Constants";
 import {twinePassageFormatter} from "../../parser/TwinePassageFormatter";
-import {ITwinePassage} from "../../parser/models/TwineModels";
+import {ITwinePassage} from "../../abstract/TwineModels";
 
 export class WonderPageView {
 

@@ -4,7 +4,8 @@ import {WONDER} from "../Constants";
 import {WonderPageView} from "./view/WonderPageView";
 import {DomUtils} from "../app-core/DomUtils";
 import {VisibleParams} from "./logic/GameConfig";
-import {ITwinePassage, ITwineStory} from "../parser/models/TwineModels";
+import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
+import {IPageCanGoBack, IPageViewChecker} from '../abstract/WonderInterfaces';
 
 export class GameView {
     private el: Element;
@@ -26,14 +27,34 @@ export class GameView {
     }
 
     handleEvent(e) {
-        // выбрать первый линк
-        const linkElement = <HTMLElement>DomUtils.closest(e.target, `.${WONDER.linkClass}`);
-        if (linkElement) {
-            const id = linkElement.dataset["id"];
-            EventBus.emit(GameEvents.onLinkClick, id);
-        }
+        if (this.checkLinkClick(e)) return;
+        if (this.checkBackClick(e)) return;
     }
 
+    private checkClick(e: MouseEvent, selector: string, callback: (el: HTMLElement, e: MouseEvent) => void): boolean {
+        const linkElement: HTMLElement = <HTMLElement>DomUtils.closest(e.target as HTMLElement, selector);
+        if (linkElement) callback(linkElement, e);
+        return linkElement != null;
+    }
+
+    private checkLinkClick(e) {
+        return this.checkClick(e,
+            `.${WONDER.linkClass}`,
+            (el: HTMLElement, e1) => {
+                const id = el.dataset["id"];
+                EventBus.emit(GameEvents.onLinkClick, id);
+            }
+        );
+    }
+
+    private checkBackClick(e: MouseEvent) {
+        return this.checkClick(e,
+            `.${WONDER.backClass}`,
+            (el: HTMLElement, e1) => {
+                EventBus.emit(GameEvents.onBackClick, null);
+            }
+        );
+    }
 
     injectStyle(style: string) {
         if (style.length == 0) return;
@@ -53,18 +74,25 @@ export class GameView {
     }
 
     private preparePassage(pageViewData: PageViewData) {
-        const passage = pageViewData.passage;
+        const passage: ITwinePassage = pageViewData.passage;
 
         console.log(`preparePassage`, passage);
         const page: Element = this.pageView.addNextPage(passage);
 
-        document.body.id = pageViewData.passage.name;
+        this.setPageNameAsBodyId(pageViewData);
+
+        this.markVisitedLinks(page, pageViewData.viewChecker);
+        this.showBackLink(page, pageViewData.pageCanGoBack, passage);
 
         // страница добавлена, но еще не видима, можно менять DOM
         this.injectParams(page, pageViewData.config.uiParams, pageViewData.state);
 
 
         EventBus.emit(GameEvents.onPassagePrepared, passage);
+    }
+
+    private setPageNameAsBodyId(pageViewData: PageViewData) {
+        document.body.id = pageViewData.passage.name;
     }
 
     private showPassage(passage: ITwinePassage) {
@@ -83,5 +111,27 @@ export class GameView {
                 el.innerHTML = paramName + ":" + paramValue;
             }
         })
+    }
+
+    private markVisitedLinks(page: Element, viewChecker: IPageViewChecker) {
+        const links: NodeListOf<HTMLElement> = page.querySelectorAll(`.${WONDER.linkClass}`);
+        let next: HTMLElement, nextLinkName: string;
+        for (let i = 0; i < links.length; i++) {
+            next = links[i];
+            nextLinkName =  next.dataset["id"];
+            if (viewChecker.isViewed(nextLinkName)) {
+                next.classList.add(WONDER.visitedClass);
+            }
+        }
+    }
+
+    private showBackLink(page: Element, canGoBack: IPageCanGoBack, passage: ITwinePassage) {
+        const backButton: HTMLElement = page.querySelector(`.${WONDER.backClass}`);
+        if (backButton == null) return;
+
+        const canShowBackButton = canGoBack.canGoBack(passage.name);
+
+        if (canShowBackButton) backButton.classList.remove(WONDER.invisibleClass);
+        else backButton.classList.add(WONDER.invisibleClass);
     }
 }

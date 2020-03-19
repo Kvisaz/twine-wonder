@@ -3,14 +3,18 @@ import {GameEvents, PageViewData} from "./GameEvents";
 import {REGEXP, WONDER} from "../Constants";
 import {GameConfig} from "./logic/GameConfig";
 import {WonderStoryParser} from "./logic/WonderStoryParser";
-import {ITwinePassage, ITwineStory} from "../parser/models/TwineModels";
+import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
 import {RunTime} from '../runtime/RunTime';
+import {IWonderHistory} from '../abstract/WonderInterfaces';
+import {WonderHistory} from './logic/WonderHistory';
 
 export class GameLogic {
     private story: ITwineStory;
 
     private gameConfig = new GameConfig();
     private gameState = {};
+
+    private history: IWonderHistory = new WonderHistory();
 
     private runTime: RunTime;
 
@@ -24,6 +28,7 @@ export class GameLogic {
         EventBus.getInstance()
             .sub(GameEvents.onPassagePrepared, (message, data) => this.onPassagePrepared(data))
             .sub(GameEvents.onLinkClick, (message, id: string) => this.onLinkClick(id))
+            .sub(GameEvents.onBackClick, (message) => this.onBackClick())
     }
 
     loadStory(story: ITwineStory) {
@@ -35,7 +40,7 @@ export class GameLogic {
         WonderStoryParser.parse(story, this.gameState, this.gameConfig);
         console.log('loadStory 2');
         EventBus.emit(GameEvents.onStoryLoaded, story);
-        EventBus.emit(GameEvents.preparePassage, this.getViewPassage(this.story.startPassageName));
+        this.onLinkClick(this.story.startPassageName);
 
         // todo if format - emit FormatLoaded
     }
@@ -49,12 +54,22 @@ export class GameLogic {
     }
 
     private showPassage(passage: ITwinePassage) {
+
         EventBus.emit(GameEvents.showPassage, passage);
     }
 
 
     private onLinkClick(name: string) {
         console.log('onLinkClick', name);
+        this.history.add(name);
+        EventBus.emit(GameEvents.preparePassage, this.getViewPassage(name));
+    }
+
+
+    private onBackClick() {
+        console.log('onBackClick');
+        this.history.pop();
+        const name = this.history.getLast();
         EventBus.emit(GameEvents.preparePassage, this.getViewPassage(name));
     }
 
@@ -69,11 +84,11 @@ export class GameLogic {
         try {
             const func = new Function(script).bind(this.gameState); // создаю функцию из строки
             result = func(); // исполняю функцию
-        }catch (e) {
+        } catch (e) {
             // todo сделать вывод без консоли, оповещение
             // м.б. запись в историю ошибок
             // потому что сейчас весь консольный лог в продакшене чистится
-            console.warn(' Wonder - UserScript error:'+e)
+            console.warn(' Wonder - UserScript error:' + e)
         }
 
         return result;
@@ -96,7 +111,10 @@ export class GameLogic {
         return new PageViewData(
             viewPassage,
             this.gameState,
-            this.gameConfig);
+            this.gameConfig,
+            this.history,
+            this.history
+        );
     }
 
     /**

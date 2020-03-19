@@ -1,7 +1,8 @@
 import {GameConfig} from "./logic/GameConfig";
-import {ITwinePassage} from "../parser/models/TwineModels";
+import {ITwinePassage} from "../abstract/TwineModels";
+import {IPageCanGoBack, IPageViewChecker} from '../abstract/WonderInterfaces';
 
-export enum GameEvents {
+export const enum GameEvents {
     onStoryLoaded = "onStoryLoaded",
     onPageFormatLoaded = "onPageFormatLoaded",
     onContentFormatLoaded = "onPassageFormatLoaded",
@@ -13,7 +14,7 @@ export enum GameEvents {
     showPassage = "showPassage",        // показа пассаж
 
     onLinkClick = "onLinkClick",        // показа пассаж
-
+    onBackClick = "onBackClick",        // показа пассаж
 }
 
 export class PageViewData {
@@ -21,6 +22,8 @@ export class PageViewData {
         public passage: ITwinePassage,
         public state: object,
         public config: GameConfig,
+        public viewChecker: IPageViewChecker,
+        public pageCanGoBack: IPageCanGoBack
     ) {
     }
 }

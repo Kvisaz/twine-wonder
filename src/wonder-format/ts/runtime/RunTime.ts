@@ -1,5 +1,4 @@
-import {IWonderLocation} from '../parser/models/WonderTwineModels';
-import {ITwinePassage} from '../parser/models/TwineModels';
+import {ITwinePassage} from '../abstract/TwineModels';
 
 export class RunTime {
     private audioPlayer: AudioPlayer;

@@ -3,7 +3,7 @@
  */
 import {GameConfig, VisibleParameter} from "./GameConfig";
 import {WONDER} from "../../Constants";
-import {ITwinePassage, ITwineStory} from "../../parser/models/TwineModels";
+import {ITwinePassage, ITwineStory} from "../../abstract/TwineModels";
 
 export class WonderStoryParser {
     static parse(story: ITwineStory, state: object, config: GameConfig) {

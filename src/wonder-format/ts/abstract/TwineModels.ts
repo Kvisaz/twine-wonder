@@ -16,12 +16,12 @@ export interface ITwineStory {
 }
 
 export interface ITwinePassage {
-     pid: string,
-     name: string,
-     tags: string,
-     position: string,
-     size: string,
-     content: string,
+     pid: string;
+     name: string; // уникальное имя, используемые для ссылки
+     tags: string;
+     position: string;
+     size: string;
+     content: string;
 }
 
 export class Passage implements ITwinePassage{

@@ -3,6 +3,14 @@
 export const STORY_SELECTOR = "tw-storydata";
 export const PASSAGE_SELECTOR = "tw-passagedata";
 
+export const COMMON_CSS = {
+    displayNone: "displayNone",
+    pointerOver: "pointerOver",
+    visited: "visited",
+    back: "back"
+
+};
+
 // wonder selector
 export const WONDER = {
     contentId: "wonder-content",
@@ -17,6 +25,9 @@ export const WONDER = {
     noSelectClass: "noselect",
     selectClass: "select",
     paramClass: 'params',
+    visitedClass: COMMON_CSS.visited,
+    backClass: COMMON_CSS.back,
+    invisibleClass: COMMON_CSS.displayNone,
     template: {
         text: "<text/>",
         choices: "<choices/>",    // начало повторяющегося блока
@@ -40,10 +51,6 @@ export const WONDER = {
 
 };
 
-export const COMMON_CSS = {
-    displayNone: "displayNone",
-    pointerOver: "pointerOver",
-};
 
 const REGEXP_ANY = '([\\s\\S]*?)';
 
@@ -62,11 +69,14 @@ export const LINK_TEMPLATE = `<span class="${WONDER.linkClass}  ${WONDER.linkAlo
 
 export const LINK_INLINE_TEMPLATE = `<span class="${WONDER.linkClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`
 
+export const BACK_TEMPLATE = `<div class="${WONDER.backClass}">Назад</div>`;
+
 // done 0 скрипты через {{}}
 // todo 1 произвольное создание параметров, инжектирование в params
 // rejected 2 общий шаблон Passage-Template - конфликт display: none с flex
 // done 3 flex css для page
 export const PASSAGE_TEMPLATE = `<div class="${WONDER.pageContentClass}">
+${BACK_TEMPLATE}
 <div class="${WONDER.paramClass}" ><div id="gold"></div></div>
 <div class="${WONDER.textClass}"><text/></div>
 </div>`;
@@ -174,10 +184,37 @@ export const DEFAULT_STYLE = `
         background: #d5c695;
     }
         
-    .${WONDER.linkClass}:hover{
+    .${WONDER.linkClass}:hover, .${WONDER.backClass}:hover{
         color: #4b0d1e;
         background: #d5b562;       
     }
+    
+    .${WONDER.visitedClass}:after {
+        content: '  (прочитано)';
+        font-size: smaller;
+     }
+     
+     .${WONDER.visitedClass} {
+        opacity: 0.65;
+        font-size: smaller;
+     }
+    
+    .${WONDER.backClass} {
+        cursor: pointer;
+        display: inline-block;
+        margin-left: 0;
+        margin-right: auto;
+        margin-bottom: 4px;
+        padding: 4px;
+        border-radius: 5px;
+        background: #eae2c5;
+        color: #6c6c6c;
+    }
+    
+     .${WONDER.backClass}:before {
+        content: '<';
+     }
+   
     
     .${WONDER.linkAloneClass}{
         margin-top: 0px;
