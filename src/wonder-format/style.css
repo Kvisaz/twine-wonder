@@ -1,0 +1,49 @@
+@font-face {
+    font-family: 'Merriweather';
+    font-style: normal;
+    font-weight: 400;
+    src: url(font/Merriweather-Regular.ttf) format('truetype');
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background: url(img/unlord-bg-001.jpg) no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Merriweather', serif;
+}
+
+#wonder-content {
+    width: 885px;
+    height: 100%;
+    background: url(img/unlord-page-001.png) center top no-repeat;
+    background-size: 885px;
+}
+
+.page {
+    background: none;
+    height: 100%;
+}
+
+.page-content {
+    padding: 96px;
+}
+
+.text {
+    font-size: 16px;
+    line-height: 1.7em;
+}
+
+.link {
+    font-size: 18px;
+    background: url(img/bookmark-idle.png) no-repeat;
+}
+
+.link:focus, .link:hover {
+    background: url(img/bookmark-focus.png) no-repeat;
+    box-shadow: none;
+    margin-bottom: 0;
+    margin-top:0;
+}

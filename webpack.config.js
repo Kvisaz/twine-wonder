@@ -42,6 +42,7 @@ const projects = [
         entry: "start.ts",
         copy: [
             "assets",
+            "style.css",
             "icon.svg",
             "wonderFormat.js"
         ]

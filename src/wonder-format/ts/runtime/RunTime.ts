@@ -13,6 +13,7 @@ export class RunTime {
 
     /************
      *  Подключить стиль
+     *  todo - не работает после экспорта, стиль не грузится
      ***********/
     styleUrl(styleUrl:string) {
         const styleEl: HTMLElement = document.createElement('link');
