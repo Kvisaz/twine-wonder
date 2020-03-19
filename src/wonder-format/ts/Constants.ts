@@ -176,14 +176,17 @@ export const DEFAULT_STYLE = `
         
     .${WONDER.linkClass}:hover{
         color: #4b0d1e;
-        background: #d5b562;
-        margin-top: -4px;
-        margin-bottom: 4px;
-        box-shadow: 2px 2px 1px #414141;
+        background: #d5b562;       
     }
     
     .${WONDER.linkAloneClass}{
-        
+        margin-top: 0px;
+    }
+    
+    .${WONDER.linkAloneClass}:hover{
+        margin-top: -2px;
+        margin-bottom: 2px;
+        box-shadow: 2px 2px 1px #414141;
     }
     
     @media screen and (max-width: 800px){
