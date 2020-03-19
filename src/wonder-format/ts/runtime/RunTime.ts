@@ -15,9 +15,9 @@ export class RunTime {
      *  Подключить стиль
      ***********/
     styleUrl(styleUrl:string) {
-        const styleEl: Element = document.createElement('link');
+        const styleEl: HTMLElement = document.createElement('link');
         styleEl.setAttribute('rel', 'stylesheet');
-        styleEl.setAttribute('rel', 'text/css');
+        styleEl.setAttribute('type', 'text/css');
         styleEl.setAttribute('href', styleUrl);
         document.head.appendChild(styleEl);
     }
