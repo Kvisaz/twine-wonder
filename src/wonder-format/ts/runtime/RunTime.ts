@@ -18,7 +18,6 @@ export class RunTime {
     styleUrl(styleUrl:string) {
         const styleEl: HTMLElement = document.createElement('link');
         styleEl.setAttribute('rel', 'stylesheet');
-        styleEl.setAttribute('type', 'text/css');
         styleEl.setAttribute('href', styleUrl);
         document.head.appendChild(styleEl);
     }
