@@ -7,6 +7,25 @@ export class RunTime {
         this.audioPlayer = new AudioPlayer();
     }
 
+    /***********
+     *  Стили, дизайн
+     **********/
+
+    /************
+     *  Подключить стиль
+     ***********/
+    styleUrl(styleUrl:string) {
+        const styleEl: Element = document.createElement('link');
+        styleEl.setAttribute('rel', 'stylesheet');
+        styleEl.setAttribute('rel', 'text/css');
+        styleEl.setAttribute('href', styleUrl);
+        document.head.appendChild(styleEl);
+    }
+
+    /***********
+     *  Sounds
+     **********/
+
     music(url: string, volume = 1) {
         this.audioPlayer.music(url, volume);
     }
@@ -23,6 +42,9 @@ export class RunTime {
         this.audioPlayer.stop();
     }
 
+    /***********
+     *  Выполнить действие на локации
+     **********/
     onLocation(location: ITwinePassage) {
         console.log('location', location);
         this.audioPlayer.musicCheck(location.name);
