@@ -12,7 +12,9 @@ export class GameLogic {
     private story: ITwineStory;
 
     private gameConfig = new GameConfig();
-    private gameState = {};
+    private appState = {
+        gameState: {} // пользовательский контекст
+    };
 
     private history: IWonderHistory = new WonderHistory();
 
@@ -31,18 +33,19 @@ export class GameLogic {
             .sub(GameEvents.onBackClick, (message) => this.onBackClick())
     }
 
+    // не нужен ли тут прелоадер? )
     loadStory(story: ITwineStory) {
         this.story = story;
 
         this.exeScript(story.script);
 
-        console.log('loadStory 1');
-        WonderStoryParser.parse(story, this.gameState, this.gameConfig);
-        console.log('loadStory 2');
+        console.log('loadStory, script executed...');
+        WonderStoryParser.parse(story, this.appState.gameState, this.gameConfig);
+        console.log('loadStory 2, gameState parsed...');
         EventBus.emit(GameEvents.onStoryLoaded, story);
         this.onLinkClick(this.story.startPassageName);
 
-        // todo if format - emit FormatLoaded
+        this.runTime.onStoryReady(story);
     }
 
     /*********
@@ -50,7 +53,7 @@ export class GameLogic {
      *********/
     private onPassagePrepared(passage: ITwinePassage) {
         this.showPassage(passage);
-        this.runTime.onLocation(passage);
+        this.runTime.onPassage(passage);
     }
 
     private showPassage(passage: ITwinePassage) {
@@ -82,7 +85,7 @@ export class GameLogic {
         let result = null;
 
         try {
-            const func = new Function(script).bind(this.gameState); // создаю функцию из строки
+            const func = new Function(script).bind(this.appState.gameState); // создаю функцию из строки
             result = func(); // исполняю функцию
         } catch (e) {
             // todo сделать вывод без консоли, оповещение
@@ -110,7 +113,7 @@ export class GameLogic {
 
         return new PageViewData(
             viewPassage,
-            this.gameState,
+            this.appState.gameState,
             this.gameConfig,
             this.history,
             this.history

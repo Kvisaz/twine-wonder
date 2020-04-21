@@ -93,6 +93,7 @@ export class GameView {
 
     private setPageNameAsBodyId(pageViewData: PageViewData) {
         document.body.id = pageViewData.passage.name;
+        document.body.className = pageViewData.passage.tags;
     }
 
     private showPassage(passage: ITwinePassage) {
