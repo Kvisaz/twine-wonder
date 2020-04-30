@@ -1,5 +1,5 @@
 import {IPageViewChecker, IWonderHistory} from '../../abstract/WonderInterfaces';
-import {WonderHistoryState} from '../AppState';
+import {IHasHash, IWonderHistoryState} from './WonderHistoryInterfaces';
 
 export class WonderHistory implements IWonderHistory, IPageViewChecker {
     private pages: Array<string>;
@@ -9,16 +9,16 @@ export class WonderHistory implements IWonderHistory, IPageViewChecker {
         this.clear();
     }
 
-    getState(): WonderHistoryState {
-        return [
-            ...this.pages
-        ]
+    getState(): IWonderHistoryState {
+        return {
+            pages: this.pages,
+            pagesHash: this.pagesHash
+        }
     }
 
-    setState(state: WonderHistoryState) {
-        this.pages = [
-            ...state
-        ]
+    setState(state: IWonderHistoryState) {
+        this.pages = state.pages;
+        this.pagesHash = state.pagesHash;
     }
 
     clear() {
@@ -55,8 +55,4 @@ export class WonderHistory implements IWonderHistory, IPageViewChecker {
     getLast(): string {
         return this.pages[this.pages.length - 1];
     }
-}
-
-interface IHasHash {
-    [name: string]: boolean
 }

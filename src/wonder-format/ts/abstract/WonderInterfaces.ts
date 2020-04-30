@@ -1,5 +1,5 @@
 import {ITwinePassage, ITwineStory} from './TwineModels';
-import {WonderHistoryState} from '../twine-game/AppState';
+import {IWonderHistoryState} from '../twine-game/logic/WonderHistoryInterfaces';
 
 export interface IWonderStory extends ITwineStory {
     passages: Array<IWonderPage>,
@@ -31,7 +31,7 @@ export interface IWonderHistory extends IPageViewChecker, IPageCanGoBack {
 
     getLast(): string; // вернуть последний
 
-    getState(): WonderHistoryState;
+    getState(): IWonderHistoryState;
 
-    setState(state: WonderHistoryState):void;
+    setState(state: IWonderHistoryState):void;
 }

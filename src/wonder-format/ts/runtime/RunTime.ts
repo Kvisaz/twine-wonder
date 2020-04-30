@@ -75,6 +75,11 @@ export class RunTime {
         this.collections.addRule(rule);
     }
 
+    //HOW TO SHOW COLLECTIONS
+    showCollections(){
+      //  this.collections.show();
+    }
+
     /***********
      *  Sounds
      **********/
