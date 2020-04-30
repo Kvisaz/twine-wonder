@@ -1,13 +1,16 @@
 import {ITwinePassage, ITwineStory} from '../abstract/TwineModels';
+import {PostMessageApi} from './PostMessageApi';
+import {IAppState} from '../twine-game/AppState';
 
 export class RunTime {
-    private audioPlayer: AudioPlayer;
-    private collections: Collections;
-
+    private readonly audioPlayer: AudioPlayer;
+    private readonly collections: Collections;
+    private readonly postMessageApi: PostMessageApi;
 
     constructor() {
         this.audioPlayer = new AudioPlayer();
         this.collections = new Collections();
+        this.postMessageApi = new PostMessageApi();
     }
 
     /***********
@@ -53,6 +56,13 @@ export class RunTime {
         this.audioPlayer.stop();
     }
 
+    /********************
+     *  postMessageApi
+     *******************/
+    parentApi(): PostMessageApi {
+        return this.postMessageApi;
+    }
+
     /***********
      *  методы вызываются основным движком
      **********/
@@ -65,8 +75,7 @@ export class RunTime {
 
     }
 
-    onPassage(passage: ITwinePassage) {
-        console.log('passage', passage);
+    onPassage(passage: ITwinePassage, state: IAppState) {
         this.audioPlayer.musicCheck(passage.name);
         this.collections.onPassage(passage);
     }

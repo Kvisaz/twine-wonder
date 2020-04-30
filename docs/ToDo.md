@@ -1,6 +1,10 @@
 
 #Todo для релиза
 
+- [postMessage API](PostMessage.md)
+- [Теги для линков на пассажи](LinkTags.md)
+
+#Вероятный бэклог!
 - [Ловить коллекционки](Collectibles.md)
 
 

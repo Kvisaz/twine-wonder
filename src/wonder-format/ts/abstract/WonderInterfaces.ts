@@ -1,4 +1,5 @@
 import {ITwinePassage, ITwineStory} from './TwineModels';
+import {WonderHistoryState} from '../twine-game/AppState';
 
 export interface IWonderStory extends ITwineStory {
     passages: Array<IWonderPage>,
@@ -29,4 +30,8 @@ export interface IWonderHistory extends IPageViewChecker, IPageCanGoBack {
     pop(): string; // удалить последний элемент истории. В списке отмеченных останется
 
     getLast(): string; // вернуть последний
+
+    getState(): WonderHistoryState;
+
+    loadState(state: WonderHistoryState):void;
 }

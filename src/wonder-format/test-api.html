@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Parent Api</title>
+    <style>
+        html, body, iframe {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        iframe {
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<iframe id="dock" src="index.html"></iframe>
+<script>
+    // save API
+    const testStorageKey = 'XXX_WONDER_TEST';
+
+    function save(data) {
+        console.log('saved....');
+        window.localStorage.setItem(testStorageKey, JSON.stringify(data));
+    }
+
+    function load() {
+        return JSON.parse(localStorage.getItem(testStorageKey));
+    }
+
+    // main
+    const iframeElement = document.querySelector('#dock');
+    const savedState = load();
+
+    iframeElement.onload = () => {
+        setTimeout(() => {
+            iframeElement.contentWindow.postMessage({
+                name: 'load',
+                data: savedState
+            }, '*');
+        }, 500)
+    }
+
+
+    function onPostMessage(e) {
+        console.log('get message ', e.data);
+        const MESSAGE = e.data.name;
+        const DATA = e.data.data;
+        handleMessage(MESSAGE, DATA);
+    }
+
+    window.addEventListener('message', onPostMessage);
+
+
+
+    // handler
+    function handleMessage(message, data) {
+        switch (message) {
+            case 'passage':
+            case 'save':
+                save(data);
+                break;
+        }
+    }
+
+
+</script>
+</body>
+</html>

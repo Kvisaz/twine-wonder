@@ -7,18 +7,21 @@ import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
 import {RunTime} from '../runtime/RunTime';
 import {IWonderHistory} from '../abstract/WonderInterfaces';
 import {WonderHistory} from './logic/WonderHistory';
+import {IAppState} from './AppState';
+import {AppEvents} from './AppEvents';
 
 export class GameLogic {
     private story: ITwineStory;
 
     private gameConfig = new GameConfig();
-    private appState = {
-        gameState: {} // пользовательский контекст
+    private appState: IAppState = {
+        passage: null,
+        game: {},
     };
 
     private history: IWonderHistory = new WonderHistory();
 
-    private runTime: RunTime;
+    private readonly runTime: RunTime;
 
     constructor() {
         this.runTime = new RunTime();
@@ -27,9 +30,11 @@ export class GameLogic {
         // @ts-ignore
         window.Wonder = window.w;
 
+        this.runTime.parentApi().on(AppEvents.load, (state) => this.loadState(state));
+
         EventBus.getInstance()
             .sub(GameEvents.onPassagePrepared, (message, data) => this.onPassagePrepared(data))
-            .sub(GameEvents.onLinkClick, (message, id: string) => this.onLinkClick(id))
+            .sub(GameEvents.onLinkClick, (message, id: string) => this.goTo(id))
             .sub(GameEvents.onBackClick, (message) => this.onBackClick())
     }
 
@@ -40,10 +45,12 @@ export class GameLogic {
         this.exeScript(story.script);
 
         console.log('loadStory, script executed...');
-        WonderStoryParser.parse(story, this.appState.gameState, this.gameConfig);
-        console.log('loadStory 2, gameState parsed...');
+        WonderStoryParser.parse(story, this.appState.game, this.gameConfig);
+        console.log('loadStory 2, game parsed...');
         EventBus.emit(GameEvents.onStoryLoaded, story);
-        this.onLinkClick(this.story.startPassageName);
+
+        this.appState.passage = this.story.startPassageName;
+        this.goTo(this.appState.passage);
 
         this.runTime.onStoryReady(story);
     }
@@ -53,39 +60,42 @@ export class GameLogic {
      *********/
     private onPassagePrepared(passage: ITwinePassage) {
         this.showPassage(passage);
-        this.runTime.onPassage(passage);
+        this.runTime.onPassage(passage, this.appState);
+        console.log('onPassagePrepared', this.appState);
     }
 
-    private showPassage(passage: ITwinePassage) {
-
-        EventBus.emit(GameEvents.showPassage, passage);
-    }
-
-
-    private onLinkClick(name: string) {
-        console.log('onLinkClick', name);
-        this.history.add(name);
+    private prepareToShow(name: string) {
         EventBus.emit(GameEvents.preparePassage, this.getViewPassage(name));
     }
 
+    private showPassage(passage: ITwinePassage) {
+        EventBus.emit(GameEvents.showPassage, passage);
+    }
+
+    private goTo(name: string) {
+        console.log('goTo', name);
+        this.appState.passage = name;
+        this.history.add(this.appState.passage); // текущий узел идёт в историю
+        this.saveAppState();
+        this.prepareToShow(name);
+    }
 
     private onBackClick() {
         console.log('onBackClick');
         this.history.pop();
-        const name = this.history.getLast();
-        EventBus.emit(GameEvents.preparePassage, this.getViewPassage(name));
+        this.goTo(this.history.getLast());
     }
 
     /*********
      * helpers
      *********/
 
-    // выполнить скрипт, забинденный на gameState
+    // выполнить скрипт, забинденный на game
     private exeScript(script: string) {
         let result = null;
 
         try {
-            const func = new Function(script).bind(this.appState.gameState); // создаю функцию из строки
+            const func = new Function(script).bind(this.appState.game); // создаю функцию из строки
             result = func(); // исполняю функцию
         } catch (e) {
             // todo сделать вывод без консоли, оповещение
@@ -113,7 +123,7 @@ export class GameLogic {
 
         return new PageViewData(
             viewPassage,
-            this.appState.gameState,
+            this.appState.game,
             this.gameConfig,
             this.history,
             this.history
@@ -142,4 +152,27 @@ export class GameLogic {
         console.log(`....... /execScripts`);
     }
 
+    /********************
+     *  STATE MANAGEMENT
+     *******************/
+
+    private saveAppState() {
+        this.appState.history = this.history.getState();
+        this.runTime.parentApi().send(AppEvents.passage, this.appState);
+    }
+
+    private loadState(state: IAppState) {
+
+        console.log('loadState', state);
+
+        this.appState = {
+            ...this.appState,
+            ...state
+        };
+        console.log('this.appState', state);
+        this.history.loadState(this.appState.history);
+
+        this.goTo(this.appState.passage);
+
+    }
 }
