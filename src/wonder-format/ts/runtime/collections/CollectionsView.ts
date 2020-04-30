@@ -46,7 +46,7 @@ export class CollectionsView {
     updateButtons(collectionMap: IWonderCollectionMap) {
         Object.keys(collectionMap).forEach(collectionName => {
             const collection = collectionMap[collectionName];
-            this.updateButton(collection)
+            this.updateButton(collection);
         })
     }
 

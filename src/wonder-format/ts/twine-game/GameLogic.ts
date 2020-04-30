@@ -35,7 +35,7 @@ export class GameLogic {
 
         EventBus.getInstance()
             .sub(GameEvents.onPassagePrepared, (message, data) => this.onPassagePrepared(data))
-            .sub(GameEvents.onLinkClick, (message, id: string) => this.goTo(id))
+            .sub(GameEvents.onLinkClick, (message, id: string) => this.onClick(id))
             .sub(GameEvents.onBackClick, (message) => this.onBackClick())
     }
 
@@ -56,7 +56,7 @@ export class GameLogic {
         EventBus.emit(GameEvents.onStoryLoaded, story);
 
         this.appState.passage = STORY_STORE.story.startPassageName;
-        this.goTo(this.appState.passage);
+        this.prepareToShow(this.appState.passage);
 
         this.runTime.onStoryReady();
     }
@@ -78,18 +78,20 @@ export class GameLogic {
         EventBus.emit(GameEvents.showPassage, passage);
     }
 
-    private goTo(name: string) {
-        console.log('goTo', name);
+    private onClick(name: string) {
+        console.log('onClick', name);
         this.appState.passage = name;
         this.history.add(this.appState.passage); // текущий узел идёт в историю
         this.saveAppState();
-        this.prepareToShow(name);
+        this.prepareToShow(this.appState.passage);
     }
 
     private onBackClick() {
         console.log('onBackClick');
         this.history.pop();
-        this.goTo(this.history.getLast());
+        this.appState.passage = this.history.getLast();
+        this.saveAppState();
+        this.prepareToShow( this.appState.passage);
     }
 
     /*********
@@ -184,7 +186,7 @@ export class GameLogic {
         this.history.setState(this.appState.history);
         this.runTime.setState(this.appState.runTime as IRunTimeState);
 
-        this.goTo(this.appState.passage);
+        this.prepareToShow(this.appState.passage);
 
     }
 }

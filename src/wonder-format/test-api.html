@@ -23,7 +23,7 @@
     const testStorageKey = 'XXX_WONDER_TEST';
 
     function save(data) {
-        console.log('saved....');
+        console.log('saved....', data);
         window.localStorage.setItem(testStorageKey, JSON.stringify(data));
     }
 
