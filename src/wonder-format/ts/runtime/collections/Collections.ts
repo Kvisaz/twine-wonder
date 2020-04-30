@@ -7,6 +7,7 @@ import {
     IWonderCollectionMap,
     IWonderCollectRule
 } from './CollectionInterfaces';
+import {STORY_STORE} from '../../twine-game/StoryStore';
 
 /*************
  *  Collectables
@@ -22,9 +23,9 @@ export class Collections {
         this.collectionsView = new CollectionsView();
     }
 
-    onStoryReady(story: ITwineStory) {
+    onStoryReady() {
         // todo посчитать коллекции
-        this.initCollections(story);
+        this.initCollections();
 
         // TODO show buttons
         setTimeout(() => {
@@ -38,6 +39,8 @@ export class Collections {
             ...this.collectionMap,
             ...state.collected
         }
+
+        this.collectionsView.updateButtons(this.collectionMap)
     }
 
     // todo check
@@ -79,13 +82,14 @@ export class Collections {
         const collection: IWonderCollection = this.collectionMap[rule.collection];
         if (collection.collected.indexOf(passage.name) < 0) {
             collection.collected.push(passage.name);
-            this.onPassageCollected(passage);
+            this.onPassageCollected(passage, collection);
         }
     }
 
-    private onPassageCollected(passage: ITwinePassage) {
+    private onPassageCollected(passage: ITwinePassage, collection: IWonderCollection) {
         console.log('passage collected', passage);
         console.log('collections', this.collectionMap);
+        this.collectionsView.updateButton(collection);
     }
 
     private addCollection(rule: IWonderCollectRule) {
@@ -94,6 +98,7 @@ export class Collections {
         }
 
         this.collectionMap[rule.collection] = {
+            name: rule.collection,
             title: rule.title,
             collected: [],
             maxAmount: 0
@@ -101,7 +106,9 @@ export class Collections {
     }
 
 
-    private initCollections(story: ITwineStory) {
+    private initCollections() {
+        const story: ITwineStory = STORY_STORE.story;
+
         story.passages.forEach(passage => {
             const pTags = getTags(passage);
             pTags.forEach(tag => {

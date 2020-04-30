@@ -1,6 +1,7 @@
 // const enum, т.к. он подставляется по значениям
 export const enum CollectionCSS {
     wrapperId = 'c-wrapper',
+    shadowId = 'c-shadow',
     button = 'c-button',
     buttonCompleted = 'c-button-completed',
     buttonTitle='c-bt-title',

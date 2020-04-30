@@ -11,6 +11,8 @@ export class RunTime {
     private readonly collections: Collections;
     private readonly postMessageApi: PostMessageApi;
 
+    private story: ITwineStory;
+
     private gameVars: object;
 
     constructor() {
@@ -19,6 +21,10 @@ export class RunTime {
         this.audioPlayer = new AudioPlayer();
         this.collections = new Collections();
         this.postMessageApi = new PostMessageApi();
+    }
+
+    setStory(story: ITwineStory){
+        this.story = story;
     }
 
     getGameVars(): object {
@@ -111,13 +117,12 @@ export class RunTime {
     /***********
      *  методы вызываются основным движком
      **********/
-    onStoryReady(story: ITwineStory) {
+    onStoryReady() {
         console.log('Wonder onStoryReady');
         // поскольку подсчет коллекций может быть долгим, откладываем ненадолго
         setTimeout(() => {
-            this.collections.onStoryReady(story);
+            this.collections.onStoryReady();
         }, 0);
-
     }
 
     onPassage(passage: ITwinePassage, state: IAppState) {

@@ -11,7 +11,8 @@
  */
 import {CollectionCSS} from './CollectionCSS';
 import {ITwinePassage} from '../../abstract/TwineModels';
-import {IWonderCollection} from './CollectionInterfaces';
+import {ICollectionShowCallback, IWonderCollection} from './CollectionInterfaces';
+import {STORY_STORE} from '../../twine-game/StoryStore';
 
 export class SingleCollectionView {
     private readonly buttonEl: HTMLElement;
@@ -25,6 +26,9 @@ export class SingleCollectionView {
     private readonly pageEl: HTMLElement;
 
     private passages: Array<ITwinePassage>;
+    private collectionName: string;
+
+    private onButtonClickCallback: ICollectionShowCallback;
 
     constructor(
         private buttonClass = CollectionCSS.button,
@@ -38,31 +42,19 @@ export class SingleCollectionView {
 
     attach(el?: HTMLElement) {
         el = el || document.body;
-        el.appendChild(this.listEl);
-        el.appendChild(this.pageEl);
+        document.body.appendChild(this.listEl);
+        document.body.appendChild(this.pageEl);
         el.appendChild(this.buttonEl);
     }
 
     update(collection: IWonderCollection) {
-        const collected = collection.collected.length;
-        const total = collection.maxAmount;
-        const title = collection.title;
-
-        // content
-        this.buttonTitleEl.innerHTML = `${collection.title}`;
-        this.buttonContentEl.innerHTML = `${collected}/${total}`;
-
-        // class
-        const isCompleted = collected == total;
-        const className = isCompleted
-            ? `${CollectionCSS.button} ${CollectionCSS.buttonCompleted}`
-            : `${CollectionCSS.button} `;
-        this.buttonEl.className = className;
+        this.updateButton(collection);
+        this.updateListTitle(collection);
+        this.updateList(collection);
     }
 
-    updateData(passages: Array<ITwinePassage>) {
-        this.passages = passages;
-        this.updateCollection(passages);
+    onCollectionShow(callback: ICollectionShowCallback) {
+        this.onButtonClickCallback = callback;
     }
 
     /********************
@@ -70,10 +62,9 @@ export class SingleCollectionView {
      *******************/
     private createButton(className: string): HTMLElement {
         const bt = this.createDiv(className);
-        bt.addEventListener('mouseup', () => this.showCollection());
 
         this.buttonTitleEl = this.createDiv(CollectionCSS.buttonTitle);
-        this.buttonContentEl  = this.createDiv(CollectionCSS.buttonContent);
+        this.buttonContentEl = this.createDiv(CollectionCSS.buttonContent);
 
         bt.appendChild(this.buttonTitleEl);
         bt.appendChild(this.buttonContentEl);
@@ -84,12 +75,12 @@ export class SingleCollectionView {
     private createList(className: string): HTMLElement {
         const list = this.createDiv(className);
 
-        list.addEventListener('click', (e) => this.findPage(e));
-        list.addEventListener('mouseup', () => this.closeCollection());
+        //list.addEventListener('click', (e) => this.findPage(e));
+        //list.addEventListener('mouseup', () => this.closeCollection());
 
 
         this.listTitleEl = this.createDiv(CollectionCSS.listTitle);
-        this.listContentEl  = this.createDiv(CollectionCSS.listContent);
+        this.listContentEl = this.createDiv(CollectionCSS.listContent);
 
         list.appendChild(this.listTitleEl);
         list.appendChild(this.listContentEl);
@@ -106,31 +97,60 @@ export class SingleCollectionView {
     /********************
      *  UPDATE COLLECTION
      *******************/
-    private updateCollection(passages: Array<ITwinePassage>) {
+
+    private updateButton(collection: IWonderCollection) {
+        this.collectionName = collection.name;
+        const collected = collection.collected.length;
+        const total = collection.maxAmount;
+        const title = collection.title;
+
+        this.buttonEl.dataset.collection = this.collectionName;
+
+        // content
+        this.buttonTitleEl.innerHTML = `${title}`;
+        this.buttonContentEl.innerHTML = `${collected}/${total}`;
+
+        // class
+        const isCompleted = collected == total;
+        const className = isCompleted
+            ? `${CollectionCSS.button} ${CollectionCSS.buttonCompleted}`
+            : `${CollectionCSS.button} `;
+        this.buttonEl.className = className;
+    }
+
+    private updateListTitle(collection: IWonderCollection) {
+        this.listTitleEl.innerHTML = collection.title;
+    }
+    private updateList(collection: IWonderCollection) {
         // clear list
-        this.listEl.innerHTML = '';
+        this.listContentEl.innerHTML = '';
 
         // create code
+        const passageMap = STORY_STORE.story.passageHash;
         let newList = '';
-        passages.forEach((passage, index) => {
+        collection.collected.forEach((name) => {
+            const passage = passageMap[name];
             const title = this.getPageTitle(passage.content);
-            const itemTemplate = this.getItemTemplate(title, index);
+            const itemTemplate = this.getItemTemplate(title, name);
             newList += itemTemplate;
         });
 
         // fill list
-        this.listEl.innerHTML = newList;
+        this.listContentEl.innerHTML = newList;
     }
 
     /********************
      *  SHOW LIST
      *******************/
-    private showCollection() {
+    showCollection() {
         // todo
+        this.listEl.className = `${CollectionCSS.list} ${CollectionCSS.listShow}`;
+        if (this.onCollectionShow) this.onButtonClickCallback(this.collectionName);
     }
 
-    private closeCollection() {
+    closeCollection() {
         // todo
+        this.listEl.className = `${CollectionCSS.list}`;
     }
 
     /********************
@@ -147,6 +167,7 @@ export class SingleCollectionView {
         let title = innerText(passageContent, '<h1>', '</h1>');
         if (title == null || title.length == 0) {
             title = getFirstLine(passageContent);
+            console.log('getFirstLine', title);
         }
         return title;
     }
@@ -171,9 +192,10 @@ export class SingleCollectionView {
         return div;
     }
 
-    private getItemTemplate(title: string, id: number): string {
-        return `<div class=${CollectionCSS.listItem} data-id="${id}">${title}</div>`
+    private getItemTemplate(title: string, name: string): string {
+        return `<div class=${CollectionCSS.listItem} data-name="${name}">${title}</div>`
     }
+
 
 }
 
@@ -188,6 +210,9 @@ export class SingleCollectionView {
  */
 function innerText(str, startTag, endTag, withTags = false) {
     const startIndex = str.indexOf(startTag);
+
+    if (startIndex < 0) return '';
+
     const endIndex = str.indexOf(endTag, startIndex);
     const startOffset = withTags ? 0 : startTag.length;
     const endOffset = withTags ? endTag.length : 0;

@@ -4,6 +4,7 @@ export interface IRulesMap {
 
 // коллекция
 export interface IWonderCollection {
+    name: string; // уникальное название коллекции
     title: string; // читабельное имя для юзера
     collected: Array<string>; // собранные пассажи
     maxAmount: number; // сколько вообще можно собрать
@@ -24,4 +25,8 @@ export interface IWonderCollectRule {
 
 export interface ICollectionState {
     collected: IWonderCollectionMap
+}
+
+export interface ICollectionShowCallback {
+    (collectionName: string): void
 }

@@ -10,10 +10,9 @@ import {WonderHistory} from './logic/WonderHistory';
 import {IAppState} from './AppState';
 import {AppEvents} from './AppEvents';
 import {IRunTimeState} from '../runtime/IRunTimeState';
+import {STORY_STORE} from './StoryStore';
 
 export class GameLogic {
-    private story: ITwineStory;
-
     private gameConfig = new GameConfig();
     private appState: IAppState;
 
@@ -42,7 +41,7 @@ export class GameLogic {
 
     // не нужен ли тут прелоадер? )
     loadStory(story: ITwineStory) {
-        this.story = story;
+        STORY_STORE.story = story;
 
         const context = this.runTime.getGameVars();
         this.exeScript(story.script, context);
@@ -56,10 +55,10 @@ export class GameLogic {
         console.log('loadStory 2, game parsed...');
         EventBus.emit(GameEvents.onStoryLoaded, story);
 
-        this.appState.passage = this.story.startPassageName;
+        this.appState.passage = STORY_STORE.story.startPassageName;
         this.goTo(this.appState.passage);
 
-        this.runTime.onStoryReady(story);
+        this.runTime.onStoryReady();
     }
 
     /*********
@@ -121,7 +120,7 @@ export class GameLogic {
      */
     private getViewPassage(name: string): PageViewData {
         const viewPassage = {
-            ...this.story.passageHash[name]
+            ...STORY_STORE.story.passageHash[name]
         };
 
         console.log('getViewPassage', name, viewPassage);

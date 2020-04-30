@@ -85,13 +85,13 @@ ${BACK_TEMPLATE}
 
 //language=CSS
 export const DEFAULT_STYLE = `
+     * {user-select: none;}
     .noselect { user-select: none; }    
     .select {  user-select: text; }
-    
     .page .displayNone, .displayNone {
         display: none; 
     }
-    
+    html, body{height: 100%}
     .pointerOver {
         cursor: pointer;
     }
@@ -107,10 +107,10 @@ export const DEFAULT_STYLE = `
         padding: 0;
         background: #ceceb7;
         font-family: "Verdana", "Roboto", "Open Sans", sans-serif;
-        
+        position: relative;
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: start;
     }
     
     .${WONDER.newLineClass} {
@@ -233,6 +233,53 @@ export const DEFAULT_STYLE = `
         height: 1em;
         line-height: 1em;
         margin-bottom: 12px;
+    }
+    
+    .${CollectionCSS.list}{
+        position: absolute;
+        height: 90%;
+        width: 800px;        
+        top: 10%;
+        left: 0;
+        transform: translate(-100%, 0);
+        background: beige;
+        transition-duration: 0.45s;
+        animation-timing-function: ease-out;
+        box-shadow: 1px 2px 6px rgba(0,0,0,0.65);
+    }
+    
+    .${CollectionCSS.listShow}{
+        left: 50%;
+        transform: translate(-54%, 0);
+    }
+    
+    .${CollectionCSS.listTitle}{
+        font-size: 32px;    
+        margin: 12px;
+     }
+        
+    .${CollectionCSS.listContent}{
+        font-size: 24px;
+        overflow: auto;
+        height: 90%;
+    }
+    .${CollectionCSS.listItem}{ 
+         margin: 12px;
+         padding: 12px;
+         border: 1px solid #afafaf;
+         cursor: pointer;
+    }
+    
+    .${CollectionCSS.listContent}::-webkit-scrollbar { width: 32px; }
+        
+    .${CollectionCSS.listContent}::-webkit-scrollbar-track {
+        background: #d0ac75;
+        border-radius: 16px;    
+    }
+    .${CollectionCSS.listContent}::-webkit-scrollbar-thumb {
+          background-color: #f1760c;   
+          border-radius: 20px;       
+          border: 2px solid #6f3909; 
     }
     
     @media screen and (max-width: 800px){
