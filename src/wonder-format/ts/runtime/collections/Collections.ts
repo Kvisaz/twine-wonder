@@ -1,4 +1,12 @@
-import {ITwinePassage, ITwineStory} from '../abstract/TwineModels';
+import {ITwinePassage, ITwineStory} from '../../abstract/TwineModels';
+import {CollectionsView} from './CollectionsView';
+import {
+    ICollectionState,
+    IRulesMap,
+    IWonderCollection,
+    IWonderCollectionMap,
+    IWonderCollectRule
+} from './CollectionInterfaces';
 
 /*************
  *  Collectables
@@ -6,15 +14,22 @@ import {ITwinePassage, ITwineStory} from '../abstract/TwineModels';
 export class Collections {
     private readonly rulesMap: IRulesMap;
     private collectionMap: IWonderCollectionMap;
+    private collectionsView: CollectionsView;
 
     constructor() {
         this.rulesMap = {};
         this.collectionMap = {};
+        this.collectionsView = new CollectionsView();
     }
 
     onStoryReady(story: ITwineStory) {
         // todo посчитать коллекции
         this.initCollections(story);
+
+        // TODO show buttons
+        setTimeout(() => {
+            this.collectionsView.createViews(this.collectionMap)
+        }, 500)
     }
 
     // todo check
@@ -79,6 +94,7 @@ export class Collections {
         }
 
         this.collectionMap[rule.collection] = {
+            title: rule.title,
             collected: [],
             maxAmount: 0
         }
@@ -109,34 +125,14 @@ export class Collections {
         });
         console.log('collections', this.collectionMap);
     }
+
+    /************
+     *  VIEW
+     ***********/
+
+
 }
 
 function getTags(passage: ITwinePassage): Array<string> {
     return passage.tags.split(' ');
-}
-
-interface IRulesMap {
-    [tag: string]: Array<IWonderCollectRule>
-}
-
-// коллекция
-export interface IWonderCollection {
-    collected: Array<string>; // собранные пассажи
-    maxAmount: number; // сколько вообще можно собрать
-}
-
-export interface IWonderCollectionMap {
-    [collectionName: string]: IWonderCollection
-}
-
-export interface IWonderCollectRule {
-    collection: string, // уникальное название коллекции
-    tags: Array<string>, // какие теги собираем
-    addAfter?: string,  // html, что добавляем после
-    addBefore?: string, // html, что добавляем до
-    hideBack?: boolean, // прячем автокнопку 'обратно'
-}
-
-export interface ICollectionState {
-    collected: IWonderCollectionMap
 }

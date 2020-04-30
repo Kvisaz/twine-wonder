@@ -1,9 +1,10 @@
 import {ITwinePassage, ITwineStory} from '../abstract/TwineModels';
 import {PostMessageApi} from './PostMessageApi';
 import {IAppState} from '../twine-game/AppState';
-import {Collections, IWonderCollectRule} from './Collections';
+import {Collections} from './collections/Collections';
 import {AudioPlayer} from './AudioPlayer';
 import {IRunTimeState} from './IRunTimeState';
+import {IWonderCollectRule} from './collections/CollectionInterfaces';
 
 export class RunTime {
     private readonly audioPlayer: AudioPlayer;

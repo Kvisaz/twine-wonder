@@ -27,6 +27,8 @@ document.body
 Wonder.collect({
     // можно выбирать сразу кучу тегов
     tags: ['gameover'],
+    // читабельный заголовок
+    title: 'Концовки', 
     // добавить в конце любой HTML.
     addAfter: '<div id="restartButton">[[Начать заново|start]]</div>', 
     // показывать автобэк

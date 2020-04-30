@@ -1,5 +1,7 @@
 // twine tags
 
+import {CollectionCSS} from './runtime/collections/CollectionCSS';
+
 export const STORY_SELECTOR = "tw-storydata";
 export const PASSAGE_SELECTOR = "tw-passagedata";
 
@@ -83,26 +85,8 @@ ${BACK_TEMPLATE}
 
 //language=CSS
 export const DEFAULT_STYLE = `
-
-    .noselect {
-    -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none; /* Safari */
-        -khtml-user-select: none; /* Konqueror HTML */
-        -moz-user-select: none; /* Old versions of Firefox */
-            -ms-user-select: none; /* Internet Explorer/Edge */
-                user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Opera and Firefox */
-    }
-    
-    .select {
-        -webkit-touch-callout: default; /* iOS Safari */
-        -webkit-user-select: text; /* Safari */
-        -khtml-user-select: text; /* Konqueror HTML */
-        -moz-user-select: text; /* Old versions of Firefox */
-            -ms-user-select: text; /* Internet Explorer/Edge */
-                user-select: text; /* Non-prefixed version, currently
-                                  supported by Chrome, Opera and Firefox */
-    }
+    .noselect { user-select: none; }    
+    .select {  user-select: text; }
     
     .page .displayNone, .displayNone {
         display: none; 
@@ -132,22 +116,6 @@ export const DEFAULT_STYLE = `
     .${WONDER.newLineClass} {
         display: block;
     }
-    
-   /* #goldMine1 {
-        background: black;
-    }
-    
-    #goldMine1 .text {
-        background: beige;
-        padding: 12px;
-        margin-top: 400px;
-    }
-    
-    #goldMine1 .page {
-        font-family: monospace;
-        background: url(img/image-castle-web.jpg) no-repeat;
-        background-size: cover;
-    }*/
     
     #${WONDER.contentId} {
         width: 800px;
@@ -224,6 +192,47 @@ export const DEFAULT_STYLE = `
         margin-top: -2px;
         margin-bottom: 2px;
         box-shadow: 2px 2px 1px #414141;
+    }
+    
+    #${CollectionCSS.wrapperId}{
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        top: 0;
+        left: 0;
+    }
+    
+    .${CollectionCSS.button}{
+        width: 96px;     
+        line-height: 1em;
+        background: antiquewhite;
+        margin-top: 24px;
+        text-align: center;
+        cursor: pointer;
+        box-shadow: 1px 2px 6px black;
+    }
+    
+    .${CollectionCSS.button}:hover {
+        transform: scale(1.09) translateX(4px);
+        box-shadow: 1px 2px 6px black;
+    }
+    
+    .${CollectionCSS.buttonTitle}{
+        font-size: 16px;
+        text-align: center;
+        height: 1em;
+        line-height: 1em;
+        background: #b66e13;
+        margin-bottom: 12px;
+        padding: 2px;
+    }
+    
+    .${CollectionCSS.buttonContent}{
+        font-size: 24px;
+        text-align: center;
+        height: 1em;
+        line-height: 1em;
+        margin-bottom: 12px;
     }
     
     @media screen and (max-width: 800px){

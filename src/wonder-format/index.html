@@ -12,8 +12,16 @@
 Wonder.styleUrl('style.css');
 Wonder.collect({
     collection: 'gameovers',
+    title: 'Концовки',
     tags: ['gameover'],
     addAfter: '<div id="restartButton">[[Начать заново|start]]</div>',
+    hideBack: true
+});
+
+Wonder.collect({
+    collection: 'glossary',
+    title: 'Глоссарий',
+    tags: ['glossary'],
     hideBack: true
 });
 
