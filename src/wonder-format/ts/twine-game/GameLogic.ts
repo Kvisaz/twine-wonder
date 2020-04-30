@@ -9,15 +9,13 @@ import {IWonderHistory} from '../abstract/WonderInterfaces';
 import {WonderHistory} from './logic/WonderHistory';
 import {IAppState} from './AppState';
 import {AppEvents} from './AppEvents';
+import {IRunTimeState} from '../runtime/IRunTimeState';
 
 export class GameLogic {
     private story: ITwineStory;
 
     private gameConfig = new GameConfig();
-    private appState: IAppState = {
-        passage: null,
-        game: {},
-    };
+    private appState: IAppState;
 
     private history: IWonderHistory = new WonderHistory();
 
@@ -29,6 +27,10 @@ export class GameLogic {
         window.w = this.runTime;
         // @ts-ignore
         window.Wonder = window.w;
+
+        this.appState = {
+            passage: null
+        }
 
         this.runTime.parentApi().on(AppEvents.load, (state) => this.loadState(state));
 
@@ -42,10 +44,15 @@ export class GameLogic {
     loadStory(story: ITwineStory) {
         this.story = story;
 
-        this.exeScript(story.script);
+        const context = this.runTime.getGameVars();
+        this.exeScript(story.script, context);
 
         console.log('loadStory, script executed...');
-        WonderStoryParser.parse(story, this.appState.game, this.gameConfig);
+
+        const gameVars = {};
+        WonderStoryParser.parse(story, gameVars, this.gameConfig);
+        this.runTime.setGameVars(gameVars);
+
         console.log('loadStory 2, game parsed...');
         EventBus.emit(GameEvents.onStoryLoaded, story);
 
@@ -91,11 +98,11 @@ export class GameLogic {
      *********/
 
     // выполнить скрипт, забинденный на game
-    private exeScript(script: string) {
+    private exeScript(script: string, context: object) {
         let result = null;
 
         try {
-            const func = new Function(script).bind(this.appState.game); // создаю функцию из строки
+            const func = new Function(script).bind(context); // создаю функцию из строки
             result = func(); // исполняю функцию
         } catch (e) {
             // todo сделать вывод без консоли, оповещение
@@ -123,7 +130,7 @@ export class GameLogic {
 
         return new PageViewData(
             viewPassage,
-            this.appState.game,
+            this.runTime.getGameVars(),
             this.gameConfig,
             this.history,
             this.history
@@ -138,6 +145,8 @@ export class GameLogic {
         console.log(`execScripts........`);
         console.log(`viewPassage.content`, viewPassage.content);
 
+        const context = this.runTime.getGameVars();
+
         // ищем строки, которые должны исполняться
         viewPassage.content = viewPassage.content
             .replace(REGEXP.exeScript,
@@ -145,7 +154,7 @@ export class GameLogic {
                     let command = catched.trim();
                     const isInline = command[0] == WONDER.inlineStart;
                     if (isInline) command = "return " + command.substring(1);
-                    const result = this.exeScript(command);
+                    const result = this.exeScript(command, context);
                     const render = isInline ? result : "";
                     return render;
                 });
@@ -158,6 +167,8 @@ export class GameLogic {
 
     private saveAppState() {
         this.appState.history = this.history.getState();
+        this.appState.runTime = this.runTime.getState();
+
         this.runTime.parentApi().send(AppEvents.passage, this.appState);
     }
 
@@ -170,7 +181,9 @@ export class GameLogic {
             ...state
         };
         console.log('this.appState', state);
-        this.history.loadState(this.appState.history);
+
+        this.history.setState(this.appState.history);
+        this.runTime.setState(this.appState.runTime as IRunTimeState);
 
         this.goTo(this.appState.passage);
 

@@ -33,5 +33,5 @@ export interface IWonderHistory extends IPageViewChecker, IPageCanGoBack {
 
     getState(): WonderHistoryState;
 
-    loadState(state: WonderHistoryState):void;
+    setState(state: WonderHistoryState):void;
 }
