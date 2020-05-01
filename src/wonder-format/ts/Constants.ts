@@ -237,12 +237,12 @@ export const DEFAULT_STYLE = `
     
     .${CollectionCSS.list}{
         position: absolute;
-        height: 90%;
+        height: 89%;
         width: 800px;        
         top: 10%;
         left: 0;
         transform: translate(-100%, 0);
-        background: beige;
+        background: #876b38;
         transition-duration: 0.45s;
         animation-timing-function: ease-out;
         box-shadow: 1px 2px 6px rgba(0,0,0,0.65);
@@ -250,25 +250,37 @@ export const DEFAULT_STYLE = `
     
     .${CollectionCSS.listShow}{
         left: 50%;
-        transform: translate(-54%, 0);
+        transform: translate(-49%, 0);
     }
     
     .${CollectionCSS.listTitle}{
         font-size: 32px;    
+         color: antiquewhite;   
         margin: 12px;
      }
         
     .${CollectionCSS.listContent}{
         font-size: 24px;
         overflow: auto;
+        padding: 12px;
+        background: #d7d7c5;
+        border: 1px solid #afafaf;
         height: 90%;
     }
     .${CollectionCSS.listItem}{ 
-         margin: 12px;
          padding: 12px;
          border: 1px solid #afafaf;
          cursor: pointer;
+         background: beige;
+         border-radius: 4px;
+         margin-top: 6px;
     }
+    
+    .${CollectionCSS.listItem}:hover {
+        transform: scale(1.01);
+        background: #fffffc;
+        box-shadow: 1px 2px 6px rgba(0,0,0,0.65);
+    }   
     
     .${CollectionCSS.listContent}::-webkit-scrollbar { width: 32px; }
         
