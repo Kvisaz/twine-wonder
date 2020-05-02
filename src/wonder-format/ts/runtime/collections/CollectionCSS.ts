@@ -13,4 +13,5 @@ export const enum CollectionCSS {
     listItem = 'c-item',
     page = 'c-page',
     pageShow = 'c-page-show',
+    pageContent = 'c-page-content',
 }

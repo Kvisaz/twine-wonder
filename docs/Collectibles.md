@@ -1,9 +1,98 @@
 #Коллекционки
 
-document.body 
--  id по name текущей локации (КОНФЛИКТ для плохих линков)
--  classes по tags текущей локации  
+## Done
+- добавить классы к кнопке
+- doc: CSS кнопки
+- doc: CSS списка
+- показать страницу
 
+
+## ToDo
+- почистить код
+- doc: CSS страницы
+- забилдить формат и передать в Twine
+- сделать дизайн CSS для игры
+
+## How to add collection
+С помощью метода Runtime можно создать коллекционку
+
+```javascript
+Wonder.collect({
+    // можно выбирать сразу кучу тегов
+    tags: ['gameover'],
+    // читабельный заголовок для пользователя
+    title: 'Концовки', 
+    // добавить в конце любой HTML.
+    addAfter: '<div id="restartButton">[[Начать заново|start]]</div>', 
+    // показывать автобэк
+    hideBack: true,
+    // сохранять собранные id в коллекцию
+    collection: 'gameovers'
+})
+```
+
+Движок будет создавать кнопку с надписью 'title' и числом собранных/всех пассажей с тем же `collection`.
+
+## Кнопка коллекции
+При нажатии - добавляет к body тень и список собранных узлов.
+
+## CSS для коллекций
+
+Кнопка создается как `div.c-button` внутри контейнера `div.c-wrapper`.  Дополнительно к кнопке добавляется класс с именем из параметра `collection`.  
+
+### CSS кнопок
+Класс обязательный - `c-button`.
+Класс в зависимости от коллекции - `collectionName`
+Дополнительный класс заполненной кнопки - `c-button-completed`
+
+```html
+<div id="c-wrapper"><!-- button wrapper -->
+    
+    <div class="c-button " data-collection="gameovers">
+        <div class="c-bt-title">Концовки</div>
+        <div class="c-bt-content">2/24</div>
+    </div>
+    
+    <div class="c-button " data-collection="glossary">
+        <div class="c-bt-title">Глоссарий</div>
+        <div class="c-bt-content">4/15</div>
+    </div>
+</div>
+```
+
+### CSS списков
+
+Списки открываются по нажатию кнопки. Под списком показывается тень. По умолчанию class `c-list` сдвинут за край. Когда показываем - добавляем класс `c-list-show`. 
+
+ItemTitle берется из h1 или первой строки собранной страницы. Контент страницы не меняется.
+
+При нажатии на `div.c-item` - к body добавляется страница. После клика на тени или на крестике страницы - она закрывается (уничтожается).
+ 
+```html
+<div class="c-list">
+    <div class="c-list-title">Глоссарий</div>
+    <div class="c-list-content">
+        <div class="c-item" data-name="glossary_titan_stuff">ItemTitle1</div>
+        <div class="c-item" data-name="glossary_titan_vine">ItemTitle2</div>
+        <div class="c-item" data-name="glossary-wasteland-legend">ItemTitle3</div>
+        <div class="c-item" data-name="glossary-zaurhas">ItemTitle4</div>
+    </div>
+</div>
+```
+
+### CSS страницы
+
+Страница открывается по нажатию на пункт в списке. Тень остается на месте, под списком. По умолчанию class `c-page` сдвинут за край. Когда показываем - добавляем класс `c-page-show`. 
+
+Дополнительно добавляется класс по имени коллекции
+
+```html
+<div class="c-page gameovers c-page-show">
+   <div class="c-page-content">
+   
+    </div>
+</div>
+```
 
 ## Общее видение
 

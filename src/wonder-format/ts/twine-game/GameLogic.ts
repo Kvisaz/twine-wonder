@@ -64,14 +64,14 @@ export class GameLogic {
     /*********
      * LOGIC
      *********/
+    private prepareToShow(name: string) {
+        EventBus.emit(GameEvents.preparePassage, this.getViewPassage(name));
+    }
+
     private onPassagePrepared(passage: ITwinePassage) {
         this.showPassage(passage);
         this.runTime.onPassage(passage, this.appState);
         console.log('onPassagePrepared', this.appState);
-    }
-
-    private prepareToShow(name: string) {
-        EventBus.emit(GameEvents.preparePassage, this.getViewPassage(name));
     }
 
     private showPassage(passage: ITwinePassage) {

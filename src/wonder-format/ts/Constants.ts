@@ -294,6 +294,41 @@ export const DEFAULT_STYLE = `
           border: 2px solid #6f3909; 
     }
     
+    .${CollectionCSS.page}{
+        position: absolute;
+        height: 95%;
+        width: 800px;        
+        top: 3%;
+        left: 0;
+        transform: translate(-100%, 0);        
+        background: beige;
+        overflow: auto;
+        transition-duration: 0.45s;
+        animation-timing-function: ease-out;
+        box-shadow: 1px 2px 6px rgba(0,0,0,0.65);
+    }
+    
+    .${CollectionCSS.pageContent}{
+        margin: 12px 12px 16px;
+    }
+    
+    .${CollectionCSS.pageShow}{
+        left: 50%;
+        transform: translate(-47%, 0);
+    }
+    
+    .${CollectionCSS.page}::-webkit-scrollbar { width: 32px; }
+        
+    .${CollectionCSS.page}::-webkit-scrollbar-track {
+        background: #d0ac75;
+        border-radius: 16px;    
+    }
+    .${CollectionCSS.page}::-webkit-scrollbar-thumb {
+          background-color: #ce9643;   
+          border-radius: 20px;       
+          border: 2px solid #efd0a6; 
+    }
+    
     @media screen and (max-width: 800px){
         .${WONDER.contentId} {
              width: 100%;

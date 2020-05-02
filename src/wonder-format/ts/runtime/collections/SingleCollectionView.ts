@@ -13,6 +13,9 @@ import {CollectionCSS} from './CollectionCSS';
 import {ITwinePassage} from '../../abstract/TwineModels';
 import {ICollectionShowCallback, IWonderCollection} from './CollectionInterfaces';
 import {STORY_STORE} from '../../twine-game/StoryStore';
+import {formatTwinePassageAsHTML} from '../../parser/FormatTwinePassageAsHTML';
+import {PASSAGE_TEMPLATE, REGEXP} from '../../Constants';
+import {DomUtils} from '../../app-core/DomUtils';
 
 export class SingleCollectionView {
     private readonly buttonEl: HTMLElement;
@@ -24,8 +27,8 @@ export class SingleCollectionView {
     private listContentEl: HTMLElement;
 
     private readonly pageEl: HTMLElement;
+    private readonly pageContentEl: HTMLElement;
 
-    private passages: Array<ITwinePassage>;
     private collectionName: string;
 
     private onButtonClickCallback: ICollectionShowCallback;
@@ -75,7 +78,7 @@ export class SingleCollectionView {
     private createList(className: string): HTMLElement {
         const list = this.createDiv(className);
 
-        //list.addEventListener('click', (e) => this.findPage(e));
+        list.addEventListener('click', (e) => this.findItem(e));
         //list.addEventListener('mouseup', () => this.closeCollection());
 
 
@@ -99,23 +102,27 @@ export class SingleCollectionView {
      *******************/
 
     private updateButton(collection: IWonderCollection) {
+        const BT = this.buttonEl;
+        const TITLE = this.buttonTitleEl;
+        const CONTENT = this.buttonContentEl;
+
         this.collectionName = collection.name;
         const collected = collection.collected.length;
         const total = collection.maxAmount;
         const title = collection.title;
 
-        this.buttonEl.dataset.collection = this.collectionName;
+        BT.dataset.collection = this.collectionName;
 
         // content
-        this.buttonTitleEl.innerHTML = `${title}`;
-        this.buttonContentEl.innerHTML = `${collected}/${total}`;
+        TITLE.innerHTML = `${title}`;
+        CONTENT.innerHTML = `${collected}/${total}`;
 
         // class
         const isCompleted = collected == total;
         const completedClass = isCompleted
             ? CollectionCSS.buttonCompleted
             : '';
-        this.buttonEl.className = CollectionCSS.button +
+        BT.className = CollectionCSS.button +
             ' ' + this.collectionName +
             ' ' + completedClass;
     }
@@ -123,9 +130,14 @@ export class SingleCollectionView {
     private updateListTitle(collection: IWonderCollection) {
         this.listTitleEl.innerHTML = collection.title;
     }
+
     private updateList(collection: IWonderCollection) {
+
+        const LIST = this.listEl;
+        const LIST_CONTENT = this.listContentEl;
+
         // clear list
-        this.listContentEl.innerHTML = '';
+        LIST_CONTENT.innerHTML = '';
 
         // create code
         const passageMap = STORY_STORE.story.passageHash;
@@ -138,28 +150,61 @@ export class SingleCollectionView {
         });
 
         // fill list
-        this.listContentEl.innerHTML = newList;
+        LIST_CONTENT.innerHTML = newList;
+
+        // list classes
+        LIST.className = CollectionCSS.list + ' ' + this.collectionName;
+    }
+
+    private updatePage(passage: ITwinePassage) {
+        const PAGE = this.pageEl;
+
+        // clear
+        PAGE.innerHTML = '';
+
+        // parse content
+        // чистим контент от возможных скриптов
+        const cleanedContent = passage.content.replace(REGEXP.exeScript,
+            '');
+        const PAGE_TEMPLATE = PASSAGE_TEMPLATE;
+        const html = formatTwinePassageAsHTML(cleanedContent, PAGE_TEMPLATE);
+
+        console.log('updatePage', html, passage);
+
+        // fill list
+        PAGE.innerHTML = html;
     }
 
     /********************
      *  SHOW LIST
      *******************/
     showCollection() {
-        // todo
-        this.listEl.className = `${CollectionCSS.list} ${CollectionCSS.listShow}`;
+        this.listEl.classList.add(CollectionCSS.listShow);
         if (this.onCollectionShow) this.onButtonClickCallback(this.collectionName);
     }
 
     closeCollection() {
-        // todo
-        this.listEl.className = `${CollectionCSS.list}`;
+        this.listEl.classList.remove(CollectionCSS.listShow);
+        this.closePage(); // если была открыта страница - убираем и её
     }
 
     /********************
      *  FIND PAGE
      *******************/
-    private findPage(e: MouseEvent) {
+    private findItem(e: MouseEvent) {
+        const item: HTMLElement = <HTMLElement>DomUtils.closest(e.target as HTMLElement, `.${CollectionCSS.listItem}`);
+        if (item) this.onItemClick(item.dataset.name);
+    }
 
+    private onItemClick(name: string) {
+        const passage = STORY_STORE.story.passageHash[name];
+        if (passage == name) {
+            console.warn('SingleCollectionView.onItemClick: cannot find' + name);
+            return;
+        }
+
+        this.updatePage(passage);
+        this.showPage();
     }
 
     /********************
@@ -178,11 +223,11 @@ export class SingleCollectionView {
      *  SHOW PAGE
      *******************/
     private showPage() {
-        // todo
+        this.pageEl.classList.add(CollectionCSS.pageShow);
     }
 
     private closePage() {
-        // todo
+        this.pageEl.classList.remove(CollectionCSS.pageShow);
     }
 
     /********************
