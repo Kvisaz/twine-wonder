@@ -112,10 +112,12 @@ export class SingleCollectionView {
 
         // class
         const isCompleted = collected == total;
-        const className = isCompleted
-            ? `${CollectionCSS.button} ${CollectionCSS.buttonCompleted}`
-            : `${CollectionCSS.button} `;
-        this.buttonEl.className = className;
+        const completedClass = isCompleted
+            ? CollectionCSS.buttonCompleted
+            : '';
+        this.buttonEl.className = CollectionCSS.button +
+            ' ' + this.collectionName +
+            ' ' + completedClass;
     }
 
     private updateListTitle(collection: IWonderCollection) {
