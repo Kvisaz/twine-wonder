@@ -9,6 +9,7 @@ export class SaveApi {
 
     autoSave(saveName: string) {
         this.autoSaveName = saveName;
+        console.log('save api is enabled');
     }
 
     save(saveName: string) {
@@ -24,7 +25,7 @@ export class SaveApi {
     }
 
     onPassage() {
-        if (this.autoSaveName = null) return;
+        if (this.autoSaveName == null) return;
         this.save(this.autoSaveName);
     }
 }
