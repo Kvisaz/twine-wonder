@@ -9,15 +9,12 @@ import {IWonderHistory} from '../abstract/WonderInterfaces';
 import {WonderHistory} from './logic/WonderHistory';
 import {IAppState} from './AppState';
 import {AppEvents} from './AppEvents';
-import {IRunTimeState} from '../runtime/IRunTimeState';
-import {STORY_STORE} from './StoryStore';
+import {IRunTimeState} from '../runtime/RunTimeInterfaces';
+import {STORE, STORY_STORE} from './Stores';
 
 export class GameLogic {
     private gameConfig = new GameConfig();
-    private appState: IAppState;
-
     private history: IWonderHistory = new WonderHistory();
-
     private readonly runTime: RunTime;
 
     constructor() {
@@ -27,7 +24,7 @@ export class GameLogic {
         // @ts-ignore
         window.Wonder = window.w;
 
-        this.appState = {
+        STORE.state = {
             passage: null
         }
 
@@ -51,13 +48,13 @@ export class GameLogic {
         WonderStoryParser.parse(story, gameVars, this.gameConfig);
         this.runTime.setGameVars(gameVars);
 
-
-
         console.log('loadStory 2, game parsed...');
         EventBus.emit(GameEvents.onStoryLoaded, story);
 
-        this.appState.passage = STORY_STORE.story.startPassageName;
-        this.prepareToShow(this.appState.passage);
+        const appState = STORE.state;
+        appState.passage = story.startPassageName;
+        this.prepareToShow(appState.passage);
+
 
         this.runTime.onStoryReady();
         // enable parent API script
@@ -73,8 +70,9 @@ export class GameLogic {
 
     private onPassagePrepared(passage: ITwinePassage) {
         this.showPassage(passage);
-        this.runTime.onPassage(passage, this.appState);
-        console.log('onPassagePrepared', this.appState);
+        const appState = STORE.state;
+        this.runTime.onPassage(passage, appState);
+        console.log('onPassagePrepared', appState);
     }
 
     private showPassage(passage: ITwinePassage) {
@@ -83,18 +81,20 @@ export class GameLogic {
 
     private onClick(name: string) {
         console.log('onClick', name);
-        this.appState.passage = name;
-        this.history.add(this.appState.passage); // текущий узел идёт в историю
+        const appState = STORE.state;
+        appState.passage = name;
+        this.history.add(appState.passage); // текущий узел идёт в историю
         this.saveAppState();
-        this.prepareToShow(this.appState.passage);
+        this.prepareToShow(appState.passage);
     }
 
     private onBackClick() {
         console.log('onBackClick');
         this.history.pop();
-        this.appState.passage = this.history.getLast();
+        const appState = STORE.state;
+        appState.passage = this.history.getLast();
         this.saveAppState();
-        this.prepareToShow( this.appState.passage);
+        this.prepareToShow(appState.passage);
     }
 
     /*********
@@ -170,27 +170,28 @@ export class GameLogic {
      *******************/
 
     private saveAppState() {
-        this.appState.history = this.history.getState();
-        this.appState.runTime = this.runTime.getState();
+        const appState = STORE.state;
+        appState.history = this.history.getState();
+        appState.runTime = this.runTime.getState();
 
-        this.runTime.parentApi().send(AppEvents.passage, this.appState);
+        this.runTime.parentApi().send(AppEvents.passage, appState);
     }
 
     private loadState(state: IAppState) {
 
         console.log('loadState', state);
-        console.log('this.appState', this.appState);
 
-        this.appState = {
-            ...this.appState,
+        STORE.state = {
+            ...STORE.state,
             ...state
         };
-        console.log('this.appState', this.appState);
+        const appState = STORE.state;
+        console.log('this.appState', appState);
 
-        this.history.setState(this.appState.history);
-        this.runTime.setState(this.appState.runTime as IRunTimeState);
+        this.history.setState(appState.history);
+        this.runTime.setState(appState.runTime as IRunTimeState);
 
-        this.prepareToShow(this.appState.passage);
+        this.prepareToShow(appState.passage);
 
     }
 }

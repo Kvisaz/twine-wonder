@@ -7,7 +7,7 @@ import {
     IWonderCollectionMap,
     IWonderCollectRule
 } from './CollectionInterfaces';
-import {STORY_STORE} from '../../twine-game/StoryStore';
+import {STORY_STORE} from '../../twine-game/Stores';
 
 /*************
  *  Collectables
