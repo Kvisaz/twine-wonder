@@ -9,8 +9,8 @@ import {IWonderHistory} from '../abstract/WonderInterfaces';
 import {WonderHistory} from './logic/WonderHistory';
 import {IAppState} from './AppState';
 import {AppEvents} from './AppEvents';
-import {IRunTimeState} from '../runtime/RunTimeInterfaces';
 import {STORE, STORY_STORE} from './Stores';
+import {IRunTimeState} from '../runtime/IRunTimeState';
 
 export class GameLogic {
     private gameConfig = new GameConfig();
