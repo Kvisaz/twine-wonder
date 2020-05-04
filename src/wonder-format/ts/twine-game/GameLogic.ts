@@ -51,8 +51,11 @@ export class GameLogic {
 
         WonderStoryParser.parse(story, gameVars, this.gameConfig);
 
-        // подключаем начальные переменные, только если не было загрузки
-        if (this.isInitialStateLoaded == false) {
+        // если было загружено состояние - восстанавливаем его
+        if (this.isInitialStateLoaded) {
+            this.setUtilStates(STORE.state);
+        } else {
+            // иначе инициализируем исполненные начальные переменные
             this.runTime.setGameVars(gameVars);
         }
 
@@ -99,7 +102,8 @@ export class GameLogic {
 
     private onBackClick() {
         const appState = STORE.state;
-        appState.passage = this.history.pop(); // текущий узел уходит из истории
+        this.history.pop(); // текущий узел уходит из истории
+        appState.passage = this.history.getLast() || STORY_STORE.story.startPassageName;
         console.log('onBackClick, pop passage ', appState.passage);
 
         this.updateState();
@@ -197,15 +201,18 @@ export class GameLogic {
         const appState = STORE.state;
         console.log('this.appState', appState);
 
-        this.history.setState(appState.history);
-        this.runTime.setState(appState.runTime as IRunTimeState);
-
         if (this.isInitialStateLoaded == false) {
             this.isInitialStateLoaded = true;
         }
 
         if (this.isStart) return;
 
+        this.setUtilStates(appState);
         this.prepareToShow(appState.passage);
+    }
+
+    private setUtilStates(appState: IAppState) {
+        this.history.setState(appState.history);
+        this.runTime.setState(appState.runTime as IRunTimeState);
     }
 }

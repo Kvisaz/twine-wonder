@@ -103,6 +103,11 @@ export class Collections {
     private initCollections() {
         const story: ITwineStory = STORY_STORE.story;
 
+        // защита от загрузки
+        Object.keys(this.collectionMap).forEach(cName => {
+            this.collectionMap[cName].maxAmount = 0;
+        })
+
         story.passages.forEach(passage => {
             const pTags = this.getTags(passage);
             pTags.forEach(tag => {
