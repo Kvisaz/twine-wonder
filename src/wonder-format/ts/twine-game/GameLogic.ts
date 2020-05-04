@@ -51,10 +51,7 @@ export class GameLogic {
         console.log('loadStory 2, game parsed...');
         EventBus.emit(GameEvents.onStoryLoaded, story);
 
-        const appState = STORE.state;
-        appState.passage = story.startPassageName;
-        this.prepareToShow(appState.passage);
-
+        this.onClick(story.startPassageName);
 
         this.runTime.onStoryReady();
         // enable parent API script
@@ -65,8 +62,8 @@ export class GameLogic {
      * LOGIC
      *********/
     private prepareToShow(name: string) {
-        STORE.state.passage = name;
-        this.saveAppState();
+        console.log('prepareToShow', name);
+
         EventBus.emit(GameEvents.preparePassage, this.getViewPassage(name));
     }
 
@@ -85,12 +82,18 @@ export class GameLogic {
         console.log('onClick', name);
         const appState = STORE.state;
         this.history.add(appState.passage); // текущий узел идёт в историю
+        appState.passage = name;
+
+        this.saveAppState();
         this.prepareToShow(name);
     }
 
     private onBackClick() {
         const appState = STORE.state;
-        appState.passage = this.history.pop();
+        appState.passage = this.history.pop(); // текущий узел уходит из истории
+        console.log('onBackClick, pop passage ', appState.passage);
+
+        this.saveAppState();
         this.prepareToShow(appState.passage);
     }
 

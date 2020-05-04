@@ -28,8 +28,9 @@ export class WonderHistory implements IWonderHistory, IPageViewChecker {
     }
 
     add(name: string) {
-        // защита от повторов
-        if (this.getLast() == name) return;
+
+        if (name == null) return;
+        if (this.getLast() == name) return; // защита от повторов
 
         this.pages.push(name);
         this.pagesHash[name] = true;
