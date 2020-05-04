@@ -1,4 +1,4 @@
-import {ITwinePassage, ITwineStory} from '../abstract/TwineModels';
+import {ITwinePassage} from '../abstract/TwineModels';
 import {PostMessageApi} from './PostMessageApi';
 import {IAppState} from '../twine-game/AppState';
 import {Collections} from './collections/Collections';
@@ -10,8 +10,6 @@ export class RunTime {
     private readonly audioPlayer: AudioPlayer;
     private readonly collections: Collections;
     private readonly postMessageApi: PostMessageApi;
-
-    private story: ITwineStory;
 
     private gameVars: object;
 
