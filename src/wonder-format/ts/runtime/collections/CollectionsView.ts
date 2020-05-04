@@ -10,6 +10,8 @@ export class CollectionsView {
     private readonly buttonWrapper: HTMLElement;
     private readonly shadow: HTMLElement;
 
+    private isViewCreated = false;
+
     constructor() {
         this.viewMap = {};
         this.buttonWrapper = document.createElement('div');
@@ -40,10 +42,14 @@ export class CollectionsView {
             view.attach(this.buttonWrapper);
         })
 
+        this.isViewCreated = true;
+
         document.body.appendChild(this.buttonWrapper);
     }
 
     updateButtons(collectionMap: IWonderCollectionMap) {
+        if (!this.isViewCreated) return;
+
         Object.keys(collectionMap).forEach(collectionName => {
             const collection = collectionMap[collectionName];
             this.updateButton(collection);
@@ -52,6 +58,10 @@ export class CollectionsView {
 
     updateButton(collection: IWonderCollection) {
         const view = this.viewMap[collection.name];
+        if (view == null) {
+            console.warn('CollectionsView.updateButton: cannot find ', collection.name);
+            return;
+        }
         view.update(collection);
     }
 
@@ -82,8 +92,7 @@ export class CollectionsView {
                 if (name == collectionName) {
                     this.shadow.style.display = 'block';
                     view.showCollection();
-                }
-                else view.closeCollection();
+                } else view.closeCollection();
             })
         }
     }
