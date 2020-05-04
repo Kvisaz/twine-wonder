@@ -24,16 +24,13 @@ export class Collections {
     }
 
     onStoryReady() {
-        // todo посчитать коллекции
         this.initCollections();
 
-        // TODO show buttons
         setTimeout(() => {
             this.collectionsView.createViews(this.collectionMap)
         }, 500)
     }
 
-    // todo check
     loadState(state: ICollectionState) {
         this.collectionMap = {
             ...this.collectionMap,
@@ -43,7 +40,6 @@ export class Collections {
         this.collectionsView.updateButtons(this.collectionMap)
     }
 
-    // todo check
     getState(): ICollectionState {
         return {
             collected: this.collectionMap
@@ -64,7 +60,7 @@ export class Collections {
     }
 
     onPassage(passage: ITwinePassage) {
-        const pTags = getTags(passage);
+        const pTags = this.getTags(passage);
         pTags.forEach(tag => this.collectTag(tag, passage));
     }
 
@@ -87,8 +83,6 @@ export class Collections {
     }
 
     private onPassageCollected(passage: ITwinePassage, collection: IWonderCollection) {
-        console.log('passage collected', passage);
-        console.log('collections', this.collectionMap);
         this.collectionsView.updateButton(collection);
     }
 
@@ -110,7 +104,7 @@ export class Collections {
         const story: ITwineStory = STORY_STORE.story;
 
         story.passages.forEach(passage => {
-            const pTags = getTags(passage);
+            const pTags = this.getTags(passage);
             pTags.forEach(tag => {
                 const rules: Array<IWonderCollectRule> = this.rulesMap[tag];
                 if (rules == null) return;
@@ -130,16 +124,9 @@ export class Collections {
                 })
             })
         });
-        console.log('collections', this.collectionMap);
     }
 
-    /************
-     *  VIEW
-     ***********/
-
-
-}
-
-function getTags(passage: ITwinePassage): Array<string> {
-    return passage.tags.split(' ');
+    private getTags(passage: ITwinePassage): Array<string> {
+        return passage.tags.split(' ');
+    }
 }

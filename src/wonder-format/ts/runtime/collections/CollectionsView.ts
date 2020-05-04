@@ -52,7 +52,6 @@ export class CollectionsView {
 
     updateButton(collection: IWonderCollection) {
         const view = this.viewMap[collection.name];
-        console.log('updateButton', collection);
         view.update(collection);
     }
 
