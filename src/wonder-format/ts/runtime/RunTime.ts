@@ -23,10 +23,6 @@ export class RunTime {
         this.postMessageApi = new PostMessageApi();
     }
 
-    setStory(story: ITwineStory){
-        this.story = story;
-    }
-
     getGameVars(): object {
         return this.gameVars;
     }
@@ -48,6 +44,7 @@ export class RunTime {
      *  STATE
      *************/
     setState(state: IRunTimeState) {
+        if (state == null) return;
         this.setGameVars(state.gameVars);
         this.collections.loadState(state.collections);
     }
@@ -83,8 +80,8 @@ export class RunTime {
     }
 
     //HOW TO SHOW COLLECTIONS
-    showCollections(){
-      //  this.collections.show();
+    showCollections() {
+        //  this.collections.show();
     }
 
     /***********

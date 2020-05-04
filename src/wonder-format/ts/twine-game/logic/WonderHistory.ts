@@ -17,6 +17,7 @@ export class WonderHistory implements IWonderHistory, IPageViewChecker {
     }
 
     setState(state: IWonderHistoryState) {
+        if (state == null) return;
         this.pages = state.pages;
         this.pagesHash = state.pagesHash;
     }

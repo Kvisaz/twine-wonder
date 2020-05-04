@@ -31,8 +31,6 @@ export class GameLogic {
             passage: null
         }
 
-        this.runTime.parentApi().on(AppEvents.load, (state) => this.loadState(state));
-
         EventBus.getInstance()
             .sub(GameEvents.onPassagePrepared, (message, data) => this.onPassagePrepared(data))
             .sub(GameEvents.onLinkClick, (message, id: string) => this.onClick(id))
@@ -43,14 +41,17 @@ export class GameLogic {
     loadStory(story: ITwineStory) {
         STORY_STORE.story = story;
 
-        const context = this.runTime.getGameVars();
-        this.exeScript(story.script, context);
+        const gameVars = this.runTime.getGameVars();
+        // user script - enable/disable parent API
+        this.exeScript(story.script, gameVars);
+        console.log('story.script', gameVars);
 
         console.log('loadStory, script executed...');
 
-        const gameVars = {};
         WonderStoryParser.parse(story, gameVars, this.gameConfig);
         this.runTime.setGameVars(gameVars);
+
+
 
         console.log('loadStory 2, game parsed...');
         EventBus.emit(GameEvents.onStoryLoaded, story);
@@ -59,6 +60,8 @@ export class GameLogic {
         this.prepareToShow(this.appState.passage);
 
         this.runTime.onStoryReady();
+        // enable parent API script
+        this.runTime.parentApi().on(AppEvents.load, (state) => this.loadState(state));
     }
 
     /*********
@@ -176,12 +179,13 @@ export class GameLogic {
     private loadState(state: IAppState) {
 
         console.log('loadState', state);
+        console.log('this.appState', this.appState);
 
         this.appState = {
             ...this.appState,
             ...state
         };
-        console.log('this.appState', state);
+        console.log('this.appState', this.appState);
 
         this.history.setState(this.appState.history);
         this.runTime.setState(this.appState.runTime as IRunTimeState);
