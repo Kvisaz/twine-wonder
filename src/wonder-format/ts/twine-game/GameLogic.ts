@@ -11,9 +11,8 @@ import {IAppState} from './AppState';
 import {AppEvents} from './AppEvents';
 import {IRunTimeState} from '../runtime/RunTimeInterfaces';
 import {STORE, STORY_STORE} from './Stores';
-import {ISuperStoreListener} from '../app-core/SuperStore';
 
-export class GameLogic implements ISuperStoreListener<IAppState> {
+export class GameLogic {
     private gameConfig = new GameConfig();
     private history: IWonderHistory = new WonderHistory();
     private readonly runTime: RunTime;
@@ -24,6 +23,10 @@ export class GameLogic implements ISuperStoreListener<IAppState> {
         window.w = this.runTime;
         // @ts-ignore
         window.Wonder = window.w;
+
+        STORE.state = {
+            passage: null
+        }
 
         EventBus.getInstance()
             .sub(GameEvents.onPassagePrepared, (message, data) => this.onPassagePrepared(data))
@@ -48,37 +51,26 @@ export class GameLogic implements ISuperStoreListener<IAppState> {
         console.log('loadStory 2, game parsed...');
         EventBus.emit(GameEvents.onStoryLoaded, story);
 
-        const appState = STORE.get;
-        this.setNewPassageName(story.startPassageName);
-
+        const appState = STORE.state;
+        appState.passage = story.startPassageName;
         this.prepareToShow(appState.passage);
+
 
         this.runTime.onStoryReady();
         // enable parent API script
         this.runTime.parentApi().on(AppEvents.load, (state) => this.loadState(state));
     }
 
-
-    onStateChange(props: Partial<IAppState>, state: IAppState): void {
-
-    }
-
     /*********
      * LOGIC
      *********/
-    private setNewPassageName(passageName) {
-        STORE.update({
-            passage: passageName
-        }, this)
-    }
-
     private prepareToShow(name: string) {
         EventBus.emit(GameEvents.preparePassage, this.getViewPassage(name));
     }
 
     private onPassagePrepared(passage: ITwinePassage) {
         this.showPassage(passage);
-        const appState = STORE.get;
+        const appState = STORE.state;
         this.runTime.onPassage(passage, appState);
         console.log('onPassagePrepared', appState);
     }
@@ -89,8 +81,8 @@ export class GameLogic implements ISuperStoreListener<IAppState> {
 
     private onClick(name: string) {
         console.log('onClick', name);
-        const appState = STORE.get;
-        this.setNewPassageName(name);
+        const appState = STORE.state;
+        appState.passage = name;
         this.history.add(appState.passage); // текущий узел идёт в историю
         this.saveAppState();
         this.prepareToShow(appState.passage);
@@ -99,9 +91,8 @@ export class GameLogic implements ISuperStoreListener<IAppState> {
     private onBackClick() {
         console.log('onBackClick');
         this.history.pop();
-        const appState = STORE.get;
-        const lastPassage = this.history.getLast();
-        this.setNewPassageName(lastPassage);
+        const appState = STORE.state;
+        appState.passage = this.history.getLast();
         this.saveAppState();
         this.prepareToShow(appState.passage);
     }
@@ -179,25 +170,22 @@ export class GameLogic implements ISuperStoreListener<IAppState> {
      *******************/
 
     private saveAppState() {
+        const appState = STORE.state;
+        appState.history = this.history.getState();
+        appState.runTime = this.runTime.getState();
 
-        STORE.update({
-            history: this.history.getState(),
-            runTime: this.runTime.getState()
-        }, this);
-
-        const appState = STORE.get;
-        this.runTime.parentApi().send(AppEvents.passage, {
-            ...appState
-        });
+        this.runTime.parentApi().send(AppEvents.passage, appState);
     }
 
     private loadState(state: IAppState) {
 
         console.log('loadState', state);
-        if (state == null) return;
 
-        STORE.update(state, this);
-        const appState = STORE.get;
+        STORE.state = {
+            ...STORE.state,
+            ...state
+        };
+        const appState = STORE.state;
         console.log('this.appState', appState);
 
         this.history.setState(appState.history);
@@ -206,5 +194,4 @@ export class GameLogic implements ISuperStoreListener<IAppState> {
         this.prepareToShow(appState.passage);
 
     }
-
 }

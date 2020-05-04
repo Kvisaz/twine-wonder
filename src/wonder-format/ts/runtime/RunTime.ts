@@ -3,16 +3,13 @@ import {PostMessageApi} from './PostMessageApi';
 import {IAppState} from '../twine-game/AppState';
 import {Collections} from './collections/Collections';
 import {AudioPlayer} from './AudioPlayer';
-import {IRunTimeState} from './RunTimeInterfaces';
+import {IRunTimeState} from './IRunTimeState';
 import {IWonderCollectRule} from './collections/CollectionInterfaces';
-import {SaveApi} from './saveapi/SaveApi';
 
 export class RunTime {
     private readonly audioPlayer: AudioPlayer;
     private readonly collections: Collections;
     private readonly postMessageApi: PostMessageApi;
-    private readonly saveApi: SaveApi;
-
 
     private story: ITwineStory;
 
@@ -24,7 +21,6 @@ export class RunTime {
         this.audioPlayer = new AudioPlayer();
         this.collections = new Collections();
         this.postMessageApi = new PostMessageApi();
-        this.saveApi = new SaveApi();
     }
 
     getGameVars(): object {
@@ -37,24 +33,11 @@ export class RunTime {
         }
     }
 
-    /**************
-     *  STATE MANAGEMENT
-     *************/
-
-
-    /**************
-     *  SAVE/LOAD
-     *************/
-    autoSave(saveName = 'autoSave') {
-        this.saveApi.autoSave(saveName);
-    }
-
-    save(saveName: string = 'save_1') {
-        this.saveApi.save(saveName);
-    }
-
-    load(saveName: string = 'save_1') {
-        this.saveApi.load(saveName);
+    updateGameVars(gameVars: object) {
+        this.gameVars = {
+            ...this.gameVars,
+            ...gameVars
+        }
     }
 
     /**************
@@ -142,6 +125,5 @@ export class RunTime {
     onPassage(passage: ITwinePassage, state: IAppState) {
         this.audioPlayer.musicCheck(passage.name);
         this.collections.onPassage(passage);
-        this.saveApi.onPassage();
     }
 }
