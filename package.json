@@ -2,7 +2,7 @@
   "name": "twine-wonder",
   "nameFormat": "Wonder",
   "author": "Kvisaz [Sergey Tokarev]",
-  "version": "0.6.13",
+  "version": "0.6.14",
   "description": "Twine Wonder Format",
   "icon": "icon.svg",
   "bundleScript": "index.js",

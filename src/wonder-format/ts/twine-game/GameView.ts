@@ -6,6 +6,7 @@ import {DomUtils} from "../app-core/DomUtils";
 import {VisibleParams} from "./logic/GameConfig";
 import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
 import {IPageCanGoBack, IPageViewChecker} from '../abstract/WonderInterfaces';
+import {STORY_STORE} from './Stores';
 
 export class GameView {
     private el: Element;
@@ -116,12 +117,21 @@ export class GameView {
 
     private markVisitedLinks(page: Element, viewChecker: IPageViewChecker) {
         const links: NodeListOf<HTMLElement> = page.querySelectorAll(`.${WONDER.linkClass}`);
+
+        const passageMap = STORY_STORE.story.passageHash;
+
         let next: HTMLElement, nextLinkName: string;
         for (let i = 0; i < links.length; i++) {
             next = links[i];
-            nextLinkName =  next.dataset["id"];
+            nextLinkName = next.dataset["id"];
             if (viewChecker.isViewed(nextLinkName)) {
                 next.classList.add(WONDER.visitedClass);
+            }
+
+            // теги пассажей
+            const linkPassage = passageMap[nextLinkName] as ITwinePassage
+            if (linkPassage && linkPassage.tags) {
+                next.className = next.className + ' ' + linkPassage.tags;
             }
         }
     }
