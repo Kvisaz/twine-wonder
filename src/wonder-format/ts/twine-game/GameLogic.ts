@@ -65,6 +65,8 @@ export class GameLogic {
      * LOGIC
      *********/
     private prepareToShow(name: string) {
+        STORE.state.passage = name;
+        this.saveAppState();
         EventBus.emit(GameEvents.preparePassage, this.getViewPassage(name));
     }
 
@@ -82,18 +84,13 @@ export class GameLogic {
     private onClick(name: string) {
         console.log('onClick', name);
         const appState = STORE.state;
-        appState.passage = name;
         this.history.add(appState.passage); // текущий узел идёт в историю
-        this.saveAppState();
-        this.prepareToShow(appState.passage);
+        this.prepareToShow(name);
     }
 
     private onBackClick() {
-        console.log('onBackClick');
-        this.history.pop();
         const appState = STORE.state;
-        appState.passage = this.history.getLast();
-        this.saveAppState();
+        appState.passage = this.history.pop();
         this.prepareToShow(appState.passage);
     }
 
