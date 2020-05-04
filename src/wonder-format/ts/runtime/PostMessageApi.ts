@@ -40,8 +40,6 @@ export class PostMessageApi {
     }
 
     on(messageName: string, listener: IPostMessageListener) {
-        if (this.isDisabled) return;
-
         if (this.listenerMap[messageName] == null) {
             this.listenerMap[messageName] = [];
         }
@@ -49,6 +47,8 @@ export class PostMessageApi {
     }
 
     private onMessage(e: MessageEvent) {
+        if (this.isDisabled) return;
+
         const postMessage: Partial<IPostMessage> = e.data;
         const listeners = this.listenerMap[postMessage.name];
         if (listeners) {

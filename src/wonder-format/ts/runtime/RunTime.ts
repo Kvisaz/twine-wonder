@@ -5,11 +5,16 @@ import {Collections} from './collections/Collections';
 import {AudioPlayer} from './AudioPlayer';
 import {IRunTimeState} from './IRunTimeState';
 import {IWonderCollectRule} from './collections/CollectionInterfaces';
+import {ISaveApiAppDataHandler} from './saveapi/SaveApiInterfaces';
+import {SaveApi} from './saveapi/SaveApi';
+import {STORE} from '../twine-game/Stores';
+import {AppEvents} from '../twine-game/AppEvents';
 
 export class RunTime {
     private readonly audioPlayer: AudioPlayer;
     private readonly collections: Collections;
     private readonly postMessageApi: PostMessageApi;
+    private readonly saveApi: SaveApi;
 
     private gameVars: object;
 
@@ -19,6 +24,23 @@ export class RunTime {
         this.audioPlayer = new AudioPlayer();
         this.collections = new Collections();
         this.postMessageApi = new PostMessageApi();
+        this.saveApi = new SaveApi();
+
+        // enable parent API load if enabled
+        this.postMessageApi.on(AppEvents.load,
+            (state: IAppState) => {
+                this.saveApi.loadFrom(state)
+            });
+
+        // set saveApi data source
+        this.saveApi.dataGetter = () => {
+            console.log('get STORE.state ', STORE.state)
+            return STORE.state;
+        }
+    }
+
+    onStateLoad(listener: ISaveApiAppDataHandler) {
+        this.saveApi.dataHandler = listener;
     }
 
     getGameVars(): object {
@@ -77,11 +99,6 @@ export class RunTime {
         this.collections.addRule(rule);
     }
 
-    //HOW TO SHOW COLLECTIONS
-    showCollections() {
-        //  this.collections.show();
-    }
-
     /***********
      *  Sounds
      **********/
@@ -109,6 +126,33 @@ export class RunTime {
         return this.postMessageApi;
     }
 
+    /********************
+     *  save/load
+     *******************/
+    // для отключения, если работаем с внешним API, к примеру
+    disableLocalSave(disable = true) {
+        this.saveApi.disable(disable);
+    }
+
+    autoSave(enabled = true) {
+        this.saveApi.autoSave(enabled);
+    }
+
+    autosave = this.autoSave;
+
+    saveSlot(saveName: string) {
+        this.saveApi.saveSlot(saveName);
+    }
+
+    save(saveName?: string) {
+        this.parentApi().send(AppEvents.passage, STORE.state);
+        this.saveApi.save(saveName);
+    }
+
+    load(saveName?: string) {
+        this.saveApi.load(saveName);
+    }
+
     /***********
      *  методы вызываются основным движком
      **********/
@@ -123,5 +167,6 @@ export class RunTime {
     onPassage(passage: ITwinePassage, state: IAppState) {
         this.audioPlayer.musicCheck(passage.name);
         this.collections.onPassage(passage);
+        this.saveApi.onPassage();
     }
 }

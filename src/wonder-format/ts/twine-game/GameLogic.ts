@@ -8,7 +8,6 @@ import {RunTime} from '../runtime/RunTime';
 import {IWonderHistory} from '../abstract/WonderInterfaces';
 import {WonderHistory} from './logic/WonderHistory';
 import {IAppState} from './AppState';
-import {AppEvents} from './AppEvents';
 import {STORE, STORY_STORE} from './Stores';
 import {IRunTimeState} from '../runtime/IRunTimeState';
 
@@ -16,6 +15,9 @@ export class GameLogic {
     private gameConfig = new GameConfig();
     private history: IWonderHistory = new WonderHistory();
     private readonly runTime: RunTime;
+
+    private isStart = true;
+    private isInitialStateLoaded = false;
 
     constructor() {
         this.runTime = new RunTime();
@@ -28,6 +30,8 @@ export class GameLogic {
             passage: null
         }
 
+        this.runTime.onStateLoad(state => this.onStateLoad(state));
+
         EventBus.getInstance()
             .sub(GameEvents.onPassagePrepared, (message, data) => this.onPassagePrepared(data))
             .sub(GameEvents.onLinkClick, (message, id: string) => this.onClick(id))
@@ -38,24 +42,28 @@ export class GameLogic {
     loadStory(story: ITwineStory) {
         STORY_STORE.story = story;
 
-        const gameVars = this.runTime.getGameVars();
-        // user script - enable/disable parent API
+        const gameVars = {};
         this.exeScript(story.script, gameVars);
+
         console.log('story.script', gameVars);
 
         console.log('loadStory, script executed...');
 
         WonderStoryParser.parse(story, gameVars, this.gameConfig);
-        this.runTime.setGameVars(gameVars);
+
+        // подключаем начальные переменные, только если не было загрузки
+        if (this.isInitialStateLoaded == false) {
+            this.runTime.setGameVars(gameVars);
+        }
 
         console.log('loadStory 2, game parsed...');
         EventBus.emit(GameEvents.onStoryLoaded, story);
 
-        this.onClick(story.startPassageName);
+        const startPassage = STORE.state.passage || story.startPassageName;
+        this.onClick(startPassage);
 
         this.runTime.onStoryReady();
-        // enable parent API script
-        this.runTime.parentApi().on(AppEvents.load, (state) => this.loadState(state));
+        this.isStart = false;
     }
 
     /*********
@@ -84,16 +92,17 @@ export class GameLogic {
         this.history.add(appState.passage); // текущий узел идёт в историю
         appState.passage = name;
 
-        this.saveAppState();
+        this.updateState();
         this.prepareToShow(name);
     }
+
 
     private onBackClick() {
         const appState = STORE.state;
         appState.passage = this.history.pop(); // текущий узел уходит из истории
         console.log('onBackClick, pop passage ', appState.passage);
 
-        this.saveAppState();
+        this.updateState();
         this.prepareToShow(appState.passage);
     }
 
@@ -169,17 +178,17 @@ export class GameLogic {
      *  STATE MANAGEMENT
      *******************/
 
-    private saveAppState() {
+    private updateState() {
         const appState = STORE.state;
         appState.history = this.history.getState();
         appState.runTime = this.runTime.getState();
-
-        this.runTime.parentApi().send(AppEvents.passage, appState);
+        return appState;
     }
 
-    private loadState(state: IAppState) {
+    private onStateLoad(state: IAppState) {
 
-        console.log('loadState', state);
+        console.log('onStateLoad', state);
+        if (state == null) return;
 
         STORE.state = {
             ...STORE.state,
@@ -191,7 +200,12 @@ export class GameLogic {
         this.history.setState(appState.history);
         this.runTime.setState(appState.runTime as IRunTimeState);
 
-        this.prepareToShow(appState.passage);
+        if (this.isInitialStateLoaded == false) {
+            this.isInitialStateLoaded = true;
+        }
 
+        if (this.isStart) return;
+
+        this.prepareToShow(appState.passage);
     }
 }

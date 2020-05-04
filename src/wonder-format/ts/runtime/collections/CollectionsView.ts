@@ -48,8 +48,6 @@ export class CollectionsView {
     }
 
     updateButtons(collectionMap: IWonderCollectionMap) {
-        if (!this.isViewCreated) return;
-
         Object.keys(collectionMap).forEach(collectionName => {
             const collection = collectionMap[collectionName];
             this.updateButton(collection);
@@ -57,6 +55,7 @@ export class CollectionsView {
     }
 
     updateButton(collection: IWonderCollection) {
+        if (!this.isViewCreated) return;
         const view = this.viewMap[collection.name];
         if (view == null) {
             console.warn('CollectionsView.updateButton: cannot find ', collection.name);
