@@ -7,7 +7,7 @@ import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
 import {RunTime} from '../runtime/RunTime';
 import {IWonderHistory} from '../abstract/WonderInterfaces';
 import {WonderHistory} from './logic/WonderHistory';
-import {IAppState} from './AppState';
+import {AppState, IAppState} from './AppState';
 import {STORE, STORY_STORE} from './Stores';
 import {IRunTimeState} from '../runtime/IRunTimeState';
 
@@ -26,9 +26,7 @@ export class GameLogic {
         // @ts-ignore
         window.Wonder = window.w;
 
-        STORE.state = {
-            passage: null
-        }
+        STORE.state = new AppState();
 
         this.runTime.onStateLoad(state => this.onStateLoad(state));
 
@@ -62,16 +60,25 @@ export class GameLogic {
         console.log('loadStory 2, game parsed...');
         EventBus.emit(GameEvents.onStoryLoaded, story);
 
-        const startPassage = STORE.state.passage || story.startPassageName;
-        this.onClick(startPassage);
-
         this.runTime.onStoryReady();
         this.isStart = false;
+
+        this.startGame(STORY_STORE.story, STORE.state);
     }
 
     /*********
      * LOGIC
      *********/
+    private getStartPage(story: ITwineStory, state: IAppState): string {
+        const hPages = state.history.pages;
+        const lastPage = hPages[hPages.length - 1];
+        return lastPage || story.startPassageName;
+    }
+
+    private startGame(story: ITwineStory, state: IAppState) {
+        this.onClick(this.getStartPage(story, state));
+    }
+
     private prepareToShow(name: string) {
         console.log('prepareToShow', name);
 
@@ -91,23 +98,16 @@ export class GameLogic {
 
     private onClick(name: string) {
         console.log('onClick', name);
-        const appState = STORE.state;
-        this.history.add(appState.passage); // текущий узел идёт в историю
-        appState.passage = name;
-
-        this.updateState();
         this.prepareToShow(name);
+        this.history.add(name); // текущий узел идёт в историю
+        this.updateState();
     }
 
 
     private onBackClick() {
-        const appState = STORE.state;
         this.history.pop(); // текущий узел уходит из истории
-        appState.passage = this.history.getLast() || STORY_STORE.story.startPassageName;
-        console.log('onBackClick, pop passage ', appState.passage);
-
-        this.updateState();
-        this.prepareToShow(appState.passage);
+        const name = this.history.getLast();
+        this.onClick(name);
     }
 
     /*********
@@ -208,7 +208,7 @@ export class GameLogic {
         if (this.isStart) return;
 
         this.setUtilStates(appState);
-        this.prepareToShow(appState.passage);
+        this.startGame(STORY_STORE.story, STORE.state);
     }
 
     private setUtilStates(appState: IAppState) {
