@@ -10,12 +10,12 @@
             <tw-story tags></tw-story>
             <tw-storydata name="wonder-demo" startnode="1" creator="TwineWonder" creator-version="2.3.8" ifid="993B579C-CE55-436E-95BA-EA224BA8A4A7" zoom="1" format="Wonder" format-version="0.6.12" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript">this.coins = 0;
 
-//Wonder.parentApi().enable();
+Wonder.parentApi().enable();
 
-Wonder.disableLocalSave(false);
-//Wonder.saveSlot('saveslot_TEST');
-//Wonder.autoSave();
-//Wonder.load();
+Wonder.disableLocalSave(true);
+Wonder.saveSlot('saveslot_TEST');
+Wonder.autoSave();
+Wonder.load();
 
 Wonder.jsUrl('./assets/test.js', ()=> {
     console.log('hello after test js load');

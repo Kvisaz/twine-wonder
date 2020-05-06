@@ -21,6 +21,8 @@ export class RunTime {
     constructor() {
         this.gameVars = {};
 
+        this.postMessageApi = new PostMessageApi();
+
         this.audioPlayer = new AudioPlayer();
         this.collections = new Collections();
         this.postMessageApi = new PostMessageApi();
@@ -159,11 +161,12 @@ export class RunTime {
     }
 
     save(saveName?: string) {
-        this.parentApi().send(AppEvents.passage, STORE.state);
+        this.parentApi().send(AppEvents.save, STORE.state);
         this.saveApi.save(saveName);
     }
 
     load(saveName?: string) {
+        this.parentApi().send(AppEvents.load);
         this.saveApi.load(saveName);
     }
 
@@ -181,6 +184,7 @@ export class RunTime {
     onPassage(passage: ITwinePassage, state: IAppState) {
         this.audioPlayer.musicCheck(passage.name);
         this.collections.onPassage(passage);
+        this.postMessageApi.send(AppEvents.passage, STORE.state);
         this.saveApi.onPassage();
     }
 }
