@@ -157,6 +157,7 @@ export class RunTime {
     autosave = this.autoSave;
 
     saveSlot(saveName: string) {
+        this.parentApi().send(AppEvents.saveSlot, saveName);
         this.saveApi.saveSlot(saveName);
     }
 
