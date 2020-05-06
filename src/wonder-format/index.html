@@ -13,9 +13,13 @@
 //Wonder.parentApi().enable();
 
 Wonder.disableLocalSave(false);
-Wonder.saveSlot('saveslot_TEST');
-Wonder.autoSave();
-Wonder.load();
+//Wonder.saveSlot('saveslot_TEST');
+//Wonder.autoSave();
+//Wonder.load();
+
+Wonder.jsUrl('./assets/test.js', ()=> {
+    console.log('hello after test js load');
+});
 
 Wonder.collect({
     collection: 'gameover',

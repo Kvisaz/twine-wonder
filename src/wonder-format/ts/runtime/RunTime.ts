@@ -82,13 +82,27 @@ export class RunTime {
 
     /************
      *  Подключить стиль
-     *  todo - не работает после экспорта, стиль не грузится
      ***********/
     styleUrl(styleUrl: string) {
         const styleEl: HTMLElement = document.createElement('link');
         styleEl.setAttribute('rel', 'stylesheet');
         styleEl.setAttribute('href', styleUrl);
         document.head.appendChild(styleEl);
+    }
+
+    /************
+     *  Подключить js
+     ***********/
+    jsUrl(jsUrl: string, callback: Function) {
+        const script = document.createElement("script")
+        script.type = "text/javascript";
+        if (callback) {
+            script.onload = function () {
+                callback();
+            };
+        }
+        script.src = jsUrl;
+        document.head.appendChild(script);
     }
 
     /********************

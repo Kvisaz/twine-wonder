@@ -23,7 +23,7 @@ const SRC = path.join(__dirname, "src");
  * а webpack-dev-server показывает localhost c корнем в DIST
  */
 
-const DIST = path.join(__dirname, "dist" + "/" + VERSION_PATH);
+const DIST = path.join(__dirname, 'dist', VERSION_PATH, 'wonder');
 const DIR_NODE = path.join(__dirname, "node_modules");
 
 /**
@@ -34,7 +34,7 @@ const DIR_NODE = path.join(__dirname, "node_modules");
 const projects = [
     {
         src: "wonder-format",
-        dist: "wonder",         // папка выгрузки в dist
+        dist: "",         // папка выгрузки в dist
 
         title: "Twine Wonder Format",
         htmlTemplate: "index.html",

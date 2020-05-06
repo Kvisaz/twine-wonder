@@ -1,14 +1,17 @@
 
 #Todo для релиза
-
+- [Рестарт](Restart.md)
 - [postMessage API](PostMessage.md)
-- [Теги для линков на пассажи](LinkTags.md)
+
 
 #Вероятный бэклог!
-- [Ловить коллекционки](Collectibles.md)
+
 
 
 ## Done
+- [Внешний скрипт](ScriptsExternal.md)
+- [Ловить коллекционки](Collectibles.md)
+- [Теги для линков на пассажи](LinkTags.md)
 - исполняет JavaScript в истории - через try-catch, чтобы ошибки не ломали всю игру
 - двойная строка в br/
 - история и кнопка back
