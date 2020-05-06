@@ -1,7 +1,7 @@
 
 #Todo для релиза
-- [Рестарт](Restart.md)
 - [postMessage API](PostMessage.md)
+- [Рестарт](Restart.md)
 
 
 #Вероятный бэклог!
