@@ -9,6 +9,12 @@
 
 ## Последняя версия - 0.6.18
 2020.05.06
+- [Wonder.showText(text)](docs/WonderCommands.md);
+- [Wonder.restart()](docs/Restart.md);
+- [Wonder.go(name, delay, stateReset)](docs/Restart.md);
+- [Wonder.hasSave()](docs/SaveLoad.md);
+
+2020.05.06
 - исправлен баг внешнего API для автосейва
 - добавлено [подключение внешниех скриптов](docs/ScriptsExternal.md)
 

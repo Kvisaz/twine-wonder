@@ -8,7 +8,7 @@ import {RunTime} from '../runtime/RunTime';
 import {IWonderHistory} from '../abstract/WonderInterfaces';
 import {WonderHistory} from './logic/WonderHistory';
 import {AppState, IAppState} from './AppState';
-import {STORE, STORY_STORE} from './Stores';
+import {RUNTIME_STORE, STORE, STORY_STORE} from './Stores';
 import {IRunTimeState} from '../runtime/IRunTimeState';
 
 export class GameLogic {
@@ -164,6 +164,8 @@ export class GameLogic {
 
         const context = this.runTime.getGameVars();
 
+        this.clearRunTimeTextBuffer(); // очищаем буффер рантаймовых текстов
+
         // ищем строки, которые должны исполняться
         viewPassage.content = viewPassage.content
             .replace(REGEXP.exeScript,
@@ -172,7 +174,9 @@ export class GameLogic {
                     const isInline = command[0] == WONDER.inlineStart;
                     if (isInline) command = "return " + command.substring(1);
                     const result = this.exeScript(command, context);
-                    const render = isInline ? result : "";
+
+                    const textBuffer: string = this.getRunTimeTextsFromBuffer();
+                    const render = isInline ? result : textBuffer;
                     return render;
                 });
         console.log(`....... /execScripts`);
@@ -214,5 +218,22 @@ export class GameLogic {
     private setUtilStates(appState: IAppState) {
         this.history.setState(appState.history);
         this.runTime.setState(appState.runTime as IRunTimeState);
+    }
+
+
+    /********
+     *  inline texts
+     *********/
+    private getRunTimeTextsFromBuffer() {
+        const textBuffer = RUNTIME_STORE.textBuffer;
+        let texts = '';
+        while (textBuffer.length > 0) {
+            texts += textBuffer.shift();
+        }
+        return texts;
+    }
+
+    private clearRunTimeTextBuffer() {
+        RUNTIME_STORE.textBuffer = [];
     }
 }

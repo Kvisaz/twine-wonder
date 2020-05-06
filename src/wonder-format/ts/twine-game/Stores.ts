@@ -12,3 +12,9 @@ class AppStore {
 }
 
 export const STORE = new AppStore();
+
+class RunTimeStore {
+    textBuffer: Array<string> = []
+}
+
+export const RUNTIME_STORE = new RunTimeStore();

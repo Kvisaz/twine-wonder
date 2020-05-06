@@ -36,7 +36,15 @@ Wonder.collect({
     hideBack: true
 });</script><tw-tag name="gameover" color="red"></tw-tag>,<tw-tag name="book" color="yellow"></tw-tag><tw-passagedata pid="1" name="start" tags="" position="911,53" size="100,100">Демо игра для показа возможностей формата Wonder.
 
-Чтобы раскрыть всю силу формата, используйте для названий пассажей и их тегов - латиницу без пробелов. Это позволит формату создавать рабочие id и class для тегов, что позволит создавать кастомный дизайн для многих страниц, ссылок и так далее.
+Чтобы раскрыть всю силу формата,  {{
+                w.showText('-- Кастомный текст 000 -- ');
+                }}  используйте для названий пассажей и их тегов - латиницу без пробелов. Это позволит формату создавать рабочие id и class для тегов, что позволит создавать кастомный дизайн для многих страниц, ссылок и так далее.
+
+ {{
+    w.showText('Пример работы w.showText');
+    w.showText(' Кастомные ссылки: <span class="inline">[[Коллекции|collections]] </span>');
+    w.showText(' -- конец примера работы w.showText');
+ }}
 
 [[Коллекции|collections]]
 [[Переменные|vars]]
@@ -81,13 +89,13 @@ Wonder.collect({
 
 Если вы чайник - вам достаточно и обычного стола, стоящего в прямоугольной комнате. </tw-passagedata><tw-passagedata pid="13" name="collections-books-how-life" tags="book" position="902,701" size="100,100">Как выжить в этом мире
 
-Постарайтесь никого не злить.</tw-passagedata><tw-passagedata pid="14" name="vars-coins-5" tags="" position="1033,352" size="100,100">{{  
+Постарайтесь никого не злить.</tw-passagedata><tw-passagedata pid="14" name="vars-coins-5" tags="" position="1033,352" size="100,100">{{
     this.coins += 5;
 }}
 Вы заработали на 5 монеток больше. Теперь у вас {{= this.coins}} монет.
 
 [[Заработать ещё 5 монеток|vars-coins-5]]
-[[Вернуться|vars]]</tw-passagedata><tw-passagedata pid="15" name="vars-coins-15" tags="" position="1356,357" size="100,100">{{  
+[[Вернуться|vars]]</tw-passagedata><tw-passagedata pid="15" name="vars-coins-15" tags="" position="1356,357" size="100,100">{{
     this.coins += 15;
 }}
 Вы заработали на 15 монеток больше. Теперь у вас {{= this.coins}} монет.

@@ -20,6 +20,7 @@ export const WONDER = {
     pageContentClass: "page-content",
     textClass: "text",
     choiceClass: "choice",
+    inlineClass: "inline",
     linkClass: "link",
     linkAloneClass: "link-alone",
     newLineClass: "newLine",
@@ -150,7 +151,16 @@ export const DEFAULT_STYLE = `
         padding: 5px 35px;
         border-radius: 5px;
         background: #d5c695;
-    }
+    }   
+    
+    .${WONDER.inlineClass} .${WONDER.linkClass}{
+        display: inline;
+        cursor: pointer;
+        padding: 5px 35px;
+        border-radius: 5px;
+        background: #d5c695;
+    }  
+    
         
     .${WONDER.linkClass}:hover, .${WONDER.backClass}:hover{
         color: #4b0d1e;

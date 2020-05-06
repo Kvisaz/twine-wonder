@@ -7,7 +7,7 @@ import {IRunTimeState} from './IRunTimeState';
 import {IWonderCollectRule} from './collections/CollectionInterfaces';
 import {ISaveApiAppDataHandler} from './saveapi/SaveApiInterfaces';
 import {SaveApi} from './saveapi/SaveApi';
-import {STORE} from '../twine-game/Stores';
+import {RUNTIME_STORE, STORE} from '../twine-game/Stores';
 import {AppEvents} from '../twine-game/AppEvents';
 
 export class RunTime {
@@ -169,6 +169,16 @@ export class RunTime {
     load(saveName?: string) {
         this.parentApi().send(AppEvents.load);
         this.saveApi.load(saveName);
+    }
+
+    /****************
+     *  show text в месте вызова
+     *********/
+
+    showText(text: string) {
+        // рантайм просто запихивает тексты в буффер
+        // оттуда их забирает логика
+        RUNTIME_STORE.textBuffer.push(text);
     }
 
     /***********
