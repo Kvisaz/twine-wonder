@@ -1,5 +1,5 @@
 import {ITwinePassage, ITwineStory} from './TwineModels';
-import {IWonderHistoryState} from '../twine-game/logic/WonderHistoryInterfaces';
+import {IAppState} from '../twine-game/AppState';
 
 export interface IWonderStory extends ITwineStory {
     passages: Array<IWonderPage>,
@@ -23,4 +23,17 @@ export interface IWonderPage extends ITwinePassage {
 
 export interface IPageVisitChecker {
     isVisited(name: string): boolean; // даннная страница уже была прочитана
+}
+
+export interface IStateCallback {
+    (state: IAppState): any
+}
+
+export interface IMessageCallback {
+    (message: string): any
+}
+
+export interface IRunTimeCommand {
+    name: string;
+    data?: any
 }

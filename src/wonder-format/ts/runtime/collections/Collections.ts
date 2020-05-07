@@ -51,6 +51,7 @@ export class Collections {
     onPassage(passage: ITwinePassage) {
         const pTags = this.getTags(passage);
         pTags.forEach(tag => this.collectTag(tag, passage));
+        this.onStateUpdate();
     }
 
     /**************

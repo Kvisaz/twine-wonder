@@ -8,16 +8,20 @@ import {WonderHistory} from './logic/WonderHistory';
 import {AppState, IAppState} from './AppState';
 import {RUNTIME_STORE, STORE, STORY_STORE} from './Stores';
 import {parseTwineData} from '../parser/TwineParser';
+import {StateRepository} from './repository/StateRepository';
+import {IRunTimeCommand} from '../abstract/WonderInterfaces';
+import {RunTimeCommand} from '../runtime/RunTimeCommands';
 
 export class GameLogic {
     private gameConfig = new GameConfig();
     private history: WonderHistory = new WonderHistory();
     private readonly runTime: RunTime;
 
-    private isStart = true;
-    private isInitialStateLoaded = false;
+    private stateRepo: StateRepository;
+    private isAutoSave = true;
 
     constructor() {
+        this.stateRepo = new StateRepository();
         this.runTime = new RunTime();
         // @ts-ignore
         window.w = this.runTime;
@@ -25,8 +29,7 @@ export class GameLogic {
         window.Wonder = window.w;
 
         STORE.state = new AppState();
-
-        this.runTime.onStateLoad(state => this.onStateLoad(state));
+        STORY_STORE.story = null;
 
         EventBus.getInstance()
             .sub(GameEvents.onPassagePrepared, (message, data) => this.onPassagePrepared(data))
@@ -35,17 +38,58 @@ export class GameLogic {
     }
 
     preload() {
+        console.log('preloading...');
         const preloadViewData = new PreloadPageViewData();
         this.startPage(preloadViewData);
-
         then(() => this.startParsing());
     }
 
     private startParsing() {
+        console.log('startParsing...');
         const story = parseTwineData();
-        console.log(`story parsed = `, story);
+        then(() => this.onStoryLoad(story));
+    }
 
-        then(() => this.loadStory(story));
+    private onStoryLoad(story: ITwineStory) {
+        console.log('onStoryLoad...', story);
+        STORY_STORE.story = story;
+
+        this.exeScript(story.script, STORE.state.gameVars);
+        this.execRunTimeCommands();
+
+        then(() => this.startStateLoading());
+    }
+
+
+    private startStateLoading() {
+        console.log('startStateLoading...');
+
+        this.stateRepo.load(
+            state => this.onStateLoad(state),
+            messageHandler
+        )
+    }
+
+    private onStateLoad(state: IAppState) {
+        console.log('onStateLoad...', state);
+        if (state != null) {
+            STORE.state = {
+                ...STORE.state,
+                ...state
+            }
+        }
+
+        const appState = STORE.state;
+        console.log('this.appState', appState);
+
+        this.runTime.onStoryReady();
+        this.startGame(STORY_STORE.story, STORE.state);
+    }
+
+    // когда загружена и история, и state
+    private onStateAndStoryLoad() {
+        const isStoryLoaded = STORY_STORE.story != null;
+        const isStateLoaded = STORE.state != null;
     }
 
     // не нужен ли тут прелоадер? )
@@ -61,7 +105,6 @@ export class GameLogic {
         EventBus.emit(GameEvents.onStoryLoaded, story);
 
         this.runTime.onStoryReady();
-        this.isStart = false;
 
         this.startGame(STORY_STORE.story, STORE.state);
     }
@@ -92,7 +135,6 @@ export class GameLogic {
         this.showPassage(passage);
         const appState = STORE.state;
         this.runTime.onPassage(passage, appState);
-        console.log('onPassagePrepared', appState);
     }
 
     private showPassage(passage: ITwinePassage) {
@@ -189,26 +231,6 @@ export class GameLogic {
      *  STATE MANAGEMENT
      *******************/
 
-    private onStateLoad(state: IAppState) {
-
-        console.log('onStateLoad', state);
-        if (state == null) return;
-
-        STORE.state = {
-            ...STORE.state,
-            ...state
-        };
-        const appState = STORE.state;
-        console.log('this.appState', appState);
-
-        if (this.isInitialStateLoaded == false) {
-            this.isInitialStateLoaded = true;
-        }
-
-        if (this.isStart) return;
-
-        this.startGame(STORY_STORE.story, STORE.state);
-    }
 
     /********
      *  inline texts
@@ -225,9 +247,68 @@ export class GameLogic {
     private clearRunTimeTextBuffer() {
         RUNTIME_STORE.textBuffer = [];
     }
+
+    /**************************
+     *  runTime commands
+     *********************/
+    private execRunTimeCommands() {
+        console.log('execRunTimeCommands...');
+        const commands = RUNTIME_STORE.commands;
+        while (commands.length > 0) {
+            this.execSingleRuntimeCommand(commands.shift())
+        }
+    }
+
+    private execSingleRuntimeCommand(command: IRunTimeCommand) {
+        console.log('...command', command.name, command.data);
+        switch (command.name) {
+            case RunTimeCommand.enableExternalApi:
+                this.stateRepo.enableExternalApi(command.data)
+                break;
+            case RunTimeCommand.saveSlot:
+                this.stateRepo.saveName(command.data,
+                    messageHandler,
+                    messageHandler
+                )
+                break;
+            case RunTimeCommand.autoSave:
+                this.isAutoSave = command.data === true;
+                break;
+            case RunTimeCommand.save:
+                if (this.isStatePreload()) return;
+                else {
+                    this.stateRepo.save(STORE.state,
+                        messageHandler,
+                        messageHandler
+                    )
+                }
+                break;
+
+            case RunTimeCommand.load:
+                if (this.isStatePreload()) return;
+                else {
+                    this.stateRepo.load(
+                        state => this.onStateLoad(state),
+                        messageHandler
+                    )
+                }
+                break;
+        }
+    }
+
+    isStatePreload(): boolean {
+        return STORE.state == null
+            || STORE.state.history == null
+            || STORE.state.history.pages == null
+            || STORE.state.history.pages.length == 0;
+    }
 }
 
 // используется для уменьшения нагрузки
 function then(fn: Function) {
     setTimeout(fn, 0);
+}
+
+function messageHandler(message: string) {
+    console.log(setTimeout)
 }

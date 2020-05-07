@@ -4,40 +4,18 @@ import {IAppState} from '../twine-game/AppState';
 import {Collections} from './collections/Collections';
 import {AudioPlayer} from './AudioPlayer';
 import {IWonderCollectRule} from './collections/CollectionInterfaces';
-import {ISaveApiAppDataHandler} from './saveapi/SaveApiInterfaces';
-import {SaveApi} from './saveapi/SaveApi';
-import {RUNTIME_STORE, STORE} from '../twine-game/Stores';
-import {AppEvents} from '../twine-game/AppEvents';
+import {RUNTIME_STORE} from '../twine-game/Stores';
+import {RunTimeCommand} from './RunTimeCommands';
 
 export class RunTime {
     private readonly audioPlayer: AudioPlayer;
     private readonly collections: Collections;
     private readonly postMessageApi: PostMessageApi;
-    private readonly saveApi: SaveApi;
 
     constructor() {
-        this.postMessageApi = new PostMessageApi();
-
         this.audioPlayer = new AudioPlayer();
         this.collections = new Collections();
         this.postMessageApi = new PostMessageApi();
-        this.saveApi = new SaveApi();
-
-        // enable parent API load if enabled
-        this.postMessageApi.on(AppEvents.load,
-            (state: IAppState) => {
-                this.saveApi.loadFrom(state)
-            });
-
-        // set saveApi data source
-        this.saveApi.dataGetter = () => {
-            console.log('get STORE.state ', STORE.state)
-            return STORE.state;
-        }
-    }
-
-    onStateLoad(listener: ISaveApiAppDataHandler) {
-        this.saveApi.dataHandler = listener;
     }
 
     /***********
@@ -109,28 +87,49 @@ export class RunTime {
      *******************/
     // для отключения, если работаем с внешним API, к примеру
     disableLocalSave(disable = true) {
-        this.saveApi.disable(disable);
+        RUNTIME_STORE.commands.push({
+            name: RunTimeCommand.enableExternalApi,
+            data: true
+        })
+    }
+
+    enableExternalApi(disable = true) {
+        RUNTIME_STORE.commands.push({
+            name: RunTimeCommand.enableExternalApi,
+            data: true
+        })
     }
 
     autoSave(enabled = true) {
-        this.saveApi.autoSave(enabled);
+        RUNTIME_STORE.commands.push({
+            name: RunTimeCommand.autoSave,
+            data: enabled
+        })
     }
 
     autosave = this.autoSave;
 
     saveSlot(saveName: string) {
-        this.parentApi().send(AppEvents.saveSlot, saveName);
-        this.saveApi.saveSlot(saveName);
+        RUNTIME_STORE.commands.push({
+            name: RunTimeCommand.saveSlot,
+            data: saveName
+        })
     }
 
     save(saveName?: string) {
-        this.parentApi().send(AppEvents.save, STORE.state);
-        this.saveApi.save(saveName);
+        if (saveName != null) this.saveSlot(saveName);
+        RUNTIME_STORE.commands.push({
+            name: RunTimeCommand.save,
+            data: saveName
+        })
     }
 
     load(saveName?: string) {
-        this.parentApi().send(AppEvents.load);
-        this.saveApi.load(saveName);
+        if (saveName != null) this.saveSlot(saveName);
+        RUNTIME_STORE.commands.push({
+            name: RunTimeCommand.load,
+            data: saveName
+        })
     }
 
     /****************
@@ -157,7 +156,5 @@ export class RunTime {
     onPassage(passage: ITwinePassage, state: IAppState) {
         this.audioPlayer.musicCheck(passage.name);
         this.collections.onPassage(passage);
-        this.postMessageApi.send(AppEvents.passage, STORE.state);
-        this.saveApi.onPassage();
     }
 }

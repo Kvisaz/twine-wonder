@@ -1,5 +1,6 @@
 import {ITwineStory} from '../abstract/TwineModels';
 import {IAppState} from './AppState';
+import {IRunTimeCommand} from '../abstract/WonderInterfaces';
 
 class StoryStore {
     story: ITwineStory;
@@ -14,7 +15,8 @@ class AppStore {
 export const STORE = new AppStore();
 
 class RunTimeStore {
-    textBuffer: Array<string> = []
+    textBuffer: Array<string> = [];
+    commands: Array<IRunTimeCommand> = [];
 }
 
 export const RUNTIME_STORE = new RunTimeStore();
