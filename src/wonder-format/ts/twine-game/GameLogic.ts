@@ -133,7 +133,7 @@ export class GameLogic {
             viewPassage,
             STORE.state.gameVars,
             this.gameConfig,
-            this.history,
+            this.history.canGoBack(viewPassage.name),
             STORE.state.history.pagesHash
         );
     }

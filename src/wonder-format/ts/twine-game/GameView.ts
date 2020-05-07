@@ -5,7 +5,7 @@ import {WonderPageView} from "./view/WonderPageView";
 import {DomUtils} from "../app-core/DomUtils";
 import {VisibleParams} from "./logic/GameConfig";
 import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
-import {IMap, IPageCanGoBack} from '../abstract/WonderInterfaces';
+import {IMap} from '../abstract/WonderInterfaces';
 import {STORY_STORE} from './Stores';
 
 export class GameView {
@@ -88,7 +88,7 @@ export class GameView {
         this.setBody(passage);
 
         this.markVisitedLinks(page, pageViewData.visitedPagesMap);
-        this.showBackLink(page, pageViewData.pageCanGoBack, passage);
+        this.showBackLink(page, pageViewData.canGoBack, passage);
 
         // страница добавлена, но еще не видима, можно менять DOM
         this.injectParams(page, pageViewData.config.uiParams, pageViewData.gameVars);
@@ -141,13 +141,11 @@ export class GameView {
         }
     }
 
-    private showBackLink(page: Element, canGoBack: IPageCanGoBack, passage: ITwinePassage) {
+    private showBackLink(page: Element, canGoBack: boolean, passage: ITwinePassage) {
         const backButton: HTMLElement = page.querySelector(`.${WONDER.backClass}`);
         if (backButton == null) return;
 
-        const canShowBackButton = canGoBack.canGoBack(passage.name);
-
-        if (canShowBackButton) backButton.classList.remove(WONDER.invisibleClass);
+        if (canGoBack) backButton.classList.remove(WONDER.invisibleClass);
         else backButton.classList.add(WONDER.invisibleClass);
     }
 }

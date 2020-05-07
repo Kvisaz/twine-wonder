@@ -23,7 +23,7 @@ export class PageViewData {
         public passage: ITwinePassage,
         public gameVars: object,
         public config: GameConfig,
-        public pageCanGoBack: IPageCanGoBack,
+        public canGoBack: boolean,
         public visitedPagesMap: IMap<boolean>
     ) {
     }
