@@ -75,13 +75,11 @@ export class GameView {
      *********************/
 
     private onStoryLoad(story: ITwineStory) {
-        console.log(`onStoryLoaded`, story);
     }
 
     private preparePassage(pageViewData: PageViewData) {
         const passage: ITwinePassage = pageViewData.passage;
 
-        console.log(`preparePassage`, passage);
         const page: Element = this.pageView.addNextPage(passage);
 
         this.setBody(passage);
@@ -102,14 +100,12 @@ export class GameView {
     }
 
     private showPassage(passage: ITwinePassage) {
-        console.log(`showPassage`, passage);
         this.pageView.showNextPage();
     }
 
 
     private injectParams(page: Element, uiParams: VisibleParams, state: object) {
         uiParams.forEach(uP => {
-            console.log(`uP`, uP);
             const paramName = uP.name;
             const paramValue = state[uP.name];
             const el = page.querySelector(uP.name);
