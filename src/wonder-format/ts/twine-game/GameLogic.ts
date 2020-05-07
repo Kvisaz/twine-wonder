@@ -44,10 +44,7 @@ export class GameLogic {
         this.exeScript(story.script, gameVars);
 
         console.log('story.script', gameVars);
-
         console.log('loadStory, script executed...');
-
-        WonderStoryParser.parse(story, gameVars, this.gameConfig);
 
         // если было загружено состояние - восстанавливаем его
         if (this.isInitialStateLoaded) {
