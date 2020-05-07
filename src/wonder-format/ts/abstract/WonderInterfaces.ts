@@ -6,6 +6,13 @@ export interface IWonderStory extends ITwineStory {
     passageHash: IWonderPageHash,  // по name хранит passage c таким же name
 }
 
+export interface IMap<T> {
+    [key: string]: T
+}
+
+export interface IStringMap extends IMap<string> {
+}
+
 export interface IWonderPageHash {
     [name: string]: IWonderPage;
 }

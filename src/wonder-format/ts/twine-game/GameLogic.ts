@@ -134,7 +134,7 @@ export class GameLogic {
             STORE.state.gameVars,
             this.gameConfig,
             this.history,
-            this.history
+            STORE.state.history.pagesHash
         );
     }
 

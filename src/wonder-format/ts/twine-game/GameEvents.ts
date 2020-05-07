@@ -1,6 +1,6 @@
 import {GameConfig} from "./logic/GameConfig";
 import {ITwinePassage} from "../abstract/TwineModels";
-import {IPageCanGoBack, IPageVisitChecker} from '../abstract/WonderInterfaces';
+import {IMap, IPageCanGoBack} from '../abstract/WonderInterfaces';
 
 export const enum GameEvents {
     onStoryLoaded = "onStoryLoaded",
@@ -23,8 +23,8 @@ export class PageViewData {
         public passage: ITwinePassage,
         public gameVars: object,
         public config: GameConfig,
-        public viewChecker: IPageVisitChecker,
-        public pageCanGoBack: IPageCanGoBack
+        public pageCanGoBack: IPageCanGoBack,
+        public visitedPagesMap: IMap<boolean>
     ) {
     }
 }
