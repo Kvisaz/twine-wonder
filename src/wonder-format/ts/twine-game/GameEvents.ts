@@ -4,6 +4,7 @@ import {IPageCanGoBack, IPageViewChecker} from '../abstract/WonderInterfaces';
 
 export const enum GameEvents {
     onStoryLoaded = "onStoryLoaded",
+    onStateLoad = "onStateLoad",
     onPageFormatLoaded = "onPageFormatLoaded",
     onContentFormatLoaded = "onPassageFormatLoaded",
     onCssLoaded = "onCssLoaded",

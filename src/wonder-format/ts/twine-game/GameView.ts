@@ -1,6 +1,6 @@
 import {EventBus} from "../app-core/EventBus";
 import {GameEvents, PageViewData} from "./GameEvents";
-import {WONDER} from "../Constants";
+import {DEFAULT_STYLE, WONDER} from "../Constants";
 import {WonderPageView} from "./view/WonderPageView";
 import {DomUtils} from "../app-core/DomUtils";
 import {VisibleParams} from "./logic/GameConfig";
@@ -13,6 +13,7 @@ export class GameView {
     private pageView: WonderPageView;
 
     constructor() {
+        this.injectStyle(DEFAULT_STYLE);
         this.el = document.createElement("div");
         this.el.id = WONDER.contentId;
         document.body.appendChild(this.el);
@@ -22,10 +23,11 @@ export class GameView {
         this.pageView = new WonderPageView(this.el);
 
         EventBus.getInstance()
-            .sub(GameEvents.onStoryLoaded, (message, data) => this.onStoryLoaded(data))
+            .sub(GameEvents.onStoryLoaded, (message, data) => this.onStoryLoad(data))
             .sub(GameEvents.preparePassage, (message, data) => this.preparePassage(data))
             .sub(GameEvents.showPassage, (message, data) => this.showPassage(data))
     }
+
 
     injectStyle(style: string) {
         if (style.length == 0) return;
@@ -72,9 +74,9 @@ export class GameView {
      *   events
      *********************/
 
-    private onStoryLoaded(story: ITwineStory) {
+    private onStoryLoad(story: ITwineStory) {
         console.log(`onStoryLoaded`, story);
-
+        this.injectStyle(story.style);
     }
 
     private preparePassage(pageViewData: PageViewData) {
@@ -83,7 +85,7 @@ export class GameView {
         console.log(`preparePassage`, passage);
         const page: Element = this.pageView.addNextPage(passage);
 
-        this.setPageNameAsBodyId(pageViewData);
+        this.setBody(passage);
 
         this.markVisitedLinks(page, pageViewData.viewChecker);
         this.showBackLink(page, pageViewData.pageCanGoBack, passage);
@@ -95,9 +97,9 @@ export class GameView {
         EventBus.emit(GameEvents.onPassagePrepared, passage);
     }
 
-    private setPageNameAsBodyId(pageViewData: PageViewData) {
-        document.body.id = pageViewData.passage.name;
-        document.body.className = pageViewData.passage.tags;
+    private setBody(passage: ITwinePassage) {
+        document.body.id = passage.name;
+        document.body.className = passage.tags;
     }
 
     private showPassage(passage: ITwinePassage) {

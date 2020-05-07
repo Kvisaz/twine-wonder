@@ -12,10 +12,7 @@ console.log(`..............................`);
 const story = parseTwineData();
 console.log(`story parsed = `, story);
 
-const logic = new GameLogic();
 const view = new GameView();
-
-view.injectStyle(DEFAULT_STYLE);
-view.injectStyle(story.style);
+const logic = new GameLogic();
 
 logic.loadStory(story);
