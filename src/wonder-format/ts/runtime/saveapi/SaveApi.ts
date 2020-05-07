@@ -2,7 +2,7 @@ import {ISaveApiAppDataGetter, ISaveApiAppDataHandler} from './SaveApiInterfaces
 import {IAppState} from '../../twine-game/AppState';
 
 export class SaveApi {
-    private saveName: string = 'autoSave';
+    private saveName: string = 'wonderSave';
     private isAuto = true;
 
     dataGetter: ISaveApiAppDataGetter;

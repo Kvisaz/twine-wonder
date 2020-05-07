@@ -89,7 +89,7 @@ export class GameView {
         this.showBackLink(page, pageViewData.pageCanGoBack, passage);
 
         // страница добавлена, но еще не видима, можно менять DOM
-        this.injectParams(page, pageViewData.config.uiParams, pageViewData.state);
+        this.injectParams(page, pageViewData.config.uiParams, pageViewData.gameVars);
 
 
         EventBus.emit(GameEvents.onPassagePrepared, passage);

@@ -30,8 +30,4 @@ export interface IWonderHistory extends IPageViewChecker, IPageCanGoBack {
     pop(): string; // удалить последний элемент истории. В списке отмеченных останется
 
     getLast(): string; // вернуть последний
-
-    getState(): IWonderHistoryState;
-
-    setState(state: IWonderHistoryState):void;
 }

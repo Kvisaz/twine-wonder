@@ -1,49 +1,38 @@
 import {ITwinePassage, ITwineStory} from '../../abstract/TwineModels';
 import {CollectionsView} from './CollectionsView';
-import {
-    ICollectionState,
-    IRulesMap,
-    IWonderCollection,
-    IWonderCollectionMap,
-    IWonderCollectRule
-} from './CollectionInterfaces';
-import {STORY_STORE} from '../../twine-game/Stores';
+import {IRulesMap, IWonderCollection, IWonderCollectionMap, IWonderCollectRule} from './CollectionInterfaces';
+import {STORE, STORY_STORE} from '../../twine-game/Stores';
 
 /*************
  *  Collectables
  ***********/
 export class Collections {
     private readonly rulesMap: IRulesMap;
-    private collectionMap: IWonderCollectionMap;
     private collectionsView: CollectionsView;
 
     constructor() {
         this.rulesMap = {};
-        this.collectionMap = {};
         this.collectionsView = new CollectionsView();
+    }
+
+    getCollectionMap(): IWonderCollectionMap {
+        return STORE.state.collectionMap;
+    }
+
+    getCollection(name: string): IWonderCollection {
+        return STORE.state.collectionMap[name];
     }
 
     onStoryReady() {
         this.initCollections();
 
         setTimeout(() => {
-            this.collectionsView.createViews(this.collectionMap)
+            this.collectionsView.createViews(this.getCollectionMap())
         }, 500)
     }
 
-    loadState(state: ICollectionState) {
-        this.collectionMap = {
-            ...this.collectionMap,
-            ...state.collected
-        }
-
-        this.collectionsView.updateButtons(this.collectionMap)
-    }
-
-    getState(): ICollectionState {
-        return {
-            collected: this.collectionMap
-        }
+    onStateUpdate() {
+        this.collectionsView.updateButtons(this.getCollectionMap());
     }
 
     // следует добавлять только в пользовательском скрипте или раньше
@@ -75,7 +64,7 @@ export class Collections {
     }
 
     private collectByRule(rule: IWonderCollectRule, passage: ITwinePassage) {
-        const collection: IWonderCollection = this.collectionMap[rule.collection];
+        const collection: IWonderCollection = this.getCollectionMap()[rule.collection];
         if (collection.collected.indexOf(passage.name) < 0) {
             collection.collected.push(passage.name);
             this.onPassageCollected(passage, collection);
@@ -87,11 +76,11 @@ export class Collections {
     }
 
     private addCollection(rule: IWonderCollectRule) {
-        if (this.collectionMap[rule.collection] != null) {
+        if (this.getCollection(rule.collection) != null) {
             console.warn('addCollection with same name ', rule.collection);
         }
 
-        this.collectionMap[rule.collection] = {
+        this.getCollectionMap()[rule.collection] = {
             name: rule.collection,
             title: rule.title,
             collected: [],
@@ -104,8 +93,8 @@ export class Collections {
         const story: ITwineStory = STORY_STORE.story;
 
         // защита от загрузки
-        Object.keys(this.collectionMap).forEach(cName => {
-            this.collectionMap[cName].maxAmount = 0;
+        Object.keys(this.getCollectionMap()).forEach(cName => {
+            this.getCollection(cName).maxAmount = 0;
         })
 
         story.passages.forEach(passage => {
@@ -115,7 +104,7 @@ export class Collections {
                 if (rules == null) return;
 
                 rules.forEach(rule => {
-                    const collection = this.collectionMap[rule.collection];
+                    const collection = this.getCollection(rule.collection);
 
                     if (collection == null) {
                         console.warn('collection==null for', rule.collection);

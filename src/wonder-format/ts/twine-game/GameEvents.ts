@@ -20,7 +20,7 @@ export const enum GameEvents {
 export class PageViewData {
     constructor(
         public passage: ITwinePassage,
-        public state: object,
+        public gameVars: object,
         public config: GameConfig,
         public viewChecker: IPageViewChecker,
         public pageCanGoBack: IPageCanGoBack

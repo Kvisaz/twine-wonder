@@ -4,15 +4,13 @@ import {REGEXP, WONDER} from "../Constants";
 import {GameConfig} from "./logic/GameConfig";
 import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
 import {RunTime} from '../runtime/RunTime';
-import {IWonderHistory} from '../abstract/WonderInterfaces';
 import {WonderHistory} from './logic/WonderHistory';
 import {AppState, IAppState} from './AppState';
 import {RUNTIME_STORE, STORE, STORY_STORE} from './Stores';
-import {IRunTimeState} from '../runtime/IRunTimeState';
 
 export class GameLogic {
     private gameConfig = new GameConfig();
-    private history: IWonderHistory = new WonderHistory();
+    private history: WonderHistory = new WonderHistory();
     private readonly runTime: RunTime;
 
     private isStart = true;
@@ -39,19 +37,10 @@ export class GameLogic {
     loadStory(story: ITwineStory) {
         STORY_STORE.story = story;
 
-        const gameVars = {};
-        this.exeScript(story.script, gameVars);
+        this.exeScript(story.script, STORE.state.gameVars);
 
-        console.log('story.script', gameVars);
+        console.log('story.script', STORE.state.gameVars);
         console.log('loadStory, script executed...');
-
-        // если было загружено состояние - восстанавливаем его
-        if (this.isInitialStateLoaded) {
-            this.setUtilStates(STORE.state);
-        } else {
-            // иначе инициализируем исполненные начальные переменные
-            this.runTime.setGameVars(gameVars);
-        }
 
         console.log('loadStory 2, game parsed...');
         EventBus.emit(GameEvents.onStoryLoaded, story);
@@ -96,7 +85,6 @@ export class GameLogic {
         console.log('onClick', name);
         this.prepareToShow(name);
         this.history.add(name); // текущий узел идёт в историю
-        this.updateState();
     }
 
 
@@ -143,7 +131,7 @@ export class GameLogic {
 
         return new PageViewData(
             viewPassage,
-            this.runTime.getGameVars(),
+            STORE.state.gameVars,
             this.gameConfig,
             this.history,
             this.history
@@ -158,7 +146,7 @@ export class GameLogic {
         console.log(`execScripts........`);
         console.log(`viewPassage.content`, viewPassage.content);
 
-        const context = this.runTime.getGameVars();
+        const context = STORE.state.gameVars;
 
         this.clearRunTimeTextBuffer(); // очищаем буффер рантаймовых текстов
 
@@ -182,13 +170,6 @@ export class GameLogic {
      *  STATE MANAGEMENT
      *******************/
 
-    private updateState() {
-        const appState = STORE.state;
-        appState.history = this.history.getState();
-        appState.runTime = this.runTime.getState();
-        return appState;
-    }
-
     private onStateLoad(state: IAppState) {
 
         console.log('onStateLoad', state);
@@ -207,15 +188,8 @@ export class GameLogic {
 
         if (this.isStart) return;
 
-        this.setUtilStates(appState);
         this.startGame(STORY_STORE.story, STORE.state);
     }
-
-    private setUtilStates(appState: IAppState) {
-        this.history.setState(appState.history);
-        this.runTime.setState(appState.runTime as IRunTimeState);
-    }
-
 
     /********
      *  inline texts

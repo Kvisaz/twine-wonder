@@ -3,7 +3,6 @@ import {PostMessageApi} from './PostMessageApi';
 import {IAppState} from '../twine-game/AppState';
 import {Collections} from './collections/Collections';
 import {AudioPlayer} from './AudioPlayer';
-import {IRunTimeState} from './IRunTimeState';
 import {IWonderCollectRule} from './collections/CollectionInterfaces';
 import {ISaveApiAppDataHandler} from './saveapi/SaveApiInterfaces';
 import {SaveApi} from './saveapi/SaveApi';
@@ -16,11 +15,7 @@ export class RunTime {
     private readonly postMessageApi: PostMessageApi;
     private readonly saveApi: SaveApi;
 
-    private gameVars: object;
-
     constructor() {
-        this.gameVars = {};
-
         this.postMessageApi = new PostMessageApi();
 
         this.audioPlayer = new AudioPlayer();
@@ -43,39 +38,6 @@ export class RunTime {
 
     onStateLoad(listener: ISaveApiAppDataHandler) {
         this.saveApi.dataHandler = listener;
-    }
-
-    getGameVars(): object {
-        return this.gameVars;
-    }
-
-    setGameVars(gameVars: object) {
-        this.gameVars = {
-            ...gameVars
-        }
-    }
-
-    updateGameVars(gameVars: object) {
-        this.gameVars = {
-            ...this.gameVars,
-            ...gameVars
-        }
-    }
-
-    /**************
-     *  STATE
-     *************/
-    setState(state: IRunTimeState) {
-        if (state == null) return;
-        this.setGameVars(state.gameVars);
-        this.collections.loadState(state.collections);
-    }
-
-    getState(): IRunTimeState {
-        return {
-            gameVars: this.gameVars,
-            collections: this.collections.getState()
-        }
     }
 
     /***********

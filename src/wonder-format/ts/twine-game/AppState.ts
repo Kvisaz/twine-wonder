@@ -1,22 +1,17 @@
 import {IWonderHistoryState} from './logic/WonderHistoryInterfaces';
+import {IWonderCollectionMap} from '../runtime/collections/CollectionInterfaces';
 
 export interface IAppState {
+    gameVars: object; // любые кастомные переменные
     history: IWonderHistoryState; // самое важное - где сейчас остановились
-    runTime: object; // данные игры
+    collectionMap: IWonderCollectionMap;
 }
 
 export class AppState implements IAppState {
-    history: IWonderHistoryState;
-    runTime: object;
-
-    constructor() {
-        this.history = {
-            pagesHash: {},
-            pages: []
-        }
-
-        this.runTime = {
-
-        }
-    }
+    gameVars = {};
+    history = {
+        pagesHash: {},
+        pages: []
+    };
+    collectionMap = {};
 }

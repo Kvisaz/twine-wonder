@@ -1,60 +1,44 @@
-import {IPageViewChecker, IWonderHistory} from '../../abstract/WonderInterfaces';
-import {IHasHash, IWonderHistoryState} from './WonderHistoryInterfaces';
+import {IPageViewChecker} from '../../abstract/WonderInterfaces';
+import {IWonderHistoryState} from './WonderHistoryInterfaces';
+import {STORE} from '../Stores';
 
-export class WonderHistory implements IWonderHistory, IPageViewChecker {
-    private pages: Array<string>;
-    private pagesHash: IHasHash;
-
+export class WonderHistory implements IPageViewChecker {
     constructor() {
-        this.clear();
-    }
 
+    }
     getState(): IWonderHistoryState {
-        return {
-            pages: this.pages,
-            pagesHash: this.pagesHash
-        }
+        return STORE.state.history
     }
-
-    setState(state: IWonderHistoryState) {
-        if (state == null) return;
-        this.pages = state.pages;
-        this.pagesHash = state.pagesHash;
-    }
-
-    clear() {
-        this.pages = [];
-        this.pagesHash = {};
-    }
-
     add(name: string) {
 
         if (name == null) return;
         if (this.getLast() == name) return; // защита от повторов
 
-        this.pages.push(name);
-        this.pagesHash[name] = true;
+        this.getState().pages.push(name);
+        this.getState().pagesHash[name] = true;
     }
 
     isViewed(name: string): boolean {
-        return this.pagesHash[name] == true;
+        return this.getState().pagesHash[name] == true;
     }
 
     pop(): string {
-        return this.pages.pop();
+        return this.getState().pages.pop();
     }
 
     canGoBack(name: string): boolean {
-        const hasHistory = this.pages.length > 0;
+        const PAGES = this.getState().pages;
+        const hasHistory = PAGES.length > 0;
         if (!hasHistory) return false;
 
-        const hasSinglePage = this.pages.length == 1;
-        const hasSameFirstPage = this.pages[0] && this.pages[0] == name;
+        const hasSinglePage = PAGES.length == 1;
+        const hasSameFirstPage = PAGES[0] && PAGES[0] == name;
 
         return !(hasSinglePage && hasSameFirstPage);
     }
 
     getLast(): string {
-        return this.pages[this.pages.length - 1];
+        const PAGES = this.getState().pages;
+        return PAGES[PAGES.length - 1];
     }
 }
