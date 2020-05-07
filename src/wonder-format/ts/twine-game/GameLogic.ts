@@ -2,7 +2,6 @@ import {EventBus} from "../app-core/EventBus";
 import {GameEvents, PageViewData} from "./GameEvents";
 import {REGEXP, WONDER} from "../Constants";
 import {GameConfig} from "./logic/GameConfig";
-import {WonderStoryParser} from "./logic/WonderStoryParser";
 import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
 import {RunTime} from '../runtime/RunTime';
 import {IWonderHistory} from '../abstract/WonderInterfaces';

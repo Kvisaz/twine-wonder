@@ -9,7 +9,7 @@ import {IPageCanGoBack, IPageViewChecker} from '../abstract/WonderInterfaces';
 import {STORY_STORE} from './Stores';
 
 export class GameView {
-    private el: Element;
+    private readonly el: Element;
     private pageView: WonderPageView;
 
     constructor() {
@@ -27,6 +27,17 @@ export class GameView {
             .sub(GameEvents.showPassage, (message, data) => this.showPassage(data))
     }
 
+    injectStyle(style: string) {
+        if (style.length == 0) return;
+
+        const styleElement = document.createElement('style');
+        styleElement.innerHTML = style;
+        document.getElementsByTagName('head')[0].appendChild(styleElement);
+    }
+
+    /**********************
+     *  user event listeners
+     *********************/
     handleEvent(e) {
         if (this.checkLinkClick(e)) return;
         if (this.checkBackClick(e)) return;
@@ -55,14 +66,6 @@ export class GameView {
                 EventBus.emit(GameEvents.onBackClick, null);
             }
         );
-    }
-
-    injectStyle(style: string) {
-        if (style.length == 0) return;
-
-        const styleElement = document.createElement('style');
-        styleElement.innerHTML = style;
-        document.getElementsByTagName('head')[0].appendChild(styleElement);
     }
 
     /**********************
