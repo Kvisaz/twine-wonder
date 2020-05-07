@@ -5,7 +5,7 @@ import {WonderPageView} from "./view/WonderPageView";
 import {DomUtils} from "../app-core/DomUtils";
 import {VisibleParams} from "./logic/GameConfig";
 import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
-import {IPageCanGoBack, IPageViewChecker} from '../abstract/WonderInterfaces';
+import {IPageCanGoBack, IPageVisitChecker} from '../abstract/WonderInterfaces';
 import {STORY_STORE} from './Stores';
 
 export class GameView {
@@ -120,7 +120,7 @@ export class GameView {
         })
     }
 
-    private markVisitedLinks(page: Element, viewChecker: IPageViewChecker) {
+    private markVisitedLinks(page: Element, viewChecker: IPageVisitChecker) {
         const links: NodeListOf<HTMLElement> = page.querySelectorAll(`.${WONDER.linkClass}`);
 
         const passageMap = STORY_STORE.story.passageHash;
@@ -129,7 +129,7 @@ export class GameView {
         for (let i = 0; i < links.length; i++) {
             next = links[i];
             nextLinkName = next.dataset["id"];
-            if (viewChecker.isViewed(nextLinkName)) {
+            if (viewChecker.isVisited(nextLinkName)) {
                 next.classList.add(WONDER.visitedClass);
             }
 

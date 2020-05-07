@@ -14,15 +14,15 @@ export interface IWonderPage extends ITwinePassage {
     music: string;
 }
 
-export interface IPageViewChecker {
-    isViewed(name: string): boolean; // даннная страница уже была прочитана
+export interface IPageVisitChecker {
+    isVisited(name: string): boolean; // даннная страница уже была прочитана
 }
 
 export interface IPageCanGoBack {
     canGoBack(name: string): boolean; // даннная страница уже была прочитана
 }
 
-export interface IWonderHistory extends IPageViewChecker, IPageCanGoBack {
+export interface IWonderHistory extends IPageVisitChecker, IPageCanGoBack {
     clear();
 
     add(name: string);

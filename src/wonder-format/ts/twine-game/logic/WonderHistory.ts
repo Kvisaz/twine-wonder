@@ -1,8 +1,8 @@
-import {IPageViewChecker} from '../../abstract/WonderInterfaces';
+import {IPageVisitChecker} from '../../abstract/WonderInterfaces';
 import {IWonderHistoryState} from './WonderHistoryInterfaces';
 import {STORE} from '../Stores';
 
-export class WonderHistory implements IPageViewChecker {
+export class WonderHistory implements IPageVisitChecker {
     constructor() {
 
     }
@@ -18,7 +18,7 @@ export class WonderHistory implements IPageViewChecker {
         this.getState().pagesHash[name] = true;
     }
 
-    isViewed(name: string): boolean {
+    isVisited(name: string): boolean {
         return this.getState().pagesHash[name] == true;
     }
 
