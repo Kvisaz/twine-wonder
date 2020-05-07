@@ -15,6 +15,8 @@ export const COMMON_CSS = {
 
 // wonder selector
 export const WONDER = {
+    preloadId: 'preload',
+    preloadAnchorId: 'preload-anchor',
     contentId: "wonder-content",
     pageClass: "page",
     pageContentClass: "page-content",
@@ -66,6 +68,8 @@ export const REGEXP = {
 };
 
 // templates
+export const PRELOAD_PAGE_TEMPLATE = `<div id=${WONDER.preloadAnchorId}></div>`;
+
 export const PAGE_TEMPLATE = `<div class="${WONDER.noSelectClass} ${WONDER.pageClass}"></div>`;
 
 export const LINK_TEMPLATE = `<span class="${WONDER.linkClass}  ${WONDER.linkAloneClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`;
@@ -126,6 +130,10 @@ export const DEFAULT_STYLE = `
     
     .${WONDER.pageClass} {
           background: beige;          
+     }
+     
+     #${WONDER.preloadId} .${WONDER.pageClass} {
+        background: none;
      }
      
      .${WONDER.pageContentClass} {

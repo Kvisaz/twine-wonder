@@ -1,7 +1,6 @@
-import {parseTwineData} from "./ts/parser/TwineParser";
 import {GameLogic} from "./ts/twine-game/GameLogic";
 import {GameView} from "./ts/twine-game/GameView";
-import {DEFAULT_STYLE} from "./ts/Constants";
+import {getTwineStoryStyle} from './ts/parser/TwineParser';
 
 // @ts-ignore from webpack
 const VERSION = VERSION_INFO;
@@ -9,10 +8,10 @@ const VERSION = VERSION_INFO;
 console.log(`..............................`);
 console.log(`Twine Wonder parser ${VERSION}`);
 console.log(`..............................`);
-const story = parseTwineData();
-console.log(`story parsed = `, story);
 
-const view = new GameView();
+// быстро берем стиль из ноды
+// чтобы добавить его к прелоадеру
+const storyStyle = getTwineStoryStyle();
+const view = new GameView(storyStyle);
 const logic = new GameLogic();
-
-logic.loadStory(story);
+logic.preload(); // а вот тут уже начнётся парсинг

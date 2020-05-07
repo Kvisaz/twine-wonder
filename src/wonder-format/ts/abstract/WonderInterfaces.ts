@@ -24,17 +24,3 @@ export interface IWonderPage extends ITwinePassage {
 export interface IPageVisitChecker {
     isVisited(name: string): boolean; // даннная страница уже была прочитана
 }
-
-export interface IPageCanGoBack {
-    canGoBack(name: string): boolean; // даннная страница уже была прочитана
-}
-
-export interface IWonderHistory extends IPageVisitChecker, IPageCanGoBack {
-    clear();
-
-    add(name: string);
-
-    pop(): string; // удалить последний элемент истории. В списке отмеченных останется
-
-    getLast(): string; // вернуть последний
-}

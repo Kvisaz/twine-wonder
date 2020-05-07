@@ -198,7 +198,7 @@ export class SingleCollectionView {
 
     private onItemClick(name: string) {
         const passage = STORY_STORE.story.passageHash[name];
-        if (passage == name) {
+        if (passage == null) {
             console.warn('SingleCollectionView.onItemClick: cannot find' + name);
             return;
         }

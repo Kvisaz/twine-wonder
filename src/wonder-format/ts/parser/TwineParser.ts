@@ -5,7 +5,7 @@ export function parseTwineData(): ITwineStory {
 
     const story = <ITwineStory>elAttributesToObject(storyEl);
 
-    story.style = document.querySelector('#twine-user-stylesheet').innerHTML.trim();
+    story.style = getTwineStoryStyle();
     story.script = document.querySelector('#twine-user-script').innerHTML.trim();
 
     const passageArray = Array.prototype.slice.call(storyEl.querySelectorAll('tw-passagedata'))
@@ -26,6 +26,10 @@ export function parseTwineData(): ITwineStory {
     });
 
     return story;
+}
+
+export function getTwineStoryStyle(): string {
+    return document.querySelector('#twine-user-stylesheet').innerHTML.trim();
 }
 
 function htmlDecode(input): string {

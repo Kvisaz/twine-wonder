@@ -1,5 +1,5 @@
 import {EventBus} from "../app-core/EventBus";
-import {GameEvents, PageViewData} from "./GameEvents";
+import {GameEvents, PageViewData, PreloadPageViewData} from "./GameEvents";
 import {REGEXP, WONDER} from "../Constants";
 import {GameConfig} from "./logic/GameConfig";
 import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
@@ -7,6 +7,7 @@ import {RunTime} from '../runtime/RunTime';
 import {WonderHistory} from './logic/WonderHistory';
 import {AppState, IAppState} from './AppState';
 import {RUNTIME_STORE, STORE, STORY_STORE} from './Stores';
+import {parseTwineData} from '../parser/TwineParser';
 
 export class GameLogic {
     private gameConfig = new GameConfig();
@@ -31,6 +32,20 @@ export class GameLogic {
             .sub(GameEvents.onPassagePrepared, (message, data) => this.onPassagePrepared(data))
             .sub(GameEvents.onLinkClick, (message, id: string) => this.onClick(id))
             .sub(GameEvents.onBackClick, (message) => this.onBackClick())
+    }
+
+    preload() {
+        const preloadViewData = new PreloadPageViewData();
+        this.startPage(preloadViewData);
+
+        then(() => this.startParsing());
+    }
+
+    private startParsing() {
+        const story = parseTwineData();
+        console.log(`story parsed = `, story);
+
+        then(() => this.loadStory(story));
     }
 
     // не нужен ли тут прелоадер? )
@@ -64,10 +79,13 @@ export class GameLogic {
         this.onClick(this.getStartPage(story, state));
     }
 
+    private startPage(pageViewData: PageViewData) {
+        EventBus.emit(GameEvents.preparePassage, pageViewData);
+    }
+
     private prepareToShow(name: string) {
         console.log('prepareToShow', name);
-
-        EventBus.emit(GameEvents.preparePassage, this.getViewPassage(name));
+        this.startPage(this.getViewPassage(name));
     }
 
     private onPassagePrepared(passage: ITwinePassage) {
@@ -134,7 +152,8 @@ export class GameLogic {
             STORE.state.gameVars,
             this.gameConfig,
             this.history.canGoBack(viewPassage.name),
-            STORE.state.history.pagesHash
+            STORE.state.history.pagesHash,
+            STORY_STORE.story.passageHash
         );
     }
 
@@ -206,4 +225,9 @@ export class GameLogic {
     private clearRunTimeTextBuffer() {
         RUNTIME_STORE.textBuffer = [];
     }
+}
+
+// используется для уменьшения нагрузки
+function then(fn: Function) {
+    setTimeout(fn, 0);
 }

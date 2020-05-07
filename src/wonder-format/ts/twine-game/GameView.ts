@@ -6,14 +6,14 @@ import {DomUtils} from "../app-core/DomUtils";
 import {VisibleParams} from "./logic/GameConfig";
 import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
 import {IMap} from '../abstract/WonderInterfaces';
-import {STORY_STORE} from './Stores';
 
 export class GameView {
     private readonly el: Element;
     private pageView: WonderPageView;
 
-    constructor() {
+    constructor(storyStyle: string) {
         this.injectStyle(DEFAULT_STYLE);
+        this.injectStyle(storyStyle);
         this.el = document.createElement("div");
         this.el.id = WONDER.contentId;
         document.body.appendChild(this.el);
@@ -76,7 +76,6 @@ export class GameView {
 
     private onStoryLoad(story: ITwineStory) {
         console.log(`onStoryLoaded`, story);
-        this.injectStyle(story.style);
     }
 
     private preparePassage(pageViewData: PageViewData) {
@@ -87,7 +86,7 @@ export class GameView {
 
         this.setBody(passage);
 
-        this.markVisitedLinks(page, pageViewData.visitedPagesMap);
+        this.markVisitedLinks(page, pageViewData.visitedPagesMap, pageViewData.pagesMap);
         this.showBackLink(page, pageViewData.canGoBack, passage);
 
         // страница добавлена, но еще не видима, можно менять DOM
@@ -120,10 +119,8 @@ export class GameView {
         })
     }
 
-    private markVisitedLinks(page: Element, visited: IMap<boolean>) {
+    private markVisitedLinks(page: Element, visited: IMap<boolean>, passageMap: IMap<ITwinePassage>) {
         const links: NodeListOf<HTMLElement> = page.querySelectorAll(`.${WONDER.linkClass}`);
-
-        const passageMap = STORY_STORE.story.passageHash;
 
         let next: HTMLElement, nextLinkName: string;
         for (let i = 0; i < links.length; i++) {
@@ -134,7 +131,7 @@ export class GameView {
             }
 
             // теги пассажей
-            const linkPassage = passageMap[nextLinkName] as ITwinePassage
+            const linkPassage = passageMap[nextLinkName];
             if (linkPassage && linkPassage.tags) {
                 next.className = next.className + ' ' + linkPassage.tags;
             }

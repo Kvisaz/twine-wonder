@@ -1,6 +1,7 @@
 import {GameConfig} from "./logic/GameConfig";
 import {ITwinePassage} from "../abstract/TwineModels";
-import {IMap, IPageCanGoBack} from '../abstract/WonderInterfaces';
+import {IMap} from '../abstract/WonderInterfaces';
+import {PRELOAD_PAGE_TEMPLATE, WONDER} from '../Constants';
 
 export const enum GameEvents {
     onStoryLoaded = "onStoryLoaded",
@@ -24,7 +25,31 @@ export class PageViewData {
         public gameVars: object,
         public config: GameConfig,
         public canGoBack: boolean,
-        public visitedPagesMap: IMap<boolean>
+        public visitedPagesMap: IMap<boolean>,
+        public pagesMap: IMap<ITwinePassage>
     ) {
     }
 }
+
+const PreloadPassage: ITwinePassage = {
+    pid: WONDER.preloadId,
+    position: '',
+    name: 'preload',
+    tags: '',
+    size: '',
+    content: PRELOAD_PAGE_TEMPLATE
+}
+
+export class PreloadPageViewData extends PageViewData {
+    constructor() {
+        super(PreloadPassage,
+            {},
+            {uiParams: []},
+            false,
+            {},
+            {}
+        )
+    }
+}
+
+
