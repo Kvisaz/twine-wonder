@@ -1,7 +1,6 @@
 import {LINK_INLINE_TEMPLATE, LINK_TEMPLATE, REGEXP, WONDER} from "../Constants";
 
 export function formatTwinePassageAsHTML(content: string, template: string): string {
-    console.log(`twinePassageFormatter....`, template);
     const MARKER = WONDER.template;
 
     // 1. вынимаем из шаблона шаблон линков
