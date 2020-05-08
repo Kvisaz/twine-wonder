@@ -63,11 +63,7 @@ export class GameLogic {
 
     private startStateLoading() {
         console.log('startStateLoading...');
-
-        this.stateRepo.load(
-            state => this.onStateLoad(state),
-            messageHandler
-        )
+        this.loadState();
     }
 
     private onStateLoad(state: IAppState) {
@@ -79,17 +75,8 @@ export class GameLogic {
             }
         }
 
-        const appState = STORE.state;
-        console.log('this.appState', appState);
-
         this.runTime.onStoryReady();
         this.startGame(STORY_STORE.story, STORE.state);
-    }
-
-    // когда загружена и история, и state
-    private onStateAndStoryLoad() {
-        const isStoryLoaded = STORY_STORE.story != null;
-        const isStateLoaded = STORE.state != null;
     }
 
     // не нужен ли тут прелоадер? )
@@ -126,10 +113,6 @@ export class GameLogic {
         EventBus.emit(GameEvents.preparePassage, pageViewData);
     }
 
-    private prepareToShow(name: string) {
-        console.log('prepareToShow', name);
-        this.startPage(this.getViewPassage(name));
-    }
 
     private onPassagePrepared(passage: ITwinePassage) {
         this.showPassage(passage);
@@ -143,8 +126,12 @@ export class GameLogic {
 
     private onClick(name: string) {
         console.log('onClick', name);
-        this.prepareToShow(name);
+
+        const viewData = this.execPassage(name);
+        this.startPage(viewData);
         this.history.add(name); // текущий узел идёт в историю
+
+        if (this.isAutoSave) this.saveState();
     }
 
 
@@ -180,12 +167,10 @@ export class GameLogic {
      * + исполняет логику
      * @param name
      */
-    private getViewPassage(name: string): PageViewData {
+    private execPassage(name: string): PageViewData {
         const viewPassage = {
             ...STORY_STORE.story.passageHash[name]
         };
-
-        console.log('getViewPassage', name, viewPassage);
 
         this.execScripts(viewPassage);
 
@@ -204,8 +189,7 @@ export class GameLogic {
      * @param viewPassage
      */
     private execScripts(viewPassage: ITwinePassage) {
-        console.log(`execScripts........`);
-        console.log(`viewPassage.content`, viewPassage.content);
+        console.log(`${viewPassage.name} execScripts........`);
 
         const context = STORE.state.gameVars;
 
@@ -266,32 +250,19 @@ export class GameLogic {
                 this.stateRepo.enableExternalApi(command.data)
                 break;
             case RunTimeCommand.saveSlot:
-                this.stateRepo.saveName(command.data,
-                    messageHandler,
-                    messageHandler
-                )
+                this.saveName(command.data);
                 break;
             case RunTimeCommand.autoSave:
                 this.isAutoSave = command.data === true;
                 break;
             case RunTimeCommand.save:
                 if (this.isStatePreload()) return;
-                else {
-                    this.stateRepo.save(STORE.state,
-                        messageHandler,
-                        messageHandler
-                    )
-                }
+                else this.saveState();
                 break;
 
             case RunTimeCommand.load:
                 if (this.isStatePreload()) return;
-                else {
-                    this.stateRepo.load(
-                        state => this.onStateLoad(state),
-                        messageHandler
-                    )
-                }
+                else this.loadState();
                 break;
         }
     }
@@ -302,6 +273,35 @@ export class GameLogic {
             || STORE.state.history.pages == null
             || STORE.state.history.pages.length == 0;
     }
+
+    /**************************
+     *  save/load functions
+     *********************/
+    private saveName(saveName: string) {
+        this.stateRepo.saveName(saveName,
+            messageHandler,
+            messageHandler
+        )
+    }
+
+    private saveState() {
+        this.stateRepo.save(STORE.state,
+            messageHandler,
+            messageHandler
+        )
+    }
+
+    private loadState() {
+        this.stateRepo.load(
+            state => this.onStateLoad(state),
+            messageHandler
+        )
+    }
+
+    /**************************
+     *  ..
+     *********************/
+
 }
 
 // используется для уменьшения нагрузки
@@ -310,5 +310,5 @@ function then(fn: Function) {
 }
 
 function messageHandler(message: string) {
-    console.log(setTimeout)
+    console.log(message)
 }
