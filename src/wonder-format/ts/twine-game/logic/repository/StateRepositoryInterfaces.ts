@@ -1,5 +1,5 @@
-import {IMessageCallback, IStateCallback} from '../../abstract/WonderInterfaces';
-import {AppState} from '../AppState';
+import {IMessageCallback, IStateCallback} from '../../../abstract/WonderInterfaces';
+import {AppState} from '../../AppState';
 
 export interface IStateRepository {
     saveName(slotName: string, resolve: IMessageCallback, reject: IMessageCallback);

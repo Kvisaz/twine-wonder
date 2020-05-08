@@ -1,7 +1,7 @@
-import {ITwinePassage, ITwineStory} from '../../abstract/TwineModels';
+import {ITwinePassage, ITwineStory} from '../../../abstract/TwineModels';
 import {CollectionsView} from './CollectionsView';
 import {IRulesMap, IWonderCollection, IWonderCollectionMap, IWonderCollectRule} from './CollectionInterfaces';
-import {STORE, STORY_STORE} from '../../twine-game/Stores';
+import {STORE, STORY_STORE} from '../../Stores';
 
 /*************
  *  Collectables

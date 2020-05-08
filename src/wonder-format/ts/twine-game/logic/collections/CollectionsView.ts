@@ -1,7 +1,7 @@
 import {SingleCollectionView} from './SingleCollectionView';
 import {CollectionCSS} from './CollectionCSS';
 import {IWonderCollection, IWonderCollectionMap} from './CollectionInterfaces';
-import {DomUtils} from '../../app-core/DomUtils';
+import {DomUtils} from '../../../app-core/DomUtils';
 
 type ViewMap = { [collectionName: string]: SingleCollectionView };
 

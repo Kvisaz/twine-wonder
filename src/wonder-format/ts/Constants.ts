@@ -1,6 +1,6 @@
 // twine tags
 
-import {CollectionCSS} from './runtime/collections/CollectionCSS';
+import {CollectionCSS} from './twine-game/logic/collections/CollectionCSS';
 
 export const STORY_SELECTOR = "tw-storydata";
 export const PASSAGE_SELECTOR = "tw-passagedata";

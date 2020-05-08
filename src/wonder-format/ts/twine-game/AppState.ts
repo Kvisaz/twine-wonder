@@ -1,5 +1,5 @@
 import {IWonderHistoryState} from './logic/WonderHistoryInterfaces';
-import {IWonderCollectionMap} from '../runtime/collections/CollectionInterfaces';
+import {IWonderCollectionMap} from './logic/collections/CollectionInterfaces';
 
 export interface IAppState {
     gameVars: object; // любые кастомные переменные

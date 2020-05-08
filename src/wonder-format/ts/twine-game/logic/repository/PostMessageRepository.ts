@@ -1,8 +1,8 @@
 import {IStateRepository} from './StateRepositoryInterfaces';
-import {IMap, IMessageCallback, IStateCallback} from '../../abstract/WonderInterfaces';
-import {AppState, IAppState} from '../AppState';
-import {IPostMessage, PostMessageApi} from '../../runtime/PostMessageApi';
-import {PostMessages} from '../PostMessages';
+import {IMap, IMessageCallback, IStateCallback} from '../../../abstract/WonderInterfaces';
+import {AppState, IAppState} from '../../AppState';
+import {IPostMessage, PostMessageApi} from '../PostMessageApi';
+import {PostMessages} from '../../PostMessages';
 
 export class PostMessageRepository implements IStateRepository {
     private slotName: string;

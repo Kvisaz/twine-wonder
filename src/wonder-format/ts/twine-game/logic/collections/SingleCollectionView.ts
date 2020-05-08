@@ -10,12 +10,12 @@
  *      - show page
  */
 import {CollectionCSS} from './CollectionCSS';
-import {ITwinePassage} from '../../abstract/TwineModels';
+import {ITwinePassage} from '../../../abstract/TwineModels';
 import {ICollectionShowCallback, IWonderCollection} from './CollectionInterfaces';
-import {STORY_STORE} from '../../twine-game/Stores';
-import {formatTwinePassageAsHTML} from '../../parser/FormatTwinePassageAsHTML';
-import {PASSAGE_TEMPLATE, REGEXP} from '../../Constants';
-import {DomUtils} from '../../app-core/DomUtils';
+import {STORY_STORE} from '../../Stores';
+import {formatTwinePassageAsHTML} from '../../../parser/FormatTwinePassageAsHTML';
+import {PASSAGE_TEMPLATE, REGEXP} from '../../../Constants';
+import {DomUtils} from '../../../app-core/DomUtils';
 
 export class SingleCollectionView {
     private readonly buttonEl: HTMLElement;

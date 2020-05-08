@@ -1,18 +1,13 @@
-import {ITwinePassage} from '../abstract/TwineModels';
-import {PostMessageApi} from './PostMessageApi';
-import {IAppState} from '../twine-game/AppState';
-import {Collections} from './collections/Collections';
-import {AudioPlayer} from './AudioPlayer';
-import {IWonderCollectRule} from './collections/CollectionInterfaces';
+import {PostMessageApi} from '../twine-game/logic/PostMessageApi';
+import {IWonderCollectRule} from '../twine-game/logic/collections/CollectionInterfaces';
 import {RUNTIME_STORE} from '../twine-game/Stores';
-import {RunTimeCommand} from './RunTimeCommands';
+import {UserScriptCommand} from './UserScriptCommands';
 
-export class RunTime {
-    private readonly audioPlayer: AudioPlayer;
+export class UserScriptApi {
+
     private readonly postMessageApi: PostMessageApi;
 
     constructor() {
-        this.audioPlayer = new AudioPlayer();
         this.postMessageApi = new PostMessageApi();
     }
 
@@ -51,7 +46,7 @@ export class RunTime {
 
     collect(rule: IWonderCollectRule) {
         RUNTIME_STORE.commands.push({
-            name: RunTimeCommand.collectionRule,
+            name: UserScriptCommand.collectionRule,
             data: rule
         })
     }
@@ -61,19 +56,41 @@ export class RunTime {
      **********/
 
     music(url: string, volume = 1) {
-        this.audioPlayer.music(url, volume);
+        RUNTIME_STORE.commands.push({
+            name: UserScriptCommand.music,
+            data: {
+                url: url,
+                volume: volume
+            }
+        })
     }
 
     musicFor(hashName: string, url: string, volume = 1) {
-        this.audioPlayer.musicFor(hashName, url, volume);
+        RUNTIME_STORE.commands.push({
+            name: UserScriptCommand.musicFor,
+            data: {
+                url: url,
+                volume: volume,
+                hashName: hashName
+            }
+        })
     }
 
     sound(url: string, volume = 1) {
-        this.audioPlayer.sound(url, volume);
+        RUNTIME_STORE.commands.push({
+            name: UserScriptCommand.sound,
+            data: {
+                url: url,
+                volume: volume,
+            }
+        })
     }
 
     musicStop() {
-        this.audioPlayer.stop();
+        RUNTIME_STORE.commands.push({
+            name: UserScriptCommand.musicStop,
+            data: null
+        })
     }
 
     /********************
@@ -89,21 +106,21 @@ export class RunTime {
     // для отключения, если работаем с внешним API, к примеру
     disableLocalSave(disable = true) {
         RUNTIME_STORE.commands.push({
-            name: RunTimeCommand.enableExternalApi,
+            name: UserScriptCommand.enableExternalApi,
             data: true
         })
     }
 
     enableExternalApi(disable = true) {
         RUNTIME_STORE.commands.push({
-            name: RunTimeCommand.enableExternalApi,
+            name: UserScriptCommand.enableExternalApi,
             data: true
         })
     }
 
     autoSave(enabled = true) {
         RUNTIME_STORE.commands.push({
-            name: RunTimeCommand.autoSave,
+            name: UserScriptCommand.autoSave,
             data: enabled
         })
     }
@@ -112,7 +129,7 @@ export class RunTime {
 
     saveSlot(saveName: string) {
         RUNTIME_STORE.commands.push({
-            name: RunTimeCommand.saveSlot,
+            name: UserScriptCommand.saveSlot,
             data: saveName
         })
     }
@@ -120,7 +137,7 @@ export class RunTime {
     save(saveName?: string) {
         if (saveName != null) this.saveSlot(saveName);
         RUNTIME_STORE.commands.push({
-            name: RunTimeCommand.save,
+            name: UserScriptCommand.save,
             data: saveName
         })
     }
@@ -128,7 +145,7 @@ export class RunTime {
     load(saveName?: string) {
         if (saveName != null) this.saveSlot(saveName);
         RUNTIME_STORE.commands.push({
-            name: RunTimeCommand.load,
+            name: UserScriptCommand.load,
             data: saveName
         })
     }
@@ -141,13 +158,5 @@ export class RunTime {
         // рантайм просто запихивает тексты в буффер
         // оттуда их забирает логика
         RUNTIME_STORE.textBuffer.push(text);
-    }
-
-    /***********
-     *  методы вызываются основным движком
-     **********/
-
-    onPassage(passage: ITwinePassage, state: IAppState) {
-        this.audioPlayer.musicCheck(passage.name);
     }
 }

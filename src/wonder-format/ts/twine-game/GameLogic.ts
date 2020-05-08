@@ -3,22 +3,24 @@ import {GameEvents, PageViewData, PreloadPageViewData} from "./GameEvents";
 import {REGEXP, WONDER} from "../Constants";
 import {GameConfig} from "./logic/GameConfig";
 import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
-import {RunTime} from '../runtime/RunTime';
+import {UserScriptApi} from '../runtime/UserScriptApi';
 import {WonderHistory} from './logic/WonderHistory';
 import {AppState, IAppState} from './AppState';
 import {RUNTIME_STORE, STORE, STORY_STORE} from './Stores';
 import {parseTwineData} from '../parser/TwineParser';
-import {StateRepository} from './repository/StateRepository';
+import {StateRepository} from './logic/repository/StateRepository';
 import {IRunTimeCommand} from '../abstract/WonderInterfaces';
-import {RunTimeCommand} from '../runtime/RunTimeCommands';
-import {Collections} from '../runtime/collections/Collections';
+import {UserScriptCommand} from '../runtime/UserScriptCommands';
+import {Collections} from './logic/collections/Collections';
+import {AudioPlayer} from './logic/AudioPlayer';
 
 export class GameLogic {
     private readonly gameConfig;
     private readonly history: WonderHistory;
     private readonly collections: Collections;
     private readonly stateRepo: StateRepository;
-    private readonly runTime: RunTime;
+    private readonly audioPlayer: AudioPlayer;
+    private readonly userScriptApi: UserScriptApi;
 
     private isAutoSave = true;
 
@@ -27,10 +29,11 @@ export class GameLogic {
         this.history = new WonderHistory();
         this.collections = new Collections();
         this.stateRepo = new StateRepository();
-        this.runTime = new RunTime();
+        this.audioPlayer = new AudioPlayer();
+        this.userScriptApi = new UserScriptApi();
 
         // @ts-ignore
-        window.w = this.runTime;
+        window.w = this.userScriptApi;
         // @ts-ignore
         window.Wonder = window.w;
 
@@ -61,7 +64,7 @@ export class GameLogic {
         STORY_STORE.story = story;
 
         this.exeScript(story.script, STORE.state.gameVars);
-        this.execRunTimeCommands();
+        this.execUserScriptCommands();
 
         then(() => this.startStateLoading());
     }
@@ -97,7 +100,7 @@ export class GameLogic {
             console.log('loadStory 2, game parsed...');
             EventBus.emit(GameEvents.onStoryLoaded, story);
 
-            this.runTime.onStoryReady();
+            this.userScriptApi.onStoryReady();
 
             this.startGame(STORY_STORE.story, STORE.state);
         }*/
@@ -124,7 +127,7 @@ export class GameLogic {
         this.showPassage(passage);
         const appState = STORE.state;
         this.collections.onPassage(passage);
-        this.runTime.onPassage(passage, appState);
+        this.audioPlayer.musicCheck(passage.name);
     }
 
     private showPassage(passage: ITwinePassage) {
@@ -180,6 +183,7 @@ export class GameLogic {
         };
 
         this.execScripts(viewPassage);
+        this.execUserScriptCommands();
 
         return new PageViewData(
             viewPassage,
@@ -240,41 +244,60 @@ export class GameLogic {
     }
 
     /**************************
-     *  runTime commands
+     *  userScriptApi commands
      *********************/
-    private execRunTimeCommands() {
-        console.log('execRunTimeCommands...');
+    private execUserScriptCommands() {
+        console.log('execUserScriptCommands...');
         const commands = RUNTIME_STORE.commands;
         while (commands.length > 0) {
-            this.execSingleRuntimeCommand(commands.shift())
+            this.execSingleUserCommand(commands.shift())
         }
     }
 
-    private execSingleRuntimeCommand(command: IRunTimeCommand) {
+    private execSingleUserCommand(command: IRunTimeCommand) {
         console.log('...command', command.name, command.data);
         switch (command.name) {
-            case RunTimeCommand.enableExternalApi:
+            case UserScriptCommand.enableExternalApi:
                 this.stateRepo.enableExternalApi(command.data)
                 break;
-            case RunTimeCommand.saveSlot:
+            case UserScriptCommand.saveSlot:
                 this.saveName(command.data);
                 break;
-            case RunTimeCommand.autoSave:
+            case UserScriptCommand.autoSave:
                 this.isAutoSave = command.data === true;
                 break;
-            case RunTimeCommand.save:
+            case UserScriptCommand.save:
                 if (this.isStatePreload()) return;
                 else this.saveState();
                 break;
-            case RunTimeCommand.load:
+            case UserScriptCommand.load:
                 if (this.isStatePreload()) return;
                 else this.loadState();
                 break;
-            case RunTimeCommand.collectionRule:
+            case UserScriptCommand.collectionRule:
                 this.collections.addRule(command.data)
                 break;
+            case UserScriptCommand.music:
+                this.audioPlayer.music(
+                    command.data.url,
+                    command.data.volume);
+                break;
+            case UserScriptCommand.musicFor:
+                this.audioPlayer.musicFor(
+                    command.data.hashName,
+                    command.data.url,
+                    command.data.volume);
+                break;
+            case UserScriptCommand.sound:
+                this.audioPlayer.sound(
+                    command.data.url,
+                    command.data.volume);
+                break;
+            case UserScriptCommand.musicStop:
+                this.audioPlayer.stop();
+                break;
             default:
-                console.warn('unhandled runTime command:: ', command.name, command.data);
+                console.warn('unhandled userScriptApi command:: ', command.name, command.data);
         }
     }
 

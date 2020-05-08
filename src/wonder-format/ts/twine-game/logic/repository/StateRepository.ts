@@ -1,5 +1,5 @@
-import {IMessageCallback, IStateCallback} from '../../abstract/WonderInterfaces';
-import {AppState} from '../AppState';
+import {IMessageCallback, IStateCallback} from '../../../abstract/WonderInterfaces';
+import {AppState} from '../../AppState';
 import {IStateRepository} from './StateRepositoryInterfaces';
 import {LocalRepository} from './LocalRepository';
 import {PostMessageRepository} from './PostMessageRepository';

@@ -1,6 +1,6 @@
 import {IStateRepository} from './StateRepositoryInterfaces';
-import {IMessageCallback, IStateCallback} from '../../abstract/WonderInterfaces';
-import {AppState} from '../AppState';
+import {IMessageCallback, IStateCallback} from '../../../abstract/WonderInterfaces';
+import {AppState} from '../../AppState';
 
 export class LocalRepository implements IStateRepository {
     private localPrefix = 'wonder_';
