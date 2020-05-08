@@ -88,23 +88,6 @@ export class GameLogic {
         this.startGame(STORY_STORE.story, STORE.state);
     }
 
-    // не нужен ли тут прелоадер? )
-    /*    loadStory(story: ITwineStory) {
-            STORY_STORE.story = story;
-
-            this.exeScript(story.script, STORE.state.gameVars);
-
-            console.log('story.script', STORE.state.gameVars);
-            console.log('loadStory, script executed...');
-
-            console.log('loadStory 2, game parsed...');
-            EventBus.emit(GameEvents.onStoryLoaded, story);
-
-            this.userScriptApi.onStoryReady();
-
-            this.startGame(STORY_STORE.story, STORE.state);
-        }*/
-
     /*********
      * LOGIC
      *********/
