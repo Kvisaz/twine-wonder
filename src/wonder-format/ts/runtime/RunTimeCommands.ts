@@ -4,4 +4,5 @@ export const enum RunTimeCommand {
     save = 'save',
     load = 'load',
     autoSave = 'autoSave',
+    collectionRule = 'collectionRule', // data - rule: IWonderCollectRule
 }

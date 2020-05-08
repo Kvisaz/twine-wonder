@@ -9,12 +9,10 @@ import {RunTimeCommand} from './RunTimeCommands';
 
 export class RunTime {
     private readonly audioPlayer: AudioPlayer;
-    private readonly collections: Collections;
     private readonly postMessageApi: PostMessageApi;
 
     constructor() {
         this.audioPlayer = new AudioPlayer();
-        this.collections = new Collections();
         this.postMessageApi = new PostMessageApi();
     }
 
@@ -52,7 +50,10 @@ export class RunTime {
      *******************/
 
     collect(rule: IWonderCollectRule) {
-        this.collections.addRule(rule);
+        RUNTIME_STORE.commands.push({
+            name: RunTimeCommand.collectionRule,
+            data: rule
+        })
     }
 
     /***********
@@ -145,16 +146,8 @@ export class RunTime {
     /***********
      *  методы вызываются основным движком
      **********/
-    onStoryReady() {
-        console.log('Wonder onStoryReady');
-        // поскольку подсчет коллекций может быть долгим, откладываем ненадолго
-        setTimeout(() => {
-            this.collections.onStoryReady();
-        }, 0);
-    }
 
     onPassage(passage: ITwinePassage, state: IAppState) {
         this.audioPlayer.musicCheck(passage.name);
-        this.collections.onPassage(passage);
     }
 }

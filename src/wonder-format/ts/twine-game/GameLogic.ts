@@ -11,18 +11,24 @@ import {parseTwineData} from '../parser/TwineParser';
 import {StateRepository} from './repository/StateRepository';
 import {IRunTimeCommand} from '../abstract/WonderInterfaces';
 import {RunTimeCommand} from '../runtime/RunTimeCommands';
+import {Collections} from '../runtime/collections/Collections';
 
 export class GameLogic {
-    private gameConfig = new GameConfig();
-    private history: WonderHistory = new WonderHistory();
+    private readonly gameConfig;
+    private readonly history: WonderHistory;
+    private readonly collections: Collections;
+    private readonly stateRepo: StateRepository;
     private readonly runTime: RunTime;
 
-    private stateRepo: StateRepository;
     private isAutoSave = true;
 
     constructor() {
+        this.gameConfig = new GameConfig();
+        this.history = new WonderHistory();
+        this.collections = new Collections();
         this.stateRepo = new StateRepository();
         this.runTime = new RunTime();
+
         // @ts-ignore
         window.w = this.runTime;
         // @ts-ignore
@@ -75,26 +81,26 @@ export class GameLogic {
             }
         }
 
-        this.runTime.onStoryReady();
+        this.collections.onStoryReady();
         this.startGame(STORY_STORE.story, STORE.state);
     }
 
     // не нужен ли тут прелоадер? )
-    loadStory(story: ITwineStory) {
-        STORY_STORE.story = story;
+    /*    loadStory(story: ITwineStory) {
+            STORY_STORE.story = story;
 
-        this.exeScript(story.script, STORE.state.gameVars);
+            this.exeScript(story.script, STORE.state.gameVars);
 
-        console.log('story.script', STORE.state.gameVars);
-        console.log('loadStory, script executed...');
+            console.log('story.script', STORE.state.gameVars);
+            console.log('loadStory, script executed...');
 
-        console.log('loadStory 2, game parsed...');
-        EventBus.emit(GameEvents.onStoryLoaded, story);
+            console.log('loadStory 2, game parsed...');
+            EventBus.emit(GameEvents.onStoryLoaded, story);
 
-        this.runTime.onStoryReady();
+            this.runTime.onStoryReady();
 
-        this.startGame(STORY_STORE.story, STORE.state);
-    }
+            this.startGame(STORY_STORE.story, STORE.state);
+        }*/
 
     /*********
      * LOGIC
@@ -117,6 +123,7 @@ export class GameLogic {
     private onPassagePrepared(passage: ITwinePassage) {
         this.showPassage(passage);
         const appState = STORE.state;
+        this.collections.onPassage(passage);
         this.runTime.onPassage(passage, appState);
     }
 
@@ -259,11 +266,15 @@ export class GameLogic {
                 if (this.isStatePreload()) return;
                 else this.saveState();
                 break;
-
             case RunTimeCommand.load:
                 if (this.isStatePreload()) return;
                 else this.loadState();
                 break;
+            case RunTimeCommand.collectionRule:
+                this.collections.addRule(command.data)
+                break;
+            default:
+                console.warn('unhandled runTime command:: ', command.name, command.data);
         }
     }
 
