@@ -7,6 +7,4 @@ export const enum PostMessages {
     loadError = 'loadError',
     save = 'save',
     saveError = 'saveError',
-    saveSlot = 'saveSlot',
-    saveSlotError = 'saveSlotError',
 }

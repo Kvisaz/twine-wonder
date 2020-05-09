@@ -164,6 +164,24 @@ export class UserScriptApi {
     }
 
     /****************
+     *  restart и переходы
+     *********/
+
+    /**
+     * @param delay - задержка в ms
+     * @param name - с какого параграфа начать
+     */
+    start(delay = 0, name: string = null) {
+        RUNTIME_STORE.commands.push({
+            name: UserScriptCommand.start,
+            data: {
+                delay: delay,
+                name: name
+            }
+        })
+    }
+
+    /****************
      *  show text в месте вызова
      *********/
 

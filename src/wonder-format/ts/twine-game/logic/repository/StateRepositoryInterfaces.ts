@@ -1,10 +1,7 @@
-import {IMessageCallback, IStateCallback} from '../../../abstract/WonderInterfaces';
-import {AppState} from '../../AppState';
+import {IMessageCallback, ILoadCallback} from '../../../abstract/WonderInterfaces';
 
 export interface IStateRepository {
-    saveName(slotName: string, resolve: IMessageCallback, reject: IMessageCallback);
+    save(saveName: string, data: string, resolve: IMessageCallback, reject: IMessageCallback);
 
-    save(state: AppState, resolve: IMessageCallback, reject: IMessageCallback);
-
-    load(resolve: IStateCallback, reject: IMessageCallback);
+    load(saveName: string, resolve: ILoadCallback, reject: IMessageCallback);
 }

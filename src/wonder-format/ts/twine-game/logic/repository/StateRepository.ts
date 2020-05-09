@@ -1,5 +1,4 @@
-import {IMessageCallback, IStateCallback} from '../../../abstract/WonderInterfaces';
-import {AppState} from '../../AppState';
+import {IMessageCallback, ILoadCallback} from '../../../abstract/WonderInterfaces';
 import {IStateRepository} from './StateRepositoryInterfaces';
 import {LocalRepository} from './LocalRepository';
 import {PostMessageRepository} from './PostMessageRepository';
@@ -19,18 +18,13 @@ export class StateRepository implements IStateRepository {
         this.repo = enable ? this.postMessageRepo : this.localRepo;
     }
 
-    saveName(slotName: string, resolve: IMessageCallback, reject: IMessageCallback) {
-        console.log('repo saveName....', slotName);
-        this.repo.saveName(slotName, resolve, reject);
-    }
-
-    load(resolve: IStateCallback, reject: IMessageCallback) {
+    load(saveName: string, resolve: ILoadCallback, reject: IMessageCallback) {
         console.log('repo load....');
-        this.repo.load(resolve, reject);
+        this.repo.load(saveName,resolve, reject);
     }
 
-    save(state: AppState, resolve: IMessageCallback, reject: IMessageCallback) {
-        console.log('repo save....');
-        this.repo.save(state, resolve, reject);
+    save(saveName: string, data: any, resolve: IMessageCallback, reject: IMessageCallback) {
+        console.log('repo save....', saveName, data);
+        this.repo.save(saveName,data, resolve, reject);
     }
 }

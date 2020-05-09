@@ -14,4 +14,4 @@ console.log(`..............................`);
 const storyStyle = getTwineStoryStyle();
 const view = new GameView(storyStyle);
 const logic = new GameLogic();
-logic.preload(); // а вот тут уже начнётся парсинг
+logic.start();

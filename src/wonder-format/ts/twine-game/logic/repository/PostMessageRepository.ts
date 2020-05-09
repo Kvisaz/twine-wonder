@@ -1,57 +1,46 @@
 import {IStateRepository} from './StateRepositoryInterfaces';
-import {IMap, IMessageCallback, IStateCallback} from '../../../abstract/WonderInterfaces';
-import {AppState, IAppState} from '../../AppState';
+import {IMap, IMessageCallback, ILoadCallback} from '../../../abstract/WonderInterfaces';
 import {IPostMessage, PostMessageApi} from '../PostMessageApi';
 import {PostMessages} from '../../PostMessages';
 
 export class PostMessageRepository implements IStateRepository {
-    private slotName: string;
     private readonly postMessageApi: PostMessageApi;
     private readonly callbacks: IMap<Function>;
 
     constructor() {
         this.postMessageApi = new PostMessageApi();
         this.callbacks = {};
-
         this.setHandlers();
     }
 
-    saveName(slotName: string, resolve: IMessageCallback, reject: IMessageCallback) {
-        this.callbacks[PostMessages.saveSlot] = resolve;
-        this.callbacks[PostMessages.saveSlotError] = reject;
-        this.postMessageApi.send(PostMessages.save, slotName);
-        this.slotName = slotName;
-    }
-
-    save(state: AppState, resolve: IMessageCallback, reject: IMessageCallback) {
+    save(saveName: string, state: any, resolve: IMessageCallback, reject: IMessageCallback) {
         try {
             const json = JSON.stringify(state);
             this.callbacks[PostMessages.save] = resolve;
             this.callbacks[PostMessages.saveError] = reject;
-            this.postMessageApi.send(PostMessages.save, json);
+            this.postMessageApi.send(PostMessages.save, {
+                saveName: saveName,
+                data: json
+            });
         } catch (e) {
-            reject(`postMessageRepository save Error for slotName [${this.slotName} :: ` + e);
+            reject(`postMessageRepository save Error for slotName [${saveName} :: ` + e);
         }
     }
 
-    load(resolve: IStateCallback, reject: IMessageCallback) {
+    load(saveName: string, resolve: ILoadCallback, reject: IMessageCallback) {
         this.callbacks[PostMessages.load] = resolve;
         this.callbacks[PostMessages.loadError] = reject;
-        this.postMessageApi.send(PostMessages.load, null);
+        this.postMessageApi.send(PostMessages.load, {
+            saveName: saveName
+        });
     }
 
     private setHandlers() {
-
-        this.setMessageHandler(PostMessages.saveSlot);
-        this.setMessageHandler(PostMessages.saveSlotError);
         this.setMessageHandler(PostMessages.save);
         this.setMessageHandler(PostMessages.saveError);
         this.setMessageHandler(PostMessages.loadError);
-
-
-        this.postMessageApi.on(PostMessages.load, (postMessage: IPostMessage) => {
-            this.onPostMessageLoad(postMessage);
-        });
+        this.postMessageApi.on(PostMessages.load,
+            (postMessage: IPostMessage) => this.onPostMessageLoad(postMessage));
 
     }
 
@@ -64,7 +53,7 @@ export class PostMessageRepository implements IStateRepository {
 
     private onPostMessageLoad(postMessage: IPostMessage) {
         try {
-            const state = JSON.parse(postMessage.data) as IAppState;
+            const state = JSON.parse(postMessage.data);
             const resolve = this.callbacks[PostMessages.load];
             resolve(state);
         } catch (e) {

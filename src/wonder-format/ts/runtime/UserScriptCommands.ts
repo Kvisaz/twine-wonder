@@ -1,9 +1,10 @@
 export const enum UserScriptCommand {
+    start = 'start', // параметр name, delay
     enableExternalApi = 'enableExternalApi',
     saveSlot = 'saveSlot',
     save = 'save',
     load = 'load',
-    autoLoad="autoLoad",
+    autoLoad = "autoLoad",
     autoSave = 'autoSave',
     collectionRule = 'collectionRule', // data - rule: IWonderCollectRule
     music = 'music',

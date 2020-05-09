@@ -23,9 +23,6 @@ export interface IWonderCollectRule {
     hideBack?: boolean, // прячем автокнопку 'обратно'
 }
 
-export interface ICollectionState {
-    collected: IWonderCollectionMap
-}
 
 export interface ICollectionShowCallback {
     (collectionName: string): void

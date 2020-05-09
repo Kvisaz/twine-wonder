@@ -1,18 +1,14 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <meta charset="utf-8">
-    <title>wonder-demo</title>
-    <style></style>
-</head>
-<body>
-<tw-story tags></tw-story>
-<tw-storydata creator="TwineWonder" creator-version="2.3.8" format="Wonder" format-version="0.6.12"
-              hidden ifid="993B579C-CE55-436E-95BA-EA224BA8A4A7" name="wonder-demo" options="" startnode="1"
-              zoom="1">
-    <style id="twine-user-stylesheet" role="stylesheet" type="text/twine-css"></style>
-    <script id="twine-user-script" role="script" type="text/twine-javascript">this.coins = 0;
+    <html>
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta charset="utf-8">
+            <title>wonder-demo</title>
+            <style></style>
+        </head>
+        <body>
+            <tw-story tags></tw-story>
+            <tw-storydata name="wonder-demo" startnode="1" creator="TwineWonder" creator-version="2.3.8" ifid="993B579C-CE55-436E-95BA-EA224BA8A4A7" zoom="1" format="Wonder" format-version="0.6.12" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript">this.coins = 0;
 
 //Wonder.parentApi().enable();
 
@@ -38,166 +34,114 @@ Wonder.collect({
     title: 'Книжки',
     tags: ['book'],
     hideBack: true
-});
+});</script><tw-tag name="gameover" color="red"></tw-tag>,<tw-tag name="book" color="yellow"></tw-tag><tw-passagedata pid="1" name="start" tags="" position="871,50" size="100,100">Демо игра для показа возможностей формата Wonder.
 
-    </script>
-    <tw-tag color="red" name="gameover"></tw-tag>
-    ,
-    <tw-tag color="yellow" name="book"></tw-tag>
-    <tw-passagedata name="start" pid="1" position="890,54" size="100,100" tags="">Демо игра для показа возможностей
-        формата Wonder.
+[[Новая игра|start-new]]
+{{ 
+	if(w.hasSave())  w.showText(&#39;[[Продолжить|start-load]]&#39;);
+}}</tw-passagedata><tw-passagedata pid="2" name="collections" tags="" position="456,404" size="100,100">Вы стоите у фонтана, в котором плещутся пираньи. Вдали возвышается замок чародея. Перед вами торговец со старинными книжками. Позади него надпись - &quot;не богохульствуй и не оскорбляй чародея&quot;
 
-        [[Новая игра|start-new]]
-        {{
-        if(w.hasSave()){
-        w.showText('[[Продолжить|start-load]]');
-        }
-        }}
-    </tw-passagedata>
-    <tw-passagedata name="collections" pid="2" position="456,404" size="100,100" tags="">Вы стоите у фонтана, в котором
-        плещутся пираньи. Вдали возвышается замок чародея. Перед вами торговец со старинными книжками. Позади него
-        надпись - &quot;не богохульствуй и не оскорбляй чародея&quot;
+[[Прыгнуть в фонтан|collections-pirahnas]]
+[[Богохульствовать|collections-god-yell]]
+[[Пошутить о чародее|collections-wizard-yell]]
+[[Почитать книжки|collections-books]]
 
-        [[Прыгнуть в фонтан|collections-pirahnas]]
-        [[Богохульствовать|collections-god-yell]]
-        [[Пошутить о чародее|collections-wizard-yell]]
-        [[Почитать книжки|collections-books]]
+</tw-passagedata><tw-passagedata pid="3" name="vars" tags="" position="1448,626" size="100,100">В кармане у вас {{= this.coins}} монеток.
 
-    </tw-passagedata>
-    <tw-passagedata name="vars" pid="3" position="1448,626" size="100,100" tags="">В кармане у вас {{= this.coins}}
-        монеток.
+[[Заработать 5 золотых|vars-coins-5]]
+[[Заработать 15 золотых|vars-coins-15]]</tw-passagedata><tw-passagedata pid="4" name="collections-pirahnas" tags="gameover" position="45,545" size="100,100">Ааааа!  Пираньи набрасываются на ваше тело и за считанные секунды обгладывают его до костей. Глаза, волосы, кожа, мясо, желудок и сердце - всё, все уничтожается этим злобными малютками.
 
-        [[Заработать 5 золотых|vars-coins-5]]
-        [[Заработать 15 золотых|vars-coins-15]]
-    </tw-passagedata>
-    <tw-passagedata name="collections-pirahnas" pid="4" position="45,545" size="100,100" tags="gameover">Ааааа! Пираньи
-        набрасываются на ваше тело и за считанные секунды обгладывают его до костей. Глаза, волосы, кожа, мясо, желудок
-        и сердце - всё, все уничтожается этим злобными малютками.
+Это конец.</tw-passagedata><tw-passagedata pid="5" name="collections-god-yell" tags="" position="195,545" size="100,100">Вы ругаете древних и новых богов за их оскорбительное высокомерие и невмешательства, за сексуальную распущенность и полное нежелание одарить вас хотя бы сундуком золота, не говоря уже о талантах.
 
-        Это конец.
-    </tw-passagedata>
-    <tw-passagedata name="collections-god-yell" pid="5" position="195,545" size="100,100" tags="">Вы ругаете древних и
-        новых богов за их оскорбительное высокомерие и невмешательства, за сексуальную распущенность и полное нежелание
-        одарить вас хотя бы сундуком золота, не говоря уже о талантах.
+Внезапно раздаётся гром.
 
-        Внезапно раздаётся гром.
+[[Продолжать богохульствовать|collections-god-yell2]]
+[[Замолчать|collections]]</tw-passagedata><tw-passagedata pid="6" name="collections-wizard-yell" tags="" position="345,544" size="100,100">Вы остроумно шутите о чувстве вкуса человека, выстроившего такой нелепый и претенциозный замок, что возвышается вдали.
 
-        [[Продолжать богохульствовать|collections-god-yell2]]
-        [[Замолчать|collections]]
-    </tw-passagedata>
-    <tw-passagedata name="collections-wizard-yell" pid="6" position="345,544" size="100,100" tags="">Вы остроумно шутите
-        о чувстве вкуса человека, выстроившего такой нелепый и претенциозный замок, что возвышается вдали.
+Внезапно вы чувствуете, что больше не можете говорить и вам хочется морковки.
 
-        Внезапно вы чувствуете, что больше не можете говорить и вам хочется морковки.
+[[Осмотреть себя|collections-wizard-yell-end]]</tw-passagedata><tw-passagedata pid="7" name="collections-books" tags="" position="534,544" size="100,100">На деревянном прилавке лежит куча старинных фолиантов. Что почитать?
 
-        [[Осмотреть себя|collections-wizard-yell-end]]
-    </tw-passagedata>
-    <tw-passagedata name="collections-books" pid="7" position="534,544" size="100,100" tags="">На деревянном прилавке
-        лежит куча старинных фолиантов. Что почитать?
+[[Гномы великие и ужасные|collections-books-gnomes]]
+[[Архитектура для чародеев|collections-books-arch-wiz]]
+[[Архитектура для чайников|collections-books-arch-pots]]
+[[Как выжить в этом мире|collections-books-how-life]]
+[[Умные люди в деревне Малые Пихоты|book-village-people]]
+[[Ничего не читать|collections]]</tw-passagedata><tw-passagedata pid="8" name="collections-god-yell2" tags="gameover" position="195,695" size="100,100">Ослепительная молния бьет с неба прямо в ваше темечко. Книги разлетаются в стороны, испуганный торговец падает ниц и просит богов их пощадить. Пираньи выпрыгивают из фонтана.
 
-        [[Гномы великие и ужасные|collections-books-gnomes]]
-        [[Архитектура для чародеев|collections-books-arch-wiz]]
-        [[Архитектура для чайников|collections-books-arch-pots]]
-        [[Как выжить в этом мире|collections-books-how-life]]
-        [[Умные люди в деревне Малые Пихоты|book-village-people]]
-        [[Ничего не читать|collections]]
-    </tw-passagedata>
-    <tw-passagedata name="collections-god-yell2" pid="8" position="195,695" size="100,100" tags="gameover">Ослепительная
-        молния бьет с неба прямо в ваше темечко. Книги разлетаются в стороны, испуганный торговец падает ниц и просит
-        богов их пощадить. Пираньи выпрыгивают из фонтана.
+Так боги наказывают богохульников.</tw-passagedata><tw-passagedata pid="9" name="collections-wizard-yell-end" tags="gameover" position="345,694" size="100,100">Чародей превратил вас в кролика. Книжный торговец приближается к вам и ласково улыбается, одновременно доставая ножик из-за пояса.
 
-        Так боги наказывают богохульников.
-    </tw-passagedata>
-    <tw-passagedata name="collections-wizard-yell-end" pid="9" position="345,694" size="100,100" tags="gameover">Чародей
-        превратил вас в кролика. Книжный торговец приближается к вам и ласково улыбается, одновременно доставая ножик
-        из-за пояса.
+Кажется, ваши приключения окончены.</tw-passagedata><tw-passagedata pid="10" name="collections-books-gnomes" tags="book" position="372,904" size="100,100">&lt;h1&gt;Гномы великие и ужасные&lt;/h1&gt;
 
-        Кажется, ваши приключения окончены.
-    </tw-passagedata>
-    <tw-passagedata name="collections-books-gnomes" pid="10" position="372,904" size="100,100" tags="book">&lt;h1&gt;Гномы
-        великие и ужасные&lt;/h1&gt;
+Это книжка о гномах скучна.</tw-passagedata><tw-passagedata pid="11" name="collections-books-arch-wiz" tags="book" position="502,904" size="100,100">&lt;h1&gt;Архитектура для чародеев&lt;/h1&gt;
 
-        Это книжка о гномах скучна.
-    </tw-passagedata>
-    <tw-passagedata name="collections-books-arch-wiz" pid="11" position="502,904" size="100,100" tags="book">&lt;h1&gt;Архитектура
-        для чародеев&lt;/h1&gt;
+Замки должны быть такими, чтобы вселять ужас в сердца простолюдинов и уважение в сердца чудовищ.
+</tw-passagedata><tw-passagedata pid="12" name="collections-books-arch-pots" tags="book" position="624,902" size="100,100">Архитектура для чайников
 
-        Замки должны быть такими, чтобы вселять ужас в сердца простолюдинов и уважение в сердца чудовищ.
-    </tw-passagedata>
-    <tw-passagedata name="collections-books-arch-pots" pid="12" position="624,902" size="100,100" tags="book">
-        Архитектура для чайников
+Если вы чайник - вам достаточно и обычного стола, стоящего в прямоугольной комнате. </tw-passagedata><tw-passagedata pid="13" name="collections-books-how-life" tags="book" position="772,907" size="100,100">Как выжить в этом мире
 
-        Если вы чайник - вам достаточно и обычного стола, стоящего в прямоугольной комнате.
-    </tw-passagedata>
-    <tw-passagedata name="collections-books-how-life" pid="13" position="772,907" size="100,100" tags="book">Как выжить
-        в этом мире
+Постарайтесь никого не злить.</tw-passagedata><tw-passagedata pid="14" name="vars-coins-5" tags="" position="1282,777" size="100,100">{{  
+    this.coins += 5;
+}}
+Вы заработали на 5 монеток больше. Теперь у вас {{= this.coins}} монет.
 
-        Постарайтесь никого не злить.
-    </tw-passagedata>
-    <tw-passagedata name="vars-coins-5" pid="14" position="1282,777" size="100,100" tags="">{{
-        this.coins += 5;
-        }}
-        Вы заработали на 5 монеток больше. Теперь у вас {{= this.coins}} монет.
+[[Заработать ещё 5 монеток|vars-coins-5]]
+[[Вернуться|vars]]</tw-passagedata><tw-passagedata pid="15" name="vars-coins-15" tags="" position="1605,782" size="100,100">{{  
+    this.coins += 15;
+}}
+Вы заработали на 15 монеток больше. Теперь у вас {{= this.coins}} монет.
 
-        [[Заработать ещё 5 монеток|vars-coins-5]]
-        [[Вернуться|vars]]
-    </tw-passagedata>
-    <tw-passagedata name="vars-coins-15" pid="15" position="1605,782" size="100,100" tags="">{{
-        this.coins += 15;
-        }}
-        Вы заработали на 15 монеток больше. Теперь у вас {{= this.coins}} монет.
+[[Заработать ещё 5 монеток|vars-coins-5]]
+[[Заработать ещё 15 монеток|vars-coins-15]]
+[[Вернуться|vars]]</tw-passagedata><tw-passagedata pid="16" name="book-village-people" tags="book" position="907,902" size="100,100">Деревня была небольшая, поэтому признанных умников было только три - кузнец Дробила, ворожея Ядровка и старый солдат Шибузук, которого по такому случаю заставили протрезветь, обмакнув три раза в корыто с шипящим молодым квасом, который еще недостаточно забродил, чтобы стать хмельным.</tw-passagedata><tw-passagedata pid="17" name="save-loads" tags="" position="1885,560" size="100,100">Здесь можно сохранять и загружать игру.
 
-        [[Заработать ещё 5 монеток|vars-coins-5]]
-        [[Заработать ещё 15 монеток|vars-coins-15]]
-        [[Вернуться|vars]]
-    </tw-passagedata>
-    <tw-passagedata name="book-village-people" pid="16" position="907,902" size="100,100" tags="book">Деревня была
-        небольшая, поэтому признанных умников было только три - кузнец Дробила, ворожея Ядровка и старый солдат Шибузук,
-        которого по такому случаю заставили протрезветь, обмакнув три раза в корыто с шипящим молодым квасом, который
-        еще недостаточно забродил, чтобы стать хмельным.
-    </tw-passagedata>
-    <tw-passagedata name="save-loads" pid="17" position="1885,560" size="100,100" tags="">Здесь можно сохранять и
-        загружать игру.
+[[Загрузить 1|load1]] / [[Сохранить 1|save1]]
+[[Загрузить 2|load2]] / [[Сохранить 2|save2]]</tw-passagedata><tw-passagedata pid="18" name="load1" tags="" position="1765,687" size="100,100">{{
+	Wonder.load(&#39;save_slot1&#39;);
+}}
+Вы загрузили игру</tw-passagedata><tw-passagedata pid="19" name="save1" tags="" position="1775,807" size="100,100">{{
+	Wonder.save(&#39;save_slot1&#39;);
+}}
+Вы сохранили игру</tw-passagedata><tw-passagedata pid="20" name="load2" tags="" position="2080,702" size="100,100">{{
+	Wonder.load(&#39;save_slot2&#39;);
+}}
+Вы загрузили игру 2</tw-passagedata><tw-passagedata pid="21" name="save2" tags="" position="2090,817" size="100,100">{{
+	Wonder.save(&#39;save_slot2&#39;);
+}}
+Вы сохранили игру 2</tw-passagedata><tw-passagedata pid="22" name="start-new" tags="" position="865,179" size="100,100">Чтобы раскрыть всю силу формата, используйте для названий пассажей и их тегов - латиницу без пробелов. Это позволит формату создавать рабочие id и class для тегов, что позволит создавать кастомный дизайн для многих страниц, ссылок и так далее.
 
-        [[Загрузить 1|load1]] / [[Сохранить 1|save1]]
-        [[Загрузить 2|load2]] / [[Сохранить 2|save2]]
-    </tw-passagedata>
-    <tw-passagedata name="load1" pid="18" position="1765,687" size="100,100" tags="">{{
-        Wonder.load(&#39;save_slot1&#39;);
-        }}
-        Вы загрузили игру
-    </tw-passagedata>
-    <tw-passagedata name="save1" pid="19" position="1775,807" size="100,100" tags="">{{
-        Wonder.save(&#39;save_slot1&#39;);
-        }}
-        Вы сохранили игру
-    </tw-passagedata>
-    <tw-passagedata name="load2" pid="20" position="2080,702" size="100,100" tags="">{{
-        Wonder.load(&#39;save_slot2&#39;);
-        }}
-        Вы загрузили игру 2
-    </tw-passagedata>
-    <tw-passagedata name="save2" pid="21" position="2090,817" size="100,100" tags="">{{
-        Wonder.save(&#39;save_slot2&#39;);
-        }}
-        Вы сохранили игру 2
-    </tw-passagedata>
-    <tw-passagedata name="start-new" pid="22" position="865,179" size="100,100" tags="">Чтобы раскрыть всю силу формата,
-        используйте для названий пассажей и их тегов - латиницу без пробелов. Это позволит формату создавать рабочие id
-        и class для тегов, что позволит создавать кастомный дизайн для многих страниц, ссылок и так далее.
+[[Коллекции|collections]]
+[[Переходы и рестарт|restarts]]
+[[Переменные|vars]]
+[[Save/load|save-loads]]
 
-        [[Коллекции|collections]]
-        [[Переменные|vars]]
-        [[Save/load|save-loads]]
+{{w.autoSave(true);}}</tw-passagedata><tw-passagedata pid="23" name="start-load" tags="" position="1057,65" size="100,100">{{
+	w.autoSave(true);
+	w.load();
+}}
+Игра загружается....</tw-passagedata><tw-passagedata pid="24" name="restarts" tags="" position="1123,1153" size="100,100">Демо для проверки переходов и рестартов
 
-        {{w.autoSave(true);}}
-    </tw-passagedata>
-    <tw-passagedata name="start-load" pid="23" position="1057,65" size="100,100" tags="">{{
-        w.load();
-        w.autoSave(true);
-        }}
-        Игра загружается....
-    </tw-passagedata>
-</tw-storydata>
-</body>
+[[Начать с коллекций с задержкой|restarts-collections-delay]]
+[[Просто тестовый параграф|restarts-test]]
+[[Начать с этого же параграфа|restarts-start]]
+[[Начать с начала игры|start]]
+</tw-passagedata><tw-passagedata pid="25" name="restarts-test" tags="" position="967,1258" size="100,100">Тестовый параграф
+
+[[Начать с коллекций|restarts-test-start-collections]]
+[[Начать с рестартов|restarts-start]]
+[[Начать с этого же параграфа|restarts-test-start]]</tw-passagedata><tw-passagedata pid="26" name="restarts-start" tags="" position="1330,1254" size="100,100">{{
+w.start(0, &#39;restarts&#39;);
+}}</tw-passagedata><tw-passagedata pid="27" name="restarts-test-start-collections" tags="" position="892,1409" size="100,100">{{
+w.start(0, &#39;collections&#39;);
+}}</tw-passagedata><tw-passagedata pid="28" name="restarts-test-start" tags="" position="1042,1409" size="100,100">{{
+w.start(0, &#39;restarts-test&#39;);
+}}</tw-passagedata><tw-passagedata pid="29" name="restarts-collections-delay" tags="" position="1192,1419" size="100,100">Через 2 секунды вы попадете на коллекции
+
+{{
+w.start(2000, &#39;collections&#39;);
+}}</tw-passagedata></tw-storydata>
+
+
+
+        </body>
 </html>

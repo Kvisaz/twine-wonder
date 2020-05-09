@@ -16,11 +16,11 @@ export class Collections {
     }
 
     getCollectionMap(): IWonderCollectionMap {
-        return STORE.state.collectionMap;
+        return STORE.user.collectionMap;
     }
 
     getCollection(name: string): IWonderCollection {
-        return STORE.state.collectionMap[name];
+        return STORE.user.collectionMap[name];
     }
 
     onStoryReady() {
@@ -79,6 +79,7 @@ export class Collections {
     private addCollection(rule: IWonderCollectRule) {
         if (this.getCollection(rule.collection) != null) {
             console.warn('addCollection with same name ', rule.collection);
+            return;
         }
 
         this.getCollectionMap()[rule.collection] = {
