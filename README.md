@@ -50,8 +50,10 @@ D:\work\PLAYTEXT\wonder-format\0.6.18\wonder.js
 Редактор Twine загружает кастомные форматы при запуске каждый раз - поэтому установка из локального файла, который лежит на вашем компьютере - гарантирует  стабильность проекта и его независимость от сети, внезапных апдейтов формата или доступности GitHub
 
 ## Документация
+- [Кастомные скрипты](docs/Scripts.md)
 - [Команды Wonder](docs/WonderCommands.md)
+- [Save/Load](docs/SaveLoad.md)
+- [Как сделать стартовую страницу](docs/StartPage.md)
 - [Темы оформления](format/templates/README.md)
 - [Как настроить фон и картинки в текстовом квесте](docs/DESIGN.md)
-- [Кастомные скрипты](docs/Scripts.md)
 - [ChangeLog](docs/CHANGELOG.md)

@@ -23,6 +23,7 @@ export class GameLogic {
     private readonly userScriptApi: UserScriptApi;
 
     private isAutoSave = true;
+    private isAutoLoad = true;
 
     constructor() {
         this.gameConfig = new GameConfig();
@@ -66,7 +67,14 @@ export class GameLogic {
         this.exeScript(story.script, STORE.state.gameVars);
         this.execUserScriptCommands();
 
-        then(() => this.startStateLoading());
+        this.collections.onStoryReady();
+
+        if (this.isAutoLoad) {
+            then(() => this.startStateLoading());
+        } else {
+            then(() => this.onStateLoad(null));
+        }
+
     }
 
 
@@ -82,9 +90,11 @@ export class GameLogic {
                 ...STORE.state,
                 ...state
             }
+
+            this.collections.onStateUpdate();
         }
 
-        this.collections.onStoryReady();
+
         this.startGame(STORY_STORE.story, STORE.state);
     }
 
@@ -119,12 +129,14 @@ export class GameLogic {
 
     private onClick(name: string) {
         console.log('onClick', name);
+        this.history.add(name); // текущий узел идёт в историю
+        if (this.isAutoSave) this.saveState();
+
+        // добавление в историю нужно до execPassage
+        // чтобы в загрузку не добавлялись загрузочные страницы
 
         const viewData = this.execPassage(name);
         this.startPage(viewData);
-        this.history.add(name); // текущий узел идёт в историю
-
-        if (this.isAutoSave) this.saveState();
     }
 
 
@@ -249,13 +261,16 @@ export class GameLogic {
             case UserScriptCommand.autoSave:
                 this.isAutoSave = command.data === true;
                 break;
+            case UserScriptCommand.autoLoad:
+                this.isAutoLoad = command.data === true;
+                break;
             case UserScriptCommand.save:
                 if (this.isStatePreload()) return;
                 else this.saveState();
                 break;
             case UserScriptCommand.load:
                 if (this.isStatePreload()) return;
-                else this.loadState();
+                else then(() => this.loadState());
                 break;
             case UserScriptCommand.collectionRule:
                 this.collections.addRule(command.data)

@@ -3,6 +3,7 @@ export const enum UserScriptCommand {
     saveSlot = 'saveSlot',
     save = 'save',
     load = 'load',
+    autoLoad="autoLoad",
     autoSave = 'autoSave',
     collectionRule = 'collectionRule', // data - rule: IWonderCollectRule
     music = 'music',

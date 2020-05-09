@@ -18,7 +18,8 @@
 
 //Wonder.enableExternalApi(false);
 Wonder.saveSlot('saveslotTest2');
-Wonder.autoSave(false);// отключить автозагрузку
+Wonder.autoSave(false);// отключить автосохранение
+Wonder.autoLoad(false);// отключить автозагрузку
 
 Wonder.jsUrl('./assets/test.js', ()=> {
     console.log('hello after test js load');
@@ -187,8 +188,8 @@ Wonder.collect({
         {{w.autoSave(true);}}
     </tw-passagedata>
     <tw-passagedata name="start-load" pid="23" position="1057,65" size="100,100" tags="">{{
-        w.autoSave(true);
         w.load();
+        w.autoSave(true);
         }}
         Игра загружается....
     </tw-passagedata>
