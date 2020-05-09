@@ -39,6 +39,7 @@ Wonder.collect({
     tags: ['book'],
     hideBack: true
 });
+
     </script>
     <tw-tag color="red" name="gameover"></tw-tag>
     ,
@@ -47,7 +48,11 @@ Wonder.collect({
         формата Wonder.
 
         [[Новая игра|start-new]]
-        [[Продолжить|start-load]]
+        {{
+        if(w.hasSave()){
+        w.showText('[[Продолжить|start-load]]');
+        }
+        }}
     </tw-passagedata>
     <tw-passagedata name="collections" pid="2" position="456,404" size="100,100" tags="">Вы стоите у фонтана, в котором
         плещутся пираньи. Вдали возвышается замок чародея. Перед вами торговец со старинными книжками. Позади него

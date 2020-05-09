@@ -118,12 +118,17 @@ export class UserScriptApi {
         })
     }
 
-    autoLoad(enabled = true){
+    hasSave(): boolean {
+        return RUNTIME_STORE.hasSave;
+    }
+
+    autoLoad(enabled = true) {
         RUNTIME_STORE.commands.push({
             name: UserScriptCommand.autoLoad,
             data: enabled
         })
     }
+
     autoload = this.autoLoad;
 
     autoSave(enabled = true) {

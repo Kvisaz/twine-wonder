@@ -15,6 +15,7 @@ class AppStore {
 export const STORE = new AppStore();
 
 class RunTimeStore {
+    hasSave:boolean = false;
     textBuffer: Array<string> = [];
     commands: Array<IRunTimeCommand> = [];
 }

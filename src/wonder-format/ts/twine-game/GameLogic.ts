@@ -69,32 +69,41 @@ export class GameLogic {
 
         this.collections.onStoryReady();
 
-        if (this.isAutoLoad) {
-            then(() => this.startStateLoading());
-        } else {
-            then(() => this.onStateLoad(null));
+        // предварительная загрузка в любом случае
+        then(() => this.preloadState());
+    }
+
+    private preloadState() {
+        console.log('preloadState...');
+        this.stateRepo.load(
+            state => this.onPreloadState(state),
+            message => console.warn('preloadState error')
+        )
+    }
+
+    private onPreloadState(state: IAppState) {
+        if (state != null) {
+            RUNTIME_STORE.hasSave = true;
         }
-
+        if (this.isAutoLoad) {
+            this.updateState(state);
+        }
+        this.startGame(STORY_STORE.story, STORE.state);
     }
 
-
-    private startStateLoading() {
-        console.log('startStateLoading...');
-        this.loadState();
+    private updateState(state: IAppState) {
+        if (state == null) return;
+        STORE.state = {
+            ...STORE.state,
+            ...state
+        }
+        this.collections.onStateUpdate();
     }
+
 
     private onStateLoad(state: IAppState) {
         console.log('onStateLoad...', state);
-        if (state != null) {
-            STORE.state = {
-                ...STORE.state,
-                ...state
-            }
-
-            this.collections.onStateUpdate();
-        }
-
-
+        this.updateState(state);
         this.startGame(STORY_STORE.story, STORE.state);
     }
 
