@@ -214,7 +214,6 @@ export class SingleCollectionView {
         let title = innerText(passageContent, '<h1>', '</h1>');
         if (title == null || title.length == 0) {
             title = getFirstLine(passageContent);
-            console.log('getFirstLine', title);
         }
         return title;
     }
