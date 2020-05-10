@@ -8,7 +8,7 @@
         </head>
         <body>
             <tw-story tags></tw-story>
-            <tw-storydata name="wonder-demo" startnode="1" creator="TwineWonder" creator-version="2.3.8" ifid="993B579C-CE55-436E-95BA-EA224BA8A4A7" zoom="1" format="Wonder" format-version="0.6.12" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript">this.coins = 0;
+            <tw-storydata name="wonder-demo" startnode="1" creator="TwineWonder" creator-version="2.3.8" ifid="993B579C-CE55-436E-95BA-EA224BA8A4A7" zoom="1" format="Wonder" format-version="0.6.19" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript">this.coins = 0;
 
 Wonder.enableExternalApi(true);
 Wonder.autoSave(false);// отключить автосохранение
@@ -35,12 +35,12 @@ Wonder.collect({
     hideBack: true
 });</script><tw-tag name="gameover" color="red"></tw-tag>,<tw-tag name="book" color="yellow"></tw-tag><tw-passagedata pid="1" name="start" tags="" position="871,50" size="100,100">Демо игра для показа возможностей формата Wonder.
 
-{{
-w.reset();// обнулить стейт
-}}
 [[Новая игра|start-new]]
 {{ 
 	if(w.hasSave())  w.showText(&#39;[[Продолжить|start-load]]&#39;);
+}}
+{{
+w.reset();// обнулить стейт
 }}</tw-passagedata><tw-passagedata pid="2" name="collections" tags="" position="456,404" size="100,100">Вы стоите у фонтана, в котором плещутся пираньи. Вдали возвышается замок чародея. Перед вами торговец со старинными книжками. Позади него надпись - &quot;не богохульствуй и не оскорбляй чародея&quot;
 
 [[Прыгнуть в фонтан|collections-pirahnas]]
