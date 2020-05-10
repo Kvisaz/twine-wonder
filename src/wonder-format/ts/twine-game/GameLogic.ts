@@ -58,7 +58,7 @@ export class GameLogic {
             .sub(GameEvents.onBackClick, (message) => this.onBackClick())
     }
 
-    start(name?:string) {
+    start(name?: string) {
         this.showPreloader()
             .then(() => this.startParsing())
             .then(story => this.onStoryLoad(story))
@@ -178,7 +178,7 @@ export class GameLogic {
         return lastPage != null ? lastPage : story.startPassageName;
     }
 
-    private startGame(story: ITwineStory, state: IAppState, name?:string) {
+    private startGame(story: ITwineStory, state: IAppState, name?: string) {
         let startName = name != null ? name : this.getStartPage(story, state)
         this.onClick(startName);
     }
@@ -205,7 +205,7 @@ export class GameLogic {
         // - load
         // - restart
         const viewData = this.execPassage(passage);
-        this.autoSave();
+        this.autoSave(); // обязательно тут, чтобы проверять флаги лоадинга и сейва
         this.startPage(viewData);
     }
 
