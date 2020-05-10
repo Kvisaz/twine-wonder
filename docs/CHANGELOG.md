@@ -1,4 +1,11 @@
 #ChangeLog
+## Последняя версия - 0.6.19
+2020.05.10
+- [Wonder.restart()](docs/Restart.md);
+- [Wonder.hasSave()](docs/SaveLoad.md);
+- [Wonder.pageAdd('tag', 'text')](docs/WonderCommands.md) - - Добавить текст на все страницы с тегом tag;
+- [Wonder.showText(text)](docs/WonderCommands.md);
+
 ## 0.6.17 - 0.6.18
 2020.05.06
 - отладка save/load для внешнего API

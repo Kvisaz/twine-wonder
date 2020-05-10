@@ -190,4 +190,42 @@ export class UserScriptApi {
         // оттуда их забирает логика
         RUNTIME_STORE.textBuffer.push(text);
     }
+
+    /********
+     *  добавить текст к странице
+     */
+
+    // добавить text/html в конец  всех страниц с тегом tag
+    pageAdd(tag: string, text: string) {
+        RUNTIME_STORE.commands.push({
+            name: UserScriptCommand.pageAdd,
+            data: {
+                tag: tag,
+                text: text
+            }
+        })
+    }
+
+    // добавить text/html в начало  всех страниц с тегом tag
+    pageBefore(tag: string, text: string) {
+        RUNTIME_STORE.commands.push({
+            name: UserScriptCommand.pageBefore,
+            data: {
+                tag: tag,
+                text: text
+            }
+        })
+    }
+
+    // добавить text/html вокруг  всех страниц с тегом tag
+    pageWrap(tag: string, text: string, text2: string) {
+        RUNTIME_STORE.commands.push({
+            name: UserScriptCommand.pageBefore,
+            data: {
+                tag: tag,
+                text: text,
+                text2: text2
+            }
+        })
+    }
 }

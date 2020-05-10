@@ -36,10 +36,6 @@ Wonder.collect({
     tags: ['gameover'],
     // читабельный заголовок для пользователя
     title: 'Концовки', 
-    // добавить в конце любой HTML.
-    addAfter: '<div id="restartButton">[[Начать заново|start]]</div>', 
-    // показывать автобэк
-    hideBack: true,
     // сохранять собранные id в коллекцию
     collection: 'gameovers'
 })

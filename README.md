@@ -7,12 +7,12 @@
 
 Каждая локация в теге body получает уникальный id - это позволяет добавлять любое оформление для нужной локации через CSS.
 
-## Последняя версия - 0.6.18
-2020.05.06
-- [Wonder.showText(text)](docs/WonderCommands.md);
+## Последняя версия - 0.6.19
+2020.05.10
 - [Wonder.restart()](docs/Restart.md);
-- [Wonder.go(name, delay, stateReset)](docs/Restart.md);
 - [Wonder.hasSave()](docs/SaveLoad.md);
+- [Wonder.pageAdd('tag', 'text')](docs/WonderCommands.md) - - Добавить текст на все страницы с тегом tag;
+- [Wonder.showText(text)](docs/WonderCommands.md);
 
 2020.05.06
 - исправлен баг внешнего API для автосейва

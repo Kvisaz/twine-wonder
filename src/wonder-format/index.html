@@ -21,12 +21,15 @@ Wonder.jsUrl('./assets/test.js', ()=> {
     console.log('hello after test js load');
 });
 
+w.pageWrap('gameover',
+'<h1>Game Over</h1>'
+'<br /><div id="restartButton">[[Начать заново|start]]</div>'
+);
+
 Wonder.collect({
     collection: 'gameover',
     title: 'Концовки',
-    tags: ['gameover'],
-    addAfter: '<div id="restartButton">[[Начать заново|start]]</div>',
-    hideBack: true
+    tags: ['gameover']
 });
 
 Wonder.collect({

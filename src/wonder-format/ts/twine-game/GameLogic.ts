@@ -13,6 +13,8 @@ import {IRunTimeCommand} from '../abstract/WonderInterfaces';
 import {UserScriptCommand} from '../runtime/UserScriptCommands';
 import {Collections} from './logic/collections/Collections';
 import {AudioPlayer} from './logic/AudioPlayer';
+import {Preprocessor} from './logic/preprocessor/Preprocessor';
+import {PreprocessPosition} from './logic/preprocessor/PreprocessorInterfaces';
 
 const gameSavePrefix = 'w-game-';
 const userSavePrefix = 'w-user-';
@@ -22,6 +24,7 @@ export class GameLogic {
     private readonly gameConfig;
     private readonly history: WonderHistory;
     private readonly collections: Collections;
+    private readonly preprocessor: Preprocessor;
     private readonly stateRepo: StateRepository;
     private readonly audioPlayer: AudioPlayer;
     private readonly userScriptApi: UserScriptApi;
@@ -34,6 +37,7 @@ export class GameLogic {
         this.gameConfig = new GameConfig();
         this.history = new WonderHistory();
         this.collections = new Collections();
+        this.preprocessor = new Preprocessor();
         this.stateRepo = new StateRepository();
         this.audioPlayer = new AudioPlayer();
         this.userScriptApi = new UserScriptApi();
@@ -85,7 +89,7 @@ export class GameLogic {
         return new Promise((resolve, reject) => {
             console.log('onStoryLoad...', story);
             STORY_STORE.story = story;
-
+            this.preprocessor.beforeStoryLoad();
             this.exeScript(story.script, STORE.state.gameVars);
             this.execUserScriptCommands();
             this.collections.onStoryReady();
@@ -183,12 +187,16 @@ export class GameLogic {
 
     private onClick(name: string) {
         console.log('onClick', name);
-        const passage = STORY_STORE.story.passageHash[name];
+        // копия для иммутабельности
+        const passage = {
+            ...STORY_STORE.story.passageHash[name]
+        };
 
         this.collections.onPassage(passage);
         this.history.add(name); // текущий узел идёт в историю
         if (this.isAutoSave) this.autoSave();
 
+        this.preprocessor.exec(passage);
         // добавление в историю нужно до execPassage
         // чтобы в загрузку не добавлялись загрузочные страницы
 
@@ -230,19 +238,15 @@ export class GameLogic {
      * @param name
      */
     private execPassage(passage: ITwinePassage): PageViewData {
-        // копия для иммутабельности
-        const viewPassage = {
-            ...passage
-        };
 
-        this.execScripts(viewPassage);
+        this.execScripts(passage);
         this.execUserScriptCommands();
 
         return new PageViewData(
-            viewPassage,
+            passage,
             STORE.state.gameVars,
             this.gameConfig,
-            this.history.canGoBack(viewPassage.name),
+            this.history.canGoBack(passage.name),
             STORE.state.history.pagesHash,
             STORY_STORE.story.passageHash
         );
@@ -357,6 +361,30 @@ export class GameLogic {
                 setTimeout(() => {
                     this.restart(command.data.name);
                 }, command.data.delay);
+                break;
+            case UserScriptCommand.pageAdd:
+                this.preprocessor.addRule({
+                    tag: command.data.tag,
+                    text: command.data.text,
+                    text2: '',
+                    position: PreprocessPosition.end
+                })
+                break;
+            case UserScriptCommand.pageBefore:
+                this.preprocessor.addRule({
+                    tag: command.data.tag,
+                    text: command.data.text,
+                    text2: '',
+                    position: PreprocessPosition.start
+                })
+                break;
+            case UserScriptCommand.pageWrap:
+                this.preprocessor.addRule({
+                    tag: command.data.tag,
+                    text: command.data.text,
+                    text2: command.data.text2,
+                    position: PreprocessPosition.around
+                })
                 break;
             default:
                 console.warn('unhandled userScriptApi command:: ', command.name, command.data);

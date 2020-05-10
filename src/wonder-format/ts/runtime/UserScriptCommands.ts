@@ -11,4 +11,7 @@ export const enum UserScriptCommand {
     musicFor = 'musicFor',
     sound = 'sound',
     musicStop = 'musicStop',
+    pageAdd = 'pageAdd',
+    pageBefore = 'pageBefore',
+    pageWrap = 'pageWrap'
 }
