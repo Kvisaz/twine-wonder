@@ -23,7 +23,7 @@ export class Collections {
         return STORE.user.collectionMap[name];
     }
 
-    onStoryReady() {
+    onUserScriptExecuted() {
         this.initCollections();
 
         setTimeout(() => {
