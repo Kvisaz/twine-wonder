@@ -31,6 +31,7 @@ export class GameLogic {
 
     private isAutoSave = true;
     private isAutoLoad = true;
+    private isLoading = false; // заказана загрузка
     private gameSaveName = 'default';
 
     constructor() {
@@ -156,7 +157,6 @@ export class GameLogic {
         this.collections.onStateUpdate();
     }
 
-
     private onGameStateLoad(state: IAppState) {
         console.log('onGameStateLoad...', state);
         this.updateGameState(state);
@@ -188,19 +188,17 @@ export class GameLogic {
     private onClick(name: string) {
         console.log('onClick', name);
         // копия для иммутабельности
-        const passage = {
-            ...STORY_STORE.story.passageHash[name]
-        };
+        const passage = Object.assign({}, STORY_STORE.story.passageHash[name]);
 
         this.collections.onPassage(passage);
         this.history.add(name); // текущий узел идёт в историю
-        if (this.isAutoSave) this.autoSave();
 
         this.preprocessor.exec(passage);
-        // добавление в историю нужно до execPassage
-        // чтобы в загрузку не добавлялись загрузочные страницы
-
+        // тут могут быть вызваны команды
+        // - load
+        // - restart
         const viewData = this.execPassage(passage);
+        this.autoSave();
         this.startPage(viewData);
     }
 
@@ -333,7 +331,10 @@ export class GameLogic {
                 break;
             case UserScriptCommand.load:
                 if (this.isStatePreload()) return;
-                else then(() => this.loadGameState());
+                else {
+                    this.isLoading = true;
+                    then(() => this.loadGameState());
+                }
                 break;
             case UserScriptCommand.collectionRule:
                 this.collections.addRule(command.data)
@@ -425,10 +426,17 @@ export class GameLogic {
     }
 
     private loadGameState() {
+        this.isLoading = true;
         this.stateRepo.load(
             this.getGameSaveName(),
-            state => this.onGameStateLoad(state),
-            messageHandler
+            state => {
+                this.isLoading = false;
+                this.onGameStateLoad(state)
+            },
+            (e) => {
+                this.isLoading = false;
+                console.warn('loadGameState error ::' + e);
+            }
         )
     }
 
@@ -441,6 +449,9 @@ export class GameLogic {
     }
 
     private autoSave() {
+        if (!this.isAutoSave) return;
+        if (this.isLoading) return;
+
         console.log('auto saving.......', STORE.state, STORE.user);
         this.saveGameState();
         this.saveUserState();
