@@ -137,17 +137,18 @@ export class GameLogic {
             if (state != null) {
                 RUNTIME_STORE.hasSave = true;
             }
-            if (this.isAutoLoad && state != null) {
-                STORE.state = state
-            } else {
-                STORE.state = new AppState();
-            }
 
+            STORE.state = new AppState();
             this.preprocessor.beforeInitUserScript();
             this.collections.beforeInitUserScript();
             this.exeScript(STORY_STORE.story.script, STORE.state.gameVars);
             this.execUserScriptCommands();
             this.collections.onInitUserScript();
+
+            // обязательно после пользовательского скрипта, чтобы проверить
+            if (this.isAutoLoad && state != null) {
+                STORE.state = state
+            }
 
             resolve();
         })
