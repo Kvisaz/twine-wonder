@@ -15,6 +15,7 @@ import {Collections} from './logic/collections/Collections';
 import {AudioPlayer} from './logic/AudioPlayer';
 import {Preprocessor} from './logic/preprocessor/Preprocessor';
 import {PreprocessPosition} from './logic/preprocessor/PreprocessorInterfaces';
+import {PostMessageApi} from './logic/PostMessageApi';
 
 const gameSavePrefix = 'w-game-';
 const userSavePrefix = 'w-user-';
@@ -25,6 +26,7 @@ export class GameLogic {
     private readonly history: WonderHistory;
     private readonly collections: Collections;
     private readonly preprocessor: Preprocessor;
+    private readonly postMessageApi: PostMessageApi;
     private readonly stateRepo: StateRepository;
     private readonly audioPlayer: AudioPlayer;
     private readonly userScriptApi: UserScriptApi;
@@ -34,14 +36,17 @@ export class GameLogic {
     private isLoading = false; // заказана загрузка
     private gameSaveName = 'default';
 
+
     constructor() {
+        console.log('GameLogic constructor.....')
         this.gameConfig = new GameConfig();
         this.history = new WonderHistory();
         this.collections = new Collections();
         this.preprocessor = new Preprocessor();
-        this.stateRepo = new StateRepository();
+        this.postMessageApi = new PostMessageApi();
+        this.stateRepo = new StateRepository(this.postMessageApi);
         this.audioPlayer = new AudioPlayer();
-        this.userScriptApi = new UserScriptApi();
+        this.userScriptApi = new UserScriptApi(this.postMessageApi);
 
         // @ts-ignore
         window.w = this.userScriptApi;
@@ -89,7 +94,17 @@ export class GameLogic {
     private onStoryLoad(story: ITwineStory): Promise<void> {
         return new Promise((resolve, reject) => {
             console.log('onStoryLoad...', story);
+
             STORY_STORE.story = story;
+            STORE.user = new UserState();
+            STORE.state = new AppState();
+
+            this.preprocessor.beforeInitUserScript();
+            this.collections.beforeInitUserScript();
+            this.exeScript(STORY_STORE.story.script, STORE.state.gameVars);
+            this.execUserScriptCommands();
+            this.collections.onInitUserScript();
+
             resolve();
         })
     }
@@ -112,7 +127,7 @@ export class GameLogic {
     private onUserStateLoad(state: IUserState): Promise<void> {
         return new Promise((resolve, reject) => {
             console.log('onUserStateLoad...', state);
-            STORE.user = state != null ? state : new UserState();
+            if (state != null) STORE.user = state;
             console.log('onUserStateLoad...  STORE.user', STORE.user);
             resolve();
         })
@@ -137,13 +152,6 @@ export class GameLogic {
             if (state != null) {
                 RUNTIME_STORE.hasSave = true;
             }
-
-            STORE.state = new AppState();
-            this.preprocessor.beforeInitUserScript();
-            this.collections.beforeInitUserScript();
-            this.exeScript(STORY_STORE.story.script, STORE.state.gameVars);
-            this.execUserScriptCommands();
-            this.collections.onInitUserScript();
 
             // обязательно после пользовательского скрипта, чтобы проверить
             if (this.isAutoLoad && state != null) {

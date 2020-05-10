@@ -3,8 +3,6 @@ export class PostMessageApi {
     private readonly targetOrigin: string;
     private readonly listenerMap: IMessageListenerHash;
 
-    private isDisabled = true;
-
     constructor(parent = null, targetOrigin = "*") {
         this.listenerMap = {};
         this.parent = parent;
@@ -17,17 +15,7 @@ export class PostMessageApi {
 
     }
 
-    enable() {
-        this.isDisabled = false;
-    }
-
-    disable() {
-        this.isDisabled = true;
-    }
-
     send(messageName: string, data?: any) {
-        if (this.isDisabled) return;
-
         const postMessage: IPostMessage = {
             name: messageName,
             data: data
@@ -47,9 +35,10 @@ export class PostMessageApi {
     }
 
     private onMessage(e: MessageEvent) {
-        if (this.isDisabled) return;
-
         const postMessage: Partial<IPostMessage> = e.data;
+
+        if (postMessage.name == undefined) return;
+
         const listeners = this.listenerMap[postMessage.name];
         if (listeners) {
             listeners.forEach(listener => listener(postMessage.data));
@@ -71,4 +60,13 @@ export interface IPostMessageListener {
 
 interface IMessageListenerHash {
     [eventName: string]: Array<IPostMessageListener>;
+}
+
+export interface IPostLoadMessage {
+    saveName: string;
+    data: string;
+}
+
+export interface IPostSaveMessage {
+    saveName: string;
 }

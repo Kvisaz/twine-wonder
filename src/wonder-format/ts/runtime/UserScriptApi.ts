@@ -7,8 +7,8 @@ export class UserScriptApi {
 
     private readonly postMessageApi: PostMessageApi;
 
-    constructor() {
-        this.postMessageApi = new PostMessageApi();
+    constructor(postMessageApi: PostMessageApi) {
+        this.postMessageApi = postMessageApi;
     }
 
     /***********

@@ -22,31 +22,26 @@
     // save API
     const testStorageKey = 'XXX_WONDER_TEST';
 
-    function save(data) {
-        console.log('saved....', data);
-        window.localStorage.setItem(testStorageKey, JSON.stringify(data));
+    function getKey(saveName) {
+        return testStorageKey + saveName;
     }
 
-    function load() {
-        return JSON.parse(localStorage.getItem(testStorageKey));
+    function save(saveName, data) {
+        console.log('saved....', data);
+        window.localStorage.setItem(this.getKey(saveName), data);
+    }
+
+    function load(saveName) {
+        return localStorage.getItem(this.getKey(saveName));
     }
 
     // main
     const iframeElement = document.querySelector('#dock');
     const savedState = load();
 
-    iframeElement.onload = () => {
-        setTimeout(() => {
-            iframeElement.contentWindow.postMessage({
-                name: 'load',
-                data: savedState
-            }, '*');
-        }, 500)
-    }
-
 
     function onPostMessage(e) {
-        console.log('get message ', e.data);
+        console.log('TEST API get message ', e.data);
         const MESSAGE = e.data.name;
         const DATA = e.data.data;
         handleMessage(MESSAGE, DATA);
@@ -54,16 +49,52 @@
 
     window.addEventListener('message', onPostMessage);
 
+    function sendMessage(message) {
+        iframeElement.contentWindow.postMessage(message, '*');
+    }
 
+    function sendLoadMessage(saveName, data) {
+        sendMessage({
+            name: 'load',
+            data: {saveName: saveName, data: data}
+        })
+    }
+
+    function sendLoadErrorMessage(saveName) {
+        sendMessage({
+            name: 'loadError',
+            data: {saveName: saveName, data: null}
+        })
+    }
 
     // handler
     function handleMessage(message, data) {
         switch (message) {
             case 'passage':
             case 'save':
-                save(data);
+                try {
+                    save(data.saveName, data.data);
+                    sendMessage({
+                        name: 'save',
+                        data: {saveName: data.saveName}
+                    })
+                } catch (e) {
+                    sendMessage({
+                        name: 'saveError',
+                        data: {saveName: data.saveName}
+                    })
+                }
+                break;
+            case 'load':
+                try {
+                    const saveData = load(data.saveName);
+                    sendLoadMessage(data.saveName, saveData);
+                } catch (e) {
+                    sendLoadErrorMessage(data.saveName);
+                }
                 break;
         }
+
     }
 
 

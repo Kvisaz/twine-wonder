@@ -4,6 +4,7 @@ import {ILoadCallback, IMessageCallback} from '../../../abstract/WonderInterface
 export class LocalRepository implements IStateRepository {
 
     save(saveName: string, state: any, resolve: IMessageCallback, reject: IMessageCallback) {
+        console.log('local repo save....', saveName);
         try {
             const json = JSON.stringify(state);
             localStorage.setItem(saveName, json);
@@ -14,7 +15,7 @@ export class LocalRepository implements IStateRepository {
     }
 
     load(saveName: string, resolve: ILoadCallback, reject: IMessageCallback) {
-        console.log('local load...');
+        console.log('local repo load...', saveName);
         try {
             console.log('local try...');
             const json = localStorage.getItem(saveName);
