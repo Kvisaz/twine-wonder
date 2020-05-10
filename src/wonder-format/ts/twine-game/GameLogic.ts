@@ -48,8 +48,8 @@ export class GameLogic {
         // @ts-ignore
         window.Wonder = window.w;
 
-        STORE.state = new AppState();
-        STORE.user = new UserState();
+        STORE.state = null;
+        STORE.user = null;
         STORY_STORE.story = null;
 
         EventBus.getInstance()
@@ -58,7 +58,7 @@ export class GameLogic {
             .sub(GameEvents.onBackClick, (message) => this.onBackClick())
     }
 
-    start() {
+    start(name?:string) {
         this.showPreloader()
             .then(() => this.startParsing())
             .then(story => this.onStoryLoad(story))
@@ -66,7 +66,7 @@ export class GameLogic {
             .then(userState => this.onUserStateLoad(userState))
             .then(() => this.preloadGameState())
             .then(gameState => this.onPreloadState(gameState))
-            .then(() => this.startGame(STORY_STORE.story, STORE.state))
+            .then(() => this.startGame(STORY_STORE.story, STORE.state, name))
     }
 
     private showPreloader(): Promise<void> {
@@ -90,10 +90,6 @@ export class GameLogic {
         return new Promise((resolve, reject) => {
             console.log('onStoryLoad...', story);
             STORY_STORE.story = story;
-            this.preprocessor.beforeStoryLoad();
-            this.exeScript(story.script, STORE.state.gameVars);
-            this.execUserScriptCommands();
-            this.collections.onStoryReady();
             resolve();
         })
     }
@@ -116,7 +112,7 @@ export class GameLogic {
     private onUserStateLoad(state: IUserState): Promise<void> {
         return new Promise((resolve, reject) => {
             console.log('onUserStateLoad...', state);
-            if (state != null) STORE.user = state;
+            STORE.user = state != null ? state : new UserState();
             console.log('onUserStateLoad...  STORE.user', STORE.user);
             resolve();
         })
@@ -141,9 +137,18 @@ export class GameLogic {
             if (state != null) {
                 RUNTIME_STORE.hasSave = true;
             }
-            if (this.isAutoLoad) {
-                this.updateGameState(state);
+            if (this.isAutoLoad && state != null) {
+                STORE.state = state
+            } else {
+                STORE.state = new AppState();
             }
+
+            this.preprocessor.beforeInitUserScript();
+            this.collections.beforeInitUserScript();
+            this.exeScript(STORY_STORE.story.script, STORE.state.gameVars);
+            this.execUserScriptCommands();
+            this.collections.onInitUserScript();
+
             resolve();
         })
     }
@@ -172,8 +177,9 @@ export class GameLogic {
         return lastPage != null ? lastPage : story.startPassageName;
     }
 
-    private startGame(story: ITwineStory, state: IAppState) {
-        this.onClick(this.getStartPage(story, state));
+    private startGame(story: ITwineStory, state: IAppState, name?:string) {
+        let startName = name != null ? name : this.getStartPage(story, state)
+        this.onClick(startName);
     }
 
     private startPage(pageViewData: PageViewData) {
@@ -360,8 +366,13 @@ export class GameLogic {
                 break;
             case UserScriptCommand.start:
                 setTimeout(() => {
-                    this.restart(command.data.name);
+                    this.start(command.data.name);
                 }, command.data.delay);
+                break;
+            case UserScriptCommand.reset:
+                if (STORE.state.history.pages.length > 1) {
+                    this.resetGameState();
+                }
                 break;
             case UserScriptCommand.pageAdd:
                 this.preprocessor.addRule({
@@ -458,25 +469,14 @@ export class GameLogic {
     }
 
     /**************************
-     *  рестарт
-     *  - сбрасывает переменные к началу
-     *  - сбрасывает историю страниц, включая посещенные
-     *  - оставляет коллекции
+     *  reset
+     *  - проще сделать полным перезапуском
      *********************/
-    private restart(name: string) {
-        const reState: IAppState = new AppState();
-        // - сбрасывает переменные к началу
-        this.exeScript(STORY_STORE.story.script, reState.gameVars);
 
-        console.log('reState', reState);
-
-        // - обновляем стейт
-        this.updateGameState(reState);
-
-        //... переходим к странице
-        const startName = name != null ? name : STORY_STORE.story.startPassageName;
-        this.onClick(startName);
-
+    private resetGameState() {
+        console.log('resetGameState', STORE.state);
+        const currentPage = this.history.getLast();
+        this.start(currentPage); // полная перезагрузка всего - так проще
     }
 
     /**************************

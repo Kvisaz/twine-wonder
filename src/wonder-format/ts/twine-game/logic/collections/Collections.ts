@@ -7,11 +7,10 @@ import {STORE, STORY_STORE} from '../../Stores';
  *  Collectables
  ***********/
 export class Collections {
-    private readonly rulesMap: IRulesMap;
+    private rulesMap: IRulesMap;
     private collectionsView: CollectionsView;
 
     constructor() {
-        this.rulesMap = {};
         this.collectionsView = new CollectionsView();
     }
 
@@ -23,11 +22,16 @@ export class Collections {
         return STORE.user.collectionMap[name];
     }
 
-    onUserScriptExecuted() {
+    beforeInitUserScript() {
+        this.rulesMap = {};
+    }
+
+    onInitUserScript() {
+
         this.initCollections();
 
         setTimeout(() => {
-            this.collectionsView.createViews(this.getCollectionMap())
+            this.collectionsView.createButtons(this.getCollectionMap())
         }, 500)
     }
 

@@ -1,5 +1,6 @@
 export const enum UserScriptCommand {
     start = 'start', // параметр name, delay
+    reset = 'reset', // обнулить gameState
     enableExternalApi = 'enableExternalApi',
     saveSlot = 'saveSlot',
     save = 'save',

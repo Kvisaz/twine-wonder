@@ -8,6 +8,11 @@ export class StateRepository implements IStateRepository {
     private readonly postMessageRepo: IStateRepository;
     private repo: IStateRepository;
 
+    // защита от циклических перезагрузок и перезаписей
+    private loadTimes = {};
+    private saveTimes = {};
+    private operationDelta = 150;
+
     constructor() {
         this.localRepo = new LocalRepository();
         this.postMessageRepo = new PostMessageRepository();
@@ -20,11 +25,29 @@ export class StateRepository implements IStateRepository {
 
     load(saveName: string, resolve: ILoadCallback, reject: IMessageCallback) {
         console.log('repo load....');
-        this.repo.load(saveName,resolve, reject);
+
+        const now = Date.now();
+        const lastTime = this.loadTimes[saveName] || 0;
+        if (now - lastTime < this.operationDelta) {
+            console.warn('too much loading...');
+            return;
+        }
+        this.loadTimes[saveName] = now;
+
+        this.repo.load(saveName, resolve, reject);
     }
 
     save(saveName: string, data: any, resolve: IMessageCallback, reject: IMessageCallback) {
         console.log('repo save....', saveName, data);
-        this.repo.save(saveName,data, resolve, reject);
+
+        const now = Date.now();
+        const lastTime = this.saveTimes[saveName] || 0;
+        if (now - lastTime < this.operationDelta) {
+            console.warn('too much saving...');
+            return;
+        }
+        this.saveTimes[saveName] = now;
+
+        this.repo.save(saveName, data, resolve, reject);
     }
 }

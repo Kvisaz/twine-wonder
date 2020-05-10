@@ -10,7 +10,7 @@ export class Preprocessor {
     private rulesMap: IPreprocessRuleMap;
 
     // начало истории - обнуляем скрипты
-    beforeStoryLoad() {
+    beforeInitUserScript() {
         this.rulesMap = {};
     }
 
@@ -25,7 +25,6 @@ export class Preprocessor {
         tags.forEach(tag => {
             const rules = this.getRules(tag);
             rules.forEach(rule => this.useRule(passageCopy, rule));
-
         })
     }
 

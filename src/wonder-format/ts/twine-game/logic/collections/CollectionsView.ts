@@ -27,11 +27,12 @@ export class CollectionsView {
         this.shadow.style.background = '#000';
         this.shadow.style.opacity = '0.3';
         this.shadow.addEventListener('mouseup', (event) => this.closeAll());
-    }
-
-    createViews(collectionMap: IWonderCollectionMap) {
 
         document.body.appendChild(this.shadow);
+    }
+
+    createButtons(collectionMap: IWonderCollectionMap) {
+        this.buttonWrapper.innerHTML = ''; // clear
 
         Object.keys(collectionMap).forEach(collectionName => {
             const collection = collectionMap[collectionName];

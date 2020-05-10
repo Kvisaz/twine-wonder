@@ -13,7 +13,6 @@
 //Wonder.parentApi().enable();
 
 //Wonder.enableExternalApi(false);
-Wonder.saveSlot('saveslotTest2');
 Wonder.autoSave(false);// отключить автосохранение
 Wonder.autoLoad(false);// отключить автозагрузку
 
@@ -22,9 +21,8 @@ Wonder.jsUrl('./assets/test.js', ()=> {
 });
 
 w.pageWrap('gameover',
-'<h1>Game Over</h1>'
-'<br /><div id="restartButton">[[Начать заново|start]]</div>'
-);
+'<h1>Game Over</h1>',
+'<br /><div id="restartButton">[[Начать заново|start]]</div>');
 
 Wonder.collect({
     collection: 'gameover',
@@ -39,6 +37,9 @@ Wonder.collect({
     hideBack: true
 });</script><tw-tag name="gameover" color="red"></tw-tag>,<tw-tag name="book" color="yellow"></tw-tag><tw-passagedata pid="1" name="start" tags="" position="871,50" size="100,100">Демо игра для показа возможностей формата Wonder.
 
+{{
+w.reset();// обнулить стейт
+}}
 [[Новая игра|start-new]]
 {{ 
 	if(w.hasSave())  w.showText(&#39;[[Продолжить|start-load]]&#39;);
