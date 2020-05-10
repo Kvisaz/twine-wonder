@@ -220,7 +220,7 @@ export class UserScriptApi {
     // добавить text/html вокруг  всех страниц с тегом tag
     pageWrap(tag: string, text: string, text2: string) {
         RUNTIME_STORE.commands.push({
-            name: UserScriptCommand.pageBefore,
+            name: UserScriptCommand.pageWrap,
             data: {
                 tag: tag,
                 text: text,
