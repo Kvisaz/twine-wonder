@@ -1,8 +1,8 @@
-import {PostMessageApi} from '../twine-game/logic/PostMessageApi';
-import {IWonderCollectRule} from '../twine-game/logic/collections/CollectionInterfaces';
-import {RUNTIME_STORE} from '../twine-game/Stores';
+import {PostMessageApi} from '../PostMessageApi';
+import {IWonderCollectRule} from '../collections/CollectionInterfaces';
+import {RUNTIME_STORE} from '../../Stores';
 import {UserScriptCommand} from './UserScriptCommands';
-import {IMap} from '../abstract/WonderInterfaces';
+import {IMap} from '../../../abstract/WonderInterfaces';
 
 export class UserScriptApi {
 
