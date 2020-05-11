@@ -224,6 +224,7 @@ export class GameLogic {
      *  Страница готова к показу
      ****************************/
     private onPassagePrepared(passage: ITwinePassage) {
+        console.log(`.................................... ${passage.name} ...prepared`, );
         const SCREEN = this.screenType;
         switch (SCREEN) {
             case PassageType.preload:
