@@ -237,7 +237,7 @@ export class GameLogic {
                 this.onScreenPrepareCallback(passage);
                 break;
             case PassageType.startScreen:
-                // todo?
+                //
                 break;
             case PassageType.game:
                 this.onGameScreenPrepareCallback(passage);
@@ -289,7 +289,7 @@ export class GameLogic {
         }
 
         if (COMMAND == WonderButtonCommand.continue) {
-            this.loadGameState(this.getGameDefaultSaveName());
+            this.loadGameState(this.getGameAutoSaveName());
             return;
         }
     }
@@ -306,9 +306,6 @@ export class GameLogic {
             const func = new Function(script).bind(context); // создаю функцию из строки
             result = func(); // исполняю функцию
         } catch (e) {
-            // todo сделать вывод без консоли, оповещение
-            // м.б. запись в историю ошибок
-            // потому что сейчас весь консольный лог в продакшене чистится
             console.warn(' Wonder - UserScript error:' + e)
         }
 
@@ -401,7 +398,6 @@ export class GameLogic {
                 this.stateRepo.enableExternalApi(command.data)
                 break;
             case UserScriptCommand.saveSlot:
-                // todo document - saveSlot отдельно от autoSaveSlot
                 const saveName = command.data != null ? command.data : '_default'
                 this.saveName(saveName);
                 break;
@@ -545,7 +541,8 @@ export class GameLogic {
         if (this.isLoading) return;
 
         console.log('auto saving.......', this.history.getLast(), STORE.state, STORE.user);
-        this.saveGameState();
+        const autoSaveName = this.getGameAutoSaveName();
+        this.saveGameState(autoSaveName);
         this.saveUserState();
     }
 
