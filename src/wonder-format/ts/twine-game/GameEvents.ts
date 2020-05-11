@@ -34,11 +34,12 @@ export class PageViewData {
 const PreloadPassage: ITwinePassage = {
     pid: WONDER.preloadId,
     position: '',
-    name: 'preload',
-    tags: '',
+    name: WONDER.preloadId,
+    tags: WONDER.preloadId,
     size: '',
     content: PRELOAD_PAGE_TEMPLATE
 }
+
 
 export class PreloadPageViewData extends PageViewData {
     constructor() {
@@ -51,5 +52,3 @@ export class PreloadPageViewData extends PageViewData {
         )
     }
 }
-
-

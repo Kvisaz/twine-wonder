@@ -17,6 +17,10 @@ export const COMMON_CSS = {
 export const WONDER = {
     preloadId: 'preload',
     preloadAnchorId: 'preload-anchor',
+    startScreenId: 'start-screen',
+    newGameBtId: 'new-game-button',
+    continueBtId: 'continue-button',
+    buttonClass: 'w-button',
     contentId: "wonder-content",
     pageClass: "page",
     pageContentClass: "page-content",

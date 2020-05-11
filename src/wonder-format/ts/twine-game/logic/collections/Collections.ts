@@ -26,7 +26,7 @@ export class Collections {
         this.rulesMap = {};
     }
 
-    onInitUserScript() {
+    onUserStateReady() {
 
         this.initCollections();
 

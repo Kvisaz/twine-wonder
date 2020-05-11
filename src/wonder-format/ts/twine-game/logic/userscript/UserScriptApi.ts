@@ -3,6 +3,7 @@ import {IWonderCollectRule} from '../collections/CollectionInterfaces';
 import {RUNTIME_STORE} from '../../Stores';
 import {UserScriptCommand} from './UserScriptCommands';
 import {IMap} from '../../../abstract/WonderInterfaces';
+import {IStartScreenOptions} from '../start/StartScreenInterfaces';
 
 export class UserScriptApi {
 
@@ -171,6 +172,16 @@ export class UserScriptApi {
         RUNTIME_STORE.commands.push({
             name: UserScriptCommand.load,
             data: saveName
+        })
+    }
+
+    /****************
+     *  Настройка стартовой страницы
+     *********/
+    startPage(options: Partial<IStartScreenOptions>) {
+        RUNTIME_STORE.commands.push({
+            name: UserScriptCommand.startPage,
+            data: options
         })
     }
 
