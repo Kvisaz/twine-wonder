@@ -10,3 +10,9 @@ export const enum PassageType {
     startScreen = 'startScreen',
     game = 'game'
 }
+
+export const enum WonderButtonCommand {
+    newGame ='newGame',
+    continue ='continue',
+    back ='back',
+}

@@ -14,9 +14,7 @@
     <style id="twine-user-stylesheet" role="stylesheet" type="text/twine-css"></style>
     <script id="twine-user-script" role="script" type="text/twine-javascript">this.coins = 0;
 
-Wonder.enableExternalApi(true);
-Wonder.autoSave(false);// отключить автосохранение
-Wonder.autoLoad(false);// отключить автозагрузку
+Wonder.enableExternalApi(false);
 
 Wonder.jsUrl('./assets/test.js', ()=> {
     console.log('hello after test js load');

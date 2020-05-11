@@ -17,6 +17,7 @@ export const enum GameEvents {
 
     onLinkClick = "onLinkClick",        // показа пассаж
     onBackClick = "onBackClick",        // показа пассаж
+    onButtonClick = "onButtonClick",        // показа пассаж
 }
 
 export class PageViewData {

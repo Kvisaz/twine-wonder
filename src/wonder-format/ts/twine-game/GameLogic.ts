@@ -16,8 +16,15 @@ import {AudioPlayer} from './logic/AudioPlayer';
 import {Preprocessor} from './logic/preprocessor/Preprocessor';
 import {PreprocessPosition} from './logic/preprocessor/PreprocessorInterfaces';
 import {PostMessageApi} from './logic/PostMessageApi';
-import {PassageType, SaveNameDefault, SavePrefixGame, SavePrefixGameAuto, SavePrefixUser} from './logic/LogicConstants';
-import {IPassagePreparedCallback} from './logic/LogicInterfaces';
+import {
+    PassageType,
+    SaveNameDefault,
+    SavePrefixGame,
+    SavePrefixGameAuto,
+    SavePrefixUser,
+    WonderButtonCommand
+} from './logic/LogicConstants';
+import {IPassagePreparedCallback, IWonderButtonData} from './logic/LogicInterfaces';
 import {StartScreen} from './logic/start/StartScreen';
 
 export class GameLogic {
@@ -33,7 +40,6 @@ export class GameLogic {
     private defaultGameVars = {}; // дефолтные переменные в начале игры, после загрузки истории и выполнения её скрипта
 
     private isUserSaveDisabledFlag = false; // запрет на сейвы
-    private isAutoSave = true;
     private isLoading = false; // заказана загрузка
     private gameSaveName = SaveNameDefault;
 
@@ -66,6 +72,7 @@ export class GameLogic {
             .sub(GameEvents.onPassagePrepared, (message, passage: ITwinePassage) => this.onPassagePrepared(passage))
             .sub(GameEvents.onLinkClick, (message, id: string) => this.onClick(id))
             .sub(GameEvents.onBackClick, (message) => this.onBackClick())
+            .sub(GameEvents.onButtonClick, (message, dataset) => this.onButtonClick(dataset))
     }
 
     start(name?: string) {
@@ -162,17 +169,14 @@ export class GameLogic {
 
     private updateGameState(state: IAppState) {
         if (state == null) return;
-        STORE.state = {
-            ...STORE.state,
-            ...state
-        }
+        STORE.state = state;
         this.collections.onStateUpdate();
     }
 
     private onGameStateLoad(state: IAppState) {
         console.log('onGameStateLoad...', state);
         this.updateGameState(state);
-        this.startTwineGame(STORY_STORE.story, STORE.state);
+        this.startTwineGame();
     }
 
     private execStoryScript() {
@@ -191,6 +195,7 @@ export class GameLogic {
      ***********************/
     private showStartScreen() {
         console.log('start screen..........');
+        this.screenType = PassageType.startScreen;
         this.startPage({
             passage: this.startScreen.getPassage(),
             canGoBack: false,
@@ -210,8 +215,9 @@ export class GameLogic {
         return lastPage != null ? lastPage : story.startPassageName;
     }
 
-    private startTwineGame(story: ITwineStory, state: IAppState, name?: string) {
-        let startName = name != null ? name : this.getStartPage(story, state)
+    private startTwineGame(name?: string) {
+        this.screenType = PassageType.game;
+        let startName = name != null ? name : this.getStartPage(STORY_STORE.story, STORE.state)
         this.isUserSaveDisabledFlag = false;
         this.onClick(startName);
     }
@@ -224,11 +230,14 @@ export class GameLogic {
      *  Страница готова к показу
      ****************************/
     private onPassagePrepared(passage: ITwinePassage) {
-        console.log(`.................................... ${passage.name} ...prepared`, );
+        console.log(`.................................... ${passage.name} ...prepared`,);
         const SCREEN = this.screenType;
         switch (SCREEN) {
             case PassageType.preload:
                 this.onScreenPrepareCallback(passage);
+                break;
+            case PassageType.startScreen:
+                // todo?
                 break;
             case PassageType.game:
                 this.onGameScreenPrepareCallback(passage);
@@ -251,7 +260,7 @@ export class GameLogic {
     private onClick(name: string) {
         console.log('onClick', name);
         // копия для иммутабельности
-        const passage = Object.assign({}, STORY_STORE.story.passageHash[name]);
+        const passage = JSON.parse(JSON.stringify(STORY_STORE.story.passageHash[name]));
 
         this.collections.onPassage(passage);
         this.history.add(name); // текущий узел идёт в историю
@@ -269,6 +278,20 @@ export class GameLogic {
         this.history.pop(); // текущий узел уходит из истории
         const name = this.history.getLast();
         this.onClick(name);
+    }
+
+    private onButtonClick(dataset: IWonderButtonData) {
+        console.log('onButtonClick ', dataset);
+        const COMMAND: WonderButtonCommand = dataset.command;
+        if (COMMAND == WonderButtonCommand.newGame) {
+            this.startTwineGame();
+            return;
+        }
+
+        if (COMMAND == WonderButtonCommand.continue) {
+            this.loadGameState(this.getGameDefaultSaveName());
+            return;
+        }
     }
 
     /*********
@@ -382,13 +405,6 @@ export class GameLogic {
                 const saveName = command.data != null ? command.data : '_default'
                 this.saveName(saveName);
                 break;
-            case UserScriptCommand.autoSave:
-                this.isAutoSave = command.data === true;
-                break;
-            case UserScriptCommand.autoLoad:
-                // todo document - теперь движок сам предоставляет выбор
-                //this.isAutoLoad = command.data === true;
-                break;
             case UserScriptCommand.save:
                 if (this.isUserSaveDisabled()) return;
                 else this.saveGameState(command.data);
@@ -498,22 +514,20 @@ export class GameLogic {
         )
     }
 
-    /*
-        private loadGameState() {
-            this.isLoading = true;
-            this.stateRepo.load(
-                this.getGameDefaultSaveName(),
-                state => {
-                    this.isLoading = false;
-                    this.onGameStateLoad(state)
-                },
-                (e) => {
-                    this.isLoading = false;
-                    console.warn('loadGameState error ::' + e);
-                }
-            )
-        }
-    */
+    private loadGameState(saveName: string) {
+        this.isLoading = true;
+        this.stateRepo.load(
+            saveName,
+            state => {
+                this.isLoading = false;
+                this.onGameStateLoad(state)
+            },
+            (e) => {
+                this.isLoading = false;
+                console.warn('loadGameState error ::' + e);
+            }
+        )
+    }
 
     private getGameDefaultSaveName(): string {
         return SavePrefixGame + this.gameSaveName;
@@ -528,7 +542,6 @@ export class GameLogic {
     }
 
     private autoSave() {
-        if (!this.isAutoSave) return;
         if (this.isLoading) return;
 
         console.log('auto saving.......', this.history.getLast(), STORE.state, STORE.user);
@@ -537,25 +550,9 @@ export class GameLogic {
     }
 
     /**************************
-     *  reset
-     *  - проще сделать полным перезапуском
-     *********************/
-
-    /* private resetGameState() {
-         console.log('resetGameState', STORE.state);
-         const currentPage = this.history.getLast();
-         this.start(currentPage); // полная перезагрузка всего - так проще
-     }*/
-
-    /**************************
      *  ..
      *********************/
 }
-
-// используется для уменьшения нагрузки
-/*function then(fn: Function) {
-    setTimeout(fn, 0);
-}*/
 
 function messageHandler(message: string) {
     console.log(message)

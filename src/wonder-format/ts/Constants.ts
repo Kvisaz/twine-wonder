@@ -204,7 +204,21 @@ export const DEFAULT_STYLE = `
      .${WONDER.backClass}:before {
         content: '<';
      }
-   
+     
+     .${WONDER.buttonClass} {
+        cursor: pointer;
+        display: block;
+        margin: 4px auto 0.65em;
+        width: 8em;
+        text-align: center;
+        background: #c6c3b2;
+        padding: 12px;
+        text-transform: uppercase;
+     }
+    
+    .${WONDER.buttonClass}:active {
+        transform: translateY(0.15em);
+    }
     
     .${WONDER.linkAloneClass}{
         margin-top: 0px;

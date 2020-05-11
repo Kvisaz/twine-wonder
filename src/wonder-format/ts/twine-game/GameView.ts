@@ -43,6 +43,7 @@ export class GameView {
     handleEvent(e) {
         if (this.checkLinkClick(e)) return;
         if (this.checkBackClick(e)) return;
+        if (this.checkButtonClick(e)) return;
     }
 
     private checkClick(e: MouseEvent, selector: string, callback: (el: HTMLElement, e: MouseEvent) => void): boolean {
@@ -66,6 +67,16 @@ export class GameView {
             `.${WONDER.backClass}`,
             (el: HTMLElement, e1) => {
                 EventBus.emit(GameEvents.onBackClick, null);
+            }
+        );
+    }
+
+    private checkButtonClick(e) {
+        return this.checkClick(e,
+            `.${WONDER.buttonClass}`,
+            (el: HTMLElement, e1) => {
+                const data = JSON.parse(JSON.stringify(el.dataset));
+                EventBus.emit(GameEvents.onButtonClick, data);
             }
         );
     }

@@ -1,6 +1,7 @@
 import {ITwinePassage} from '../../../abstract/TwineModels';
 import {PRELOAD_PAGE_TEMPLATE, WONDER} from '../../../Constants';
 import {IStartScreenOptions} from './StartScreenInterfaces';
+import {WonderButtonCommand} from '../LogicConstants';
 
 const defaultStartScreenOptions: IStartScreenOptions = {
     newGame: 'New Game',
@@ -55,18 +56,18 @@ export class StartScreen {
         return str == null ? def.trim() : str;
     }
 
-    private getButtonCode(title: string, id: string): string {
-        return `<div id="${id}" class="${WONDER.buttonClass}">${title}</div>`;
+    private getButtonCode(title: string, id: string, command: WonderButtonCommand): string {
+        return `<div id="${id}" class="${WONDER.buttonClass}" data-command="${command}">${title}</div>`;
     }
 
     private getNewGameButtonCode(options: Partial<IStartScreenOptions>): string {
-        const text = this.getString(options.title, 'New Game');
-        return this.getButtonCode(text, WONDER.newGameBtId);
+        const text = this.getString(options.newGame, 'New Game');
+        return this.getButtonCode(text, WONDER.newGameBtId, WonderButtonCommand.newGame);
     }
 
     private getContinueButtonCode(options: Partial<IStartScreenOptions>): string {
         const text = this.getString(options.continue, 'Continue');
-        return this.getButtonCode(text, WONDER.continueBtId);
+        return this.getButtonCode(text, WONDER.continueBtId, WonderButtonCommand.continue);
     }
 
     private getTitleCode(options: Partial<IStartScreenOptions>): string {
