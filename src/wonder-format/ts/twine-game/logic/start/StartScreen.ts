@@ -14,6 +14,7 @@ const defaultStartScreenOptions: IStartScreenOptions = {
 
 export class StartScreen {
     private readonly passage: ITwinePassage;
+    private hasSave = false;
 
     constructor() {
         this.passage = {
@@ -24,7 +25,10 @@ export class StartScreen {
             size: '',
             content: PRELOAD_PAGE_TEMPLATE
         }
+    }
 
+    init(hasPreviousSave: boolean) {
+        this.hasSave = hasPreviousSave;
         this.setup(defaultStartScreenOptions);
     }
 
@@ -33,7 +37,12 @@ export class StartScreen {
             console.warn('null StartScreenOptions');
             return;
         }
-        this.passage.content = this.createContent(options);
+
+        const OPTIONS = {
+            ...defaultStartScreenOptions,
+            continueOff: !this.hasSave
+        }
+        this.passage.content = this.createContent(OPTIONS);
     }
 
     getPassage() {

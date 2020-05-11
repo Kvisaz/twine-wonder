@@ -156,9 +156,9 @@ export class GameLogic {
 
     private initGameState(state: IAppState): Promise<void> {
         return new Promise((resolve, reject) => {
-            if (state != null) {
-                RUNTIME_STORE.hasSave = true;
-            }
+            const hasSave = state != null;
+            RUNTIME_STORE.hasSave = hasSave;
+            this.startScreen.init(hasSave);
 
             STORE.state = new AppState();
             STORE.state.gameVars = JSON.parse(JSON.stringify(this.defaultGameVars));
