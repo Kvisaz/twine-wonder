@@ -2,7 +2,7 @@
   "name": "twine-wonder",
   "nameFormat": "Wonder",
   "author": "Kvisaz [Sergey Tokarev]",
-  "version": "0.6.19",
+  "version": "0.6.20",
   "description": "Twine Wonder Format",
   "icon": "icon.svg",
   "bundleScript": "index.js",
@@ -10,7 +10,7 @@
   "repository": "https://github.com/Kvisaz/twine-wonder",
   "scripts": {
     "start": "webpack && webpack-dev-server",
-    "buildTest": "webpack",
+    "buildTest": "webpack && node twineFormatBuild.js",
     "build": "webpack --mode production && node twineFormatBuild.js",
     "server": "webpack --mode production && node twineFormatBuild && webpack-dev-server"
   },
