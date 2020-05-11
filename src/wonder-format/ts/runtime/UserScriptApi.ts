@@ -2,13 +2,18 @@ import {PostMessageApi} from '../twine-game/logic/PostMessageApi';
 import {IWonderCollectRule} from '../twine-game/logic/collections/CollectionInterfaces';
 import {RUNTIME_STORE} from '../twine-game/Stores';
 import {UserScriptCommand} from './UserScriptCommands';
+import {IMap} from '../abstract/WonderInterfaces';
 
 export class UserScriptApi {
 
     private readonly postMessageApi: PostMessageApi;
+    private readonly includedScripts: IMap<boolean>;
+    private readonly includedStyles: IMap<boolean>;
 
     constructor(postMessageApi: PostMessageApi) {
         this.postMessageApi = postMessageApi;
+        this.includedScripts = {};
+        this.includedStyles = {};
     }
 
     /***********
@@ -19,6 +24,9 @@ export class UserScriptApi {
      *  Подключить стиль
      ***********/
     styleUrl(styleUrl: string) {
+        if (this.includedStyles[styleUrl]) return;
+        this.includedStyles[styleUrl] = true;
+
         const styleEl: HTMLElement = document.createElement('link');
         styleEl.setAttribute('rel', 'stylesheet');
         styleEl.setAttribute('href', styleUrl);
@@ -29,6 +37,9 @@ export class UserScriptApi {
      *  Подключить js
      ***********/
     jsUrl(jsUrl: string, callback: Function) {
+        if (this.includedScripts[jsUrl]) return;
+        this.includedScripts[jsUrl] = true;
+
         const script = document.createElement("script")
         script.type = "text/javascript";
         if (callback) {
@@ -107,14 +118,14 @@ export class UserScriptApi {
     disableLocalSave(disable = true) {
         RUNTIME_STORE.commands.push({
             name: UserScriptCommand.enableExternalApi,
-            data: true
+            data: !disable
         })
     }
 
-    enableExternalApi(disable = true) {
+    enableExternalApi(enable = true) {
         RUNTIME_STORE.commands.push({
             name: UserScriptCommand.enableExternalApi,
-            data: true
+            data: enable
         })
     }
 
