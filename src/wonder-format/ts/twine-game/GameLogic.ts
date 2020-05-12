@@ -292,6 +292,11 @@ export class GameLogic {
             this.loadGameState(this.getGameAutoSaveName());
             return;
         }
+
+        if (COMMAND == WonderButtonCommand.restart) {
+            this.restartAsync(dataset.name, dataset.delay)
+            return;
+        }
     }
 
     /*********
@@ -436,15 +441,7 @@ export class GameLogic {
                 this.audioPlayer.stop();
                 break;
             case UserScriptCommand.start:
-                setTimeout(() => {
-                    this.restart(command.data.name);
-                }, command.data.delay);
-                break;
-            case UserScriptCommand.reset:
-                // todo remove
-                /* if (STORE.state.history.pages.length > 1) {
-                     this.resetGameState();
-                 }*/
+                this.restartAsync(command.data.name, command.data.delay);
                 break;
             case UserScriptCommand.pageAdd:
                 this.preprocessor.addRule({
@@ -547,16 +544,18 @@ export class GameLogic {
     }
 
     /**************************
-     *  restart  TODO
+     *  restart
      *********************/
-    private restart(name: any) {
-        console.log('restart ', name);
+    private restartAsync(name: string, delay: string) {
+        const DELAY = delay != null ? parseInt(delay) : 0;
+        setTimeout(() => this.restart(name), DELAY);
+    }
 
+    private restart(name: string) {
         STORE.state.gameVars = JSON.parse(JSON.stringify(this.defaultGameVars));
         STORE.state.history.pages = [];
         STORE.state.history.pagesHash = {};
-
-        this.startTwineGame(name)
+        this.startTwineGame(name);
     }
 
     /**************************

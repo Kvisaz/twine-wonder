@@ -8,4 +8,6 @@ export interface IPassagePreparedCallback {
 
 export interface IWonderButtonData {
     command: WonderButtonCommand;
+    name?:string; // passage name
+    delay?:string; // задержка
 }

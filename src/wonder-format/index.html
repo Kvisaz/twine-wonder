@@ -22,7 +22,7 @@ Wonder.jsUrl('./assets/test.js', ()=> {
 
 w.pageWrap('gameover',
 '<h1>Game Over</h1>',
-'<br /><div id="restartButton">[[Начать заново|start]]</div>');
+'<br /><span class="w-button" data-command="restart" data-delay="2000">Начать игру через 2 сек</span> <br /><span class="w-button" data-command="restart">Начать игру</span> <br /><span class="w-button" data-command="restart" data-name="collections">Начать игру с коллекций</span>');
 
 Wonder.collect({
     collection: 'gameover',
@@ -40,9 +40,7 @@ Wonder.collect({
     <tw-tag color="red" name="gameover"></tw-tag>
     ,
     <tw-tag color="yellow" name="book"></tw-tag>
-    <tw-passagedata name="collections" pid="1" position="456,404" size="100,100" tags="">Вы стоите у фонтана, в котором
-        плещутся пираньи. Вдали возвышается замок чародея. Перед вами торговец со старинными книжками. Позади него
-        надпись - &quot;не богохульствуй и не оскорбляй чародея&quot;
+    <tw-passagedata name="collections" pid="1" position="456,404" size="100,100" tags="">Вы стоите у фонтана, в котором плещутся пираньи. Вдали возвышается замок чародея. Перед вами торговец со старинными книжками. Позади него надпись - &quot;не богохульствуй и не оскорбляй чародея&quot;
 
         [[Прыгнуть в фонтан|collections-pirahnas]]
         [[Богохульствовать|collections-god-yell]]

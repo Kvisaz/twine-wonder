@@ -15,4 +15,5 @@ export const enum WonderButtonCommand {
     newGame ='newGame',
     continue ='continue',
     back ='back',
+    restart = 'restart'
 }
