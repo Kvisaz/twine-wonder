@@ -197,16 +197,6 @@ export class UserScriptApi {
         })
     }
 
-    /**
-     * обнулить gamestate
-     */
-    reset() {
-        RUNTIME_STORE.commands.push({
-            name: UserScriptCommand.reset,
-            data: {}
-        })
-    }
-
     /****************
      *  show text в месте вызова
      *********/

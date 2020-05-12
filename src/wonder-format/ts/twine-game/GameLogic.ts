@@ -437,7 +437,7 @@ export class GameLogic {
                 break;
             case UserScriptCommand.start:
                 setTimeout(() => {
-                    this.start(command.data.name);
+                    this.restart(command.data.name);
                 }, command.data.delay);
                 break;
             case UserScriptCommand.reset:
@@ -544,6 +544,19 @@ export class GameLogic {
         const autoSaveName = this.getGameAutoSaveName();
         this.saveGameState(autoSaveName);
         this.saveUserState();
+    }
+
+    /**************************
+     *  restart  TODO
+     *********************/
+    private restart(name: any) {
+        console.log('restart ', name);
+
+        STORE.state.gameVars = JSON.parse(JSON.stringify(this.defaultGameVars));
+        STORE.state.history.pages = [];
+        STORE.state.history.pagesHash = {};
+
+        this.startTwineGame(name)
     }
 
     /**************************
