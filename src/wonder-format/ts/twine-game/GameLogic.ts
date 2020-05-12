@@ -17,7 +17,7 @@ import {Preprocessor} from './logic/preprocessor/Preprocessor';
 import {PreprocessPosition} from './logic/preprocessor/PreprocessorInterfaces';
 import {PostMessageApi} from './logic/PostMessageApi';
 import {
-    PassageType,
+    PassageType, SaveNameAuto,
     SaveNameDefault,
     SavePrefixGame,
     SavePrefixGameAuto,
@@ -117,9 +117,12 @@ export class GameLogic {
     private preloadUserState(): Promise<IUserState> {
         return new Promise((resolve, reject) => {
             console.log('preloadUserState...');
-            const slot = SavePrefixUser + SaveNameDefault;
+
+            STORE.user = new UserState(); // создаем пустую юзердату
+            this.execStoryScript(); // исп
+
             this.stateRepo.load(
-                slot,
+                this.getUserDataSaveName(),
                 data => resolve(data),
                 e => {
                     console.warn('preloadUserState error ' + e);
@@ -132,10 +135,15 @@ export class GameLogic {
     private initUserState(state: IUserState): Promise<void> {
         return new Promise((resolve, reject) => {
             console.log('initUserState...', state);
-            STORE.user = (state != null) ? state : new UserState();
+            if(state!=null){
+                STORE.user = {
+                    ... STORE.user,
+                    ...state
+                }
+            }
             console.log('initUserState...  STORE.user', STORE.user);
-            this.execStoryScript();
-            this.afterExecStoryScript();
+
+            this.collections.onUserStateReady();
             resolve();
         })
     }
@@ -184,10 +192,6 @@ export class GameLogic {
         this.collections.beforeInitUserScript();
         this.exeScript(STORY_STORE.story.script, this.defaultGameVars);
         this.execUserScriptCommands();
-    }
-
-    private afterExecStoryScript() {
-        this.collections.onUserStateReady();
     }
 
     /***********************
@@ -500,7 +504,7 @@ export class GameLogic {
     private saveUserState() {
         console.log('--------- saveUserState on', this.history.getLast());
         this.stateRepo.save(
-            this.getUserSaveName(),
+            this.getUserDataSaveName(),
             STORE.user,
             messageHandler,
             messageHandler
@@ -527,10 +531,10 @@ export class GameLogic {
     }
 
     private getGameAutoSaveName(): string {
-        return SavePrefixGameAuto + this.gameSaveName;
+        return SavePrefixGameAuto + SaveNameAuto;
     }
 
-    private getUserSaveName(): string {
+    private getUserDataSaveName(): string {
         return SavePrefixUser + SaveNameDefault;
     }
 

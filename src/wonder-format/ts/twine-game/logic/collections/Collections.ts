@@ -2,6 +2,7 @@ import {ITwinePassage, ITwineStory} from '../../../abstract/TwineModels';
 import {CollectionsView} from './CollectionsView';
 import {IRulesMap, IWonderCollection, IWonderCollectionMap, IWonderCollectRule} from './CollectionInterfaces';
 import {STORE, STORY_STORE} from '../../Stores';
+import {IUserState} from '../../AppState';
 
 /*************
  *  Collectables
@@ -14,12 +15,16 @@ export class Collections {
         this.collectionsView = new CollectionsView();
     }
 
+    private getUserData():IUserState{
+        return STORE.user;
+    }
+
     getCollectionMap(): IWonderCollectionMap {
-        return STORE.user.collectionMap;
+        return this.getUserData().collectionMap;
     }
 
     getCollection(name: string): IWonderCollection {
-        return STORE.user.collectionMap[name];
+        return this.getUserData().collectionMap[name];
     }
 
     beforeInitUserScript() {
