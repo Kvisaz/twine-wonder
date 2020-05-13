@@ -13,8 +13,8 @@ const defaultStartScreenOptions: IStartScreenOptions = {
 
 
 export class StartScreen {
+    private options: IStartScreenOptions;
     private readonly passage: ITwinePassage;
-    private hasSave = false;
 
     constructor() {
         this.passage = {
@@ -25,24 +25,34 @@ export class StartScreen {
             size: '',
             content: PRELOAD_PAGE_TEMPLATE
         }
-    }
 
-    init(hasPreviousSave: boolean) {
-        this.hasSave = hasPreviousSave;
-        this.setup(defaultStartScreenOptions);
-    }
-
-    setup(options: Partial<IStartScreenOptions>) {
-        if (options == null) {
-            console.warn('null StartScreenOptions');
-            return;
+        this.options = {
+            ...defaultStartScreenOptions
         }
+    }
 
-        const OPTIONS = {
+    userOptions(options: Partial<IStartScreenOptions>){
+        console.log('StartScreen userOptions....')
+        this.options = {
             ...defaultStartScreenOptions,
-            continueOff: !this.hasSave
+            ...options
         }
-        this.passage.content = this.createContent(OPTIONS);
+    }
+
+    onGameStateLoaded(hasPreviousSave: boolean) {
+        console.log('StartScreen onGameStateLoaded....');
+        const previousContinueOff = this.options.continueOff == true;
+        const continueOff = previousContinueOff || !hasPreviousSave;
+        this.options = {
+            ...this.options,
+            continueOff: continueOff
+        }
+        this.setup(this.options);
+    }
+
+    private setup(options: Partial<IStartScreenOptions>) {
+        console.log('StartScreen setup....')
+        this.passage.content = this.createContent(options);
     }
 
     getPassage() {

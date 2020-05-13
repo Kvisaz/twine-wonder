@@ -135,9 +135,9 @@ export class GameLogic {
     private initUserState(state: IUserState): Promise<void> {
         return new Promise((resolve, reject) => {
             console.log('initUserState...', state);
-            if(state!=null){
+            if (state != null) {
                 STORE.user = {
-                    ... STORE.user,
+                    ...STORE.user,
                     ...state
                 }
             }
@@ -166,7 +166,7 @@ export class GameLogic {
         return new Promise((resolve, reject) => {
             const hasSave = state != null;
             RUNTIME_STORE.hasSave = hasSave;
-            this.startScreen.init(hasSave);
+            this.startScreen.onGameStateLoaded(hasSave);
 
             STORE.state = new AppState();
             STORE.state.gameVars = JSON.parse(JSON.stringify(this.defaultGameVars));
@@ -472,7 +472,7 @@ export class GameLogic {
                 })
                 break;
             case UserScriptCommand.startPage:
-                this.startScreen.setup(command.data);
+                this.startScreen.userOptions(command.data);
                 break;
             default:
                 console.warn('unhandled userScriptApi command:: ', command.name, command.data);
@@ -492,7 +492,7 @@ export class GameLogic {
     }
 
     private saveGameState(saveName?: string) {
-        if (saveName == null) saveName = this.getGameDefaultSaveName();
+        if (saveName == null) saveName = this.getGameSaveName();
         this.stateRepo.save(
             saveName,
             STORE.state,
@@ -526,16 +526,20 @@ export class GameLogic {
         )
     }
 
-    private getGameDefaultSaveName(): string {
-        return SavePrefixGame + this.gameSaveName;
+    private getGameName(): string {
+        return STORY_STORE.story.name;
+    }
+
+    private getGameSaveName(): string {
+        return SavePrefixGame + this.getGameName() + '-' + this.gameSaveName;
     }
 
     private getGameAutoSaveName(): string {
-        return SavePrefixGameAuto + SaveNameAuto;
+        return SavePrefixGameAuto + this.getGameName() + '-' + SaveNameAuto;
     }
 
     private getUserDataSaveName(): string {
-        return SavePrefixUser + SaveNameDefault;
+        return SavePrefixUser + this.getGameName() + '-' + SaveNameDefault;
     }
 
     private autoSave() {
