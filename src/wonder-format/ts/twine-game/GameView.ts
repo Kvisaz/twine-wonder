@@ -48,8 +48,18 @@ export class GameView {
 
     private checkClick(e: MouseEvent, selector: string, callback: (el: HTMLElement, e: MouseEvent) => void): boolean {
         const linkElement: HTMLElement = <HTMLElement>DomUtils.closest(e.target as HTMLElement, selector);
-        if (linkElement) callback(linkElement, e);
-        return linkElement != null;
+
+        // нашли элемент?
+        const hasElement = linkElement != null;
+        if(!hasElement) return false;
+
+        // защита от двойных кликов
+        const notPressedYet = !linkElement.classList.contains(WONDER.pressedClass);
+        if(notPressedYet){
+            linkElement.classList.add(WONDER.pressedClass);
+            callback(linkElement, e);
+        }
+        return notPressedYet;
     }
 
     private checkLinkClick(e) {

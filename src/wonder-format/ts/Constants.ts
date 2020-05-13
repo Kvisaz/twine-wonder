@@ -28,6 +28,7 @@ export const WONDER = {
     choiceClass: "choice",
     inlineClass: "inline",
     linkClass: "link",
+    pressedClass: "pressed",
     linkAloneClass: "link-alone",
     newLineClass: "newLine",
     linkInlineClass: "inline",
@@ -215,8 +216,13 @@ export const DEFAULT_STYLE = `
         padding: 12px;
         text-transform: uppercase;
      }
+     
+     .${WONDER.pressedClass}{
+        opacity: 0.55;
+        cursor: auto;
+     }
     
-    .${WONDER.buttonClass}:active {
+    .${WONDER.buttonClass}:not(.${WONDER.pressedClass}):active {
         transform: translateY(0.15em);
     }
     
