@@ -225,6 +225,7 @@ export const DEFAULT_STYLE = `
         background: #c6c3b2;
         padding: 12px;
         text-transform: uppercase;
+        transition:all 0.21s ease-out;
      }
      
      .${WONDER.pressedClass}{
