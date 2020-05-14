@@ -2,6 +2,7 @@ import {SingleCollectionView} from './SingleCollectionView';
 import {CollectionCSS} from './CollectionCSS';
 import {IWonderCollection, IWonderCollectionMap} from './CollectionInterfaces';
 import {DomUtils} from '../../../app-core/DomUtils';
+import {WONDER} from '../../../Constants';
 
 type ViewMap = { [collectionName: string]: SingleCollectionView };
 
@@ -21,11 +22,7 @@ export class CollectionsView {
         this.shadow = document.createElement('div');
         this.shadow.id = CollectionCSS.shadowId;
         this.shadow.style.display = 'none';
-        this.shadow.style.position = 'absolute';
-        this.shadow.style.width = '100%';
-        this.shadow.style.height = '100%';
-        this.shadow.style.background = '#000';
-        this.shadow.style.opacity = '0.3';
+        this.shadow.className = WONDER.shadowScreenClass;
         this.shadow.addEventListener('mouseup', (event) => this.closeAll());
 
         document.body.appendChild(this.shadow);
