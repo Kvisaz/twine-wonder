@@ -27,7 +27,6 @@ export class SingleCollectionView {
     private listContentEl: HTMLElement;
 
     private readonly pageEl: HTMLElement;
-    private readonly pageContentEl: HTMLElement;
 
     private collectionName: string;
 
