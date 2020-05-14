@@ -17,7 +17,9 @@ import {Preprocessor} from './logic/preprocessor/Preprocessor';
 import {PreprocessPosition} from './logic/preprocessor/PreprocessorInterfaces';
 import {PostMessageApi} from './logic/PostMessageApi';
 import {
-    PassageType, SaveNameAuto,
+    GameMenuButtonDelay,
+    PassageType,
+    SaveNameAuto,
     SaveNameDefault,
     SavePrefixGame,
     SavePrefixGameAuto,
@@ -26,6 +28,14 @@ import {
 } from './logic/LogicConstants';
 import {IPassagePreparedCallback, IWonderButtonData} from './logic/LogicInterfaces';
 import {StartScreen} from './logic/start/StartScreen';
+import {GameMenu} from './logic/collections/menu/GameMenu';
+import {PostMessages} from './PostMessages';
+import {
+    BrowserMenuButtons,
+    DesktopMenuButtons,
+    MenuGameButtonLabel,
+    MenuGamTitleLabel
+} from './logic/collections/menu/GameMenuConstants';
 
 export class GameLogic {
     private readonly gameConfig;
@@ -46,12 +56,15 @@ export class GameLogic {
     private screenType: PassageType;
     private onScreenPrepareCallback: IPassagePreparedCallback;
 
-    private startScreen: StartScreen;
+    private readonly startScreen: StartScreen;
+    private readonly gameMenu: GameMenu;
+    private gameMenuButtons: Array<IWonderButtonData>;
 
     constructor() {
         console.log('GameLogic constructor.....')
         this.gameConfig = new GameConfig();
         this.startScreen = new StartScreen();
+        this.gameMenu = new GameMenu();
         this.history = new WonderHistory();
         this.collections = new Collections();
         this.preprocessor = new Preprocessor();
@@ -59,6 +72,9 @@ export class GameLogic {
         this.stateRepo = new StateRepository(this.postMessageApi);
         this.audioPlayer = new AudioPlayer();
         this.userScriptApi = new UserScriptApi(this.postMessageApi);
+
+        this.gameMenuButtons = BrowserMenuButtons;
+
         // @ts-ignore
         window.w = this.userScriptApi;
         // @ts-ignore
@@ -208,6 +224,15 @@ export class GameLogic {
             visitedPagesMap: {},
             pagesMap: {}
         });
+
+        setTimeout(() => {
+            this.gameMenu.setup({
+                mainButtonLabel: MenuGameButtonLabel,
+                winTitle: MenuGamTitleLabel,
+                buttons: this.gameMenuButtons,
+                buttonHandler: dataset => this.handleGameMenuButton(dataset)
+            })
+        }, GameMenuButtonDelay)
     }
 
     /***********************
@@ -404,6 +429,9 @@ export class GameLogic {
         console.log('...command', command.name);
         switch (command.name) {
             case UserScriptCommand.enableExternalApi:
+                this.gameMenuButtons = command.data == true
+                    ? DesktopMenuButtons
+                    : BrowserMenuButtons;
                 this.stateRepo.enableExternalApi(command.data)
                 break;
             case UserScriptCommand.saveSlot:
@@ -564,6 +592,37 @@ export class GameLogic {
         STORE.state.history.pages = [];
         STORE.state.history.pagesHash = {};
         this.startTwineGame(name);
+    }
+
+
+    /**************************
+     *  GameMenu
+     *********************/
+    private handleGameMenuButton(dataset: IWonderButtonData) {
+        if (dataset.command == WonderButtonCommand.restart) {
+            // todo dialog
+            this.restartAsync(dataset.name, dataset.delay);
+            return;
+        }
+
+        if (dataset.command == WonderButtonCommand.newGame) {
+            // todo dialog
+            this.restartAsync(dataset.name, '0');
+            return;
+        }
+
+        if (dataset.command == WonderButtonCommand.fullScreen) {
+            // todo dialog
+            this.postMessageApi.send(PostMessages.fullScreen);
+            return;
+        }
+
+        if (dataset.command == WonderButtonCommand.close) {
+            // todo dialog
+            this.postMessageApi.send(PostMessages.close);
+            return;
+        }
+
     }
 
     /**************************

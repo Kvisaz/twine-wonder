@@ -1,6 +1,7 @@
 // twine tags
 
 import {CollectionCSS} from './twine-game/logic/collections/CollectionCSS';
+import {GameMenuCSS} from './twine-game/logic/collections/menu/GameMenuCSS';
 
 export const STORY_SELECTOR = "tw-storydata";
 export const PASSAGE_SELECTOR = "tw-passagedata";
@@ -15,6 +16,7 @@ export const COMMON_CSS = {
 
 // wonder selector
 export const WONDER = {
+    shadowScreenClass: 'scr-shadow',
     preloadId: 'preload',
     preloadAnchorId: 'preload-anchor',
     startScreenId: 'start-screen',
@@ -121,6 +123,14 @@ export const DEFAULT_STYLE = `
         display: flex;
         justify-content: center;
         align-items: start;
+    }
+    
+    .${WONDER.shadowScreenClass} {
+       position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.3;
     }
     
     .${WONDER.newLineClass} {
@@ -369,6 +379,83 @@ export const DEFAULT_STYLE = `
           background-color: #ce9643;   
           border-radius: 20px;       
           border: 2px solid #efd0a6; 
+    }
+    
+    .${GameMenuCSS.mainButtonClass}{
+        font-size: 24px;
+        position: absolute;
+        background: #c6c3b2;
+        cursor: pointer;    
+        top: -132px;
+        right: -132px;
+        transform: scale(0.1);
+        transition:all 0.21s ease-out;
+        width: 132px;
+        height: 132px;
+        box-shadow: -2px 2px 6px rgba(0,0,0,0.5);   
+        border-radius: 0px 0px 0px 128px;
+    }
+    
+    .${GameMenuCSS.mainButtonVisibleClass}{
+        top: -4px;
+        right: -4px;
+        transform: scale(1);
+    }
+    
+    .${GameMenuCSS.mainButtonClass} svg{
+        position: absolute;
+        left: 44px;
+        bottom: 44px;
+        width: 64px;
+        height: 64px;
+    }
+    
+    .${GameMenuCSS.mainButtonClass} svg path{
+        stroke: #534633;
+        stroke-width: 2px;
+        fill: #362e23;
+        stroke-opacity: 0.5;
+    }
+    
+    .${GameMenuCSS.mainButtonClass} svg circle{
+        fill: beige;
+    }
+    
+    
+    
+    .${GameMenuCSS.mainButtonVisibleClass}:active{
+         box-shadow:none;
+         transform: translateY(2px);   
+    }
+    
+    
+    .${GameMenuCSS.mainButtonClassContent}{
+    }
+    
+    .${GameMenuCSS.winClass}{
+        position: absolute;
+        height: 95%;
+        width: 800px;        
+        top: 3%;
+        right: 0;
+        transform: translate(-100%, 0);        
+        background: beige;
+        overflow: auto;
+        transition-duration: 0.45s;
+        animation-timing-function: ease-out;
+        box-shadow: 1px 2px 6px rgba(0,0,0,0.65);
+    }
+    
+    .${GameMenuCSS.winVisibleClass}{
+        left: 50%;
+        transform: translate(-52%, 0);
+    }
+    
+    .${GameMenuCSS.winButtonClass}{
+        cursor: pointer;    
+        background: #5D7CC8;
+        width: 300px;
+        height: 125px;
     }
     
     @media screen and (max-width: 800px){

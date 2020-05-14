@@ -4,6 +4,8 @@ export const SavePrefixUser = 'w-user-';
 export const SaveNameDefault = 'data';
 export const SaveNameAuto = 'save';
 
+export const GameMenuButtonDelay = 1500;
+
 export const enum PassageType {
     none = 'none',
     preload = 'preload',
@@ -12,8 +14,10 @@ export const enum PassageType {
 }
 
 export const enum WonderButtonCommand {
-    newGame ='newGame',
-    continue ='continue',
-    back ='back',
-    restart = 'restart'
+    newGame = 'newGame',
+    continue = 'continue',
+    back = 'back',
+    restart = 'restart',
+    fullScreen = 'fullScreen',
+    close = 'close',
 }
