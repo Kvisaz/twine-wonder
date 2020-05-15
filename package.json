@@ -27,5 +27,7 @@
     "webpack-watch-files-plugin": "^1.0.2",
     "zip-a-folder": "0.0.12"
   },
-  "dependencies": {}
+  "dependencies": {
+    "kvisaz-dialog": "^0.1.0"
+  }
 }

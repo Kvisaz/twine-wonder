@@ -36,6 +36,7 @@ import {
     MenuGameButtonLabel,
     MenuGamTitleLabel
 } from './logic/collections/menu/GameMenuConstants';
+import {IKvisazLibButton, IKvisazLibDialogOptions} from 'kvisaz-dialog/src/kvisaz';
 
 export class GameLogic {
     private readonly gameConfig;
@@ -59,6 +60,7 @@ export class GameLogic {
     private readonly startScreen: StartScreen;
     private readonly gameMenu: GameMenu;
     private gameMenuButtons: Array<IWonderButtonData>;
+    private isDesktop = false;
 
     constructor() {
         console.log('GameLogic constructor.....')
@@ -227,10 +229,7 @@ export class GameLogic {
 
         setTimeout(() => {
             this.gameMenu.setup({
-                mainButtonLabel: MenuGameButtonLabel,
-                winTitle: MenuGamTitleLabel,
-                buttons: this.gameMenuButtons,
-                buttonHandler: dataset => this.handleGameMenuButton(dataset)
+                windowOptions: this.getMenuOptions()
             })
         }, GameMenuButtonDelay)
     }
@@ -429,9 +428,7 @@ export class GameLogic {
         console.log('...command', command.name);
         switch (command.name) {
             case UserScriptCommand.enableExternalApi:
-                this.gameMenuButtons = command.data == true
-                    ? DesktopMenuButtons
-                    : BrowserMenuButtons;
+                this.isDesktop = command.data == true;
                 this.stateRepo.enableExternalApi(command.data)
                 break;
             case UserScriptCommand.saveSlot:
@@ -598,6 +595,54 @@ export class GameLogic {
     /**************************
      *  GameMenu
      *********************/
+    private getMenuOptions(): IKvisazLibDialogOptions {
+        if (this.isDesktop) return this.getDesktopMenuOptions();
+        else return this.getBrowserMenuOptions();
+    }
+
+    private getMenuCommonOptions(): Partial<IKvisazLibDialogOptions> {
+        return {
+            addClass: 'game-menu-window',
+            title: 'Меню игры'
+        }
+    }
+
+    private getBrowserMenuOptions(): IKvisazLibDialogOptions {
+        return {
+            ...this.getMenuCommonOptions(),
+            buttons: [
+                {
+                    text: 'Рестарт',
+                    callback: () => {
+                        console.log('Рестарт игры');
+                        // todo предупреждение
+                        this.restartAsync(null, ''+0);
+                    }
+                }
+            ]
+        }
+    }
+
+    private getDesktopMenuOptions(): IKvisazLibDialogOptions {
+        const options = this.getBrowserMenuOptions();
+        const desktopButtons: Array<IKvisazLibButton> = [
+            {
+                text: 'Десктопная клавиша',
+                callback: () => {
+                    console.log('Десктопная клавиша');
+                    // todo предупреждение
+                }
+            }
+        ]
+
+        options.buttons = [
+            ...options.buttons,
+            ...desktopButtons
+        ]
+
+        return options;
+    }
+
     private handleGameMenuButton(dataset: IWonderButtonData) {
         if (dataset.command == WonderButtonCommand.restart) {
             // todo dialog

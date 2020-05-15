@@ -1,6 +1,10 @@
 import {GameLogic} from "./ts/twine-game/GameLogic";
 import {GameView} from "./ts/twine-game/GameView";
 import {getTwineStoryStyle} from './ts/parser/TwineParser';
+import 'kvisaz-dialog/src/kvisaz.js';
+
+console.log('Kvisaz lib check ::', window['Kvisaz']);
+
 
 // @ts-ignore from webpack
 const VERSION = VERSION_INFO;
