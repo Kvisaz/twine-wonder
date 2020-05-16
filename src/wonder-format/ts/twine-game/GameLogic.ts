@@ -37,6 +37,7 @@ import {
     MenuGamTitleLabel
 } from './logic/collections/menu/GameMenuConstants';
 import {IKvisazLibButton, IKvisazLibDialogOptions} from 'kvisaz-dialog/src/kvisaz';
+import {Strings} from '../../Strings';
 
 export class GameLogic {
     private readonly gameConfig;
@@ -603,7 +604,7 @@ export class GameLogic {
     private getMenuCommonOptions(): Partial<IKvisazLibDialogOptions> {
         return {
             addClass: 'game-menu-window',
-            title: 'Меню игры'
+            title: Strings.settingsTitle
         }
     }
 
@@ -612,12 +613,18 @@ export class GameLogic {
             ...this.getMenuCommonOptions(),
             buttons: [
                 {
-                    text: 'Рестарт',
+                    text: Strings.settingsContinue,
                     callback: () => {
-                        console.log('Рестарт игры');
-                        // todo предупреждение
-                        this.restartAsync(null, ''+0);
-                    }
+                        console.log(`click ${Strings.settingsContinue}`);
+                    },
+                },
+                {
+                    text: Strings.settingsRestart,
+                    callback: () => {
+                        console.log(`click ${Strings.settingsRestart}`);
+                        this.restartAsync(null, '' + 0);
+                    },
+                    warning: Strings.settingsRestartWarning
                 }
             ]
         }
@@ -627,11 +634,19 @@ export class GameLogic {
         const options = this.getBrowserMenuOptions();
         const desktopButtons: Array<IKvisazLibButton> = [
             {
-                text: 'Десктопная клавиша',
+                text: Strings.settingsFullScreen,
                 callback: () => {
-                    console.log('Десктопная клавиша');
-                    // todo предупреждение
+                    console.log(`click ${Strings.settingsFullScreen}`);
+                    this.postMessageApi.send(PostMessages.fullScreen, null);
                 }
+            },
+            {
+                text: Strings.settingsExit,
+                callback: () => {
+                    console.log(`click ${Strings.settingsExit}`);
+                    this.postMessageApi.send(PostMessages.close, null);
+                },
+                warning: Strings.settingsExitWarning
             }
         ]
 
