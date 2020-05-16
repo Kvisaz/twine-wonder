@@ -658,33 +658,6 @@ export class GameLogic {
         return options;
     }
 
-    private handleGameMenuButton(dataset: IWonderButtonData) {
-        if (dataset.command == WonderButtonCommand.restart) {
-            // todo dialog
-            this.restartAsync(dataset.name, dataset.delay);
-            return;
-        }
-
-        if (dataset.command == WonderButtonCommand.newGame) {
-            // todo dialog
-            this.restartAsync(dataset.name, '0');
-            return;
-        }
-
-        if (dataset.command == WonderButtonCommand.fullScreen) {
-            // todo dialog
-            this.postMessageApi.send(PostMessages.fullScreen);
-            return;
-        }
-
-        if (dataset.command == WonderButtonCommand.close) {
-            // todo dialog
-            this.postMessageApi.send(PostMessages.close);
-            return;
-        }
-
-    }
-
     /**************************
      *  ..
      *********************/
