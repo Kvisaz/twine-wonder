@@ -384,7 +384,7 @@ export const DEFAULT_STYLE = `
     
     .${GameMenuCSS.mainButtonClass}{
         font-size: 24px;
-        position: absolute;
+        position: fixed;
         background: #c6c3b2;
         cursor: pointer;    
         top: -132px;
