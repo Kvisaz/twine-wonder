@@ -1,5 +1,6 @@
 import {IWonderHistoryState} from './logic/WonderHistoryInterfaces';
 import {IWonderCollectionMap} from './logic/collections/CollectionInterfaces';
+import {IMap} from '../abstract/WonderInterfaces';
 
 export interface IAppState {
     gameVars: object; // любые кастомные переменные
@@ -8,7 +9,11 @@ export interface IAppState {
 
 // состояние юзера - не меняется при рестарте
 export interface IUserState {
+    /**
+     * @deprecated - коллекции инициализируется в начале игры
+     */
     collectionMap: IWonderCollectionMap;
+    visitedPageMap: IMap<boolean>;
 }
 
 export class AppState implements IAppState {
@@ -20,5 +25,9 @@ export class AppState implements IAppState {
 }
 
 export class UserState implements IUserState {
-    collectionMap = {}
+    /**
+     * @deprecated - коллекции инициализируется в начале игры
+     */
+    collectionMap = {};
+    visitedPageMap = {};
 }

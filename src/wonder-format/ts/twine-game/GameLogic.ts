@@ -38,6 +38,7 @@ import {
 } from './logic/collections/menu/GameMenuConstants';
 import {IKvisazLibButton, IKvisazLibDialogOptions} from 'kvisaz-dialog/src/kvisaz';
 import {Strings} from '../../Strings';
+import {UserStateUtils} from './UserStateUtils';
 
 export class GameLogic {
     private readonly gameConfig;
@@ -159,10 +160,12 @@ export class GameLogic {
                     ...STORE.user,
                     ...state
                 }
+
+                UserStateUtils.restoreCollectedAsVisited(STORE.user);
             }
             console.log('initUserState...  STORE.user', STORE.user);
 
-            this.collections.onUserStateReady();
+            this.collections.onUserStateReady(STORY_STORE.story, STORE.user.visitedPageMap);
             resolve();
         })
     }
@@ -208,7 +211,6 @@ export class GameLogic {
 
     private execStoryScript() {
         this.preprocessor.beforeInitUserScript();
-        this.collections.beforeInitUserScript();
         this.exeScript(STORY_STORE.story.script, this.defaultGameVars);
         this.execUserScriptCommands();
     }
@@ -292,6 +294,7 @@ export class GameLogic {
 
         this.collections.onPassage(passage);
         this.history.add(name); // текущий узел идёт в историю
+        STORE.user.visitedPageMap[name] = true; // помечаем общую посещаемость
 
         this.preprocessor.exec(passage);
         // тут могут быть вызваны команды
