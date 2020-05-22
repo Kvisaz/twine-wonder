@@ -1,14 +1,21 @@
-import {IPageVisitChecker} from '../../abstract/WonderInterfaces';
+import {IMap, IPageVisitChecker} from '../../abstract/WonderInterfaces';
 import {IWonderHistoryState} from './WonderHistoryInterfaces';
-import {STORE} from '../Stores';
+import {STORE, STORY_STORE} from '../Stores';
+import {ITwinePassage, ITwineStory} from '../../abstract/TwineModels';
 
 export class WonderHistory implements IPageVisitChecker {
     constructor() {
 
     }
-    getState(): IWonderHistoryState {
+
+    private getState(): IWonderHistoryState {
         return STORE.state.history
     }
+
+    private getStory(): ITwineStory {
+        return STORY_STORE.story;
+    }
+
     add(name: string) {
 
         if (name == null) return;
@@ -41,4 +48,22 @@ export class WonderHistory implements IPageVisitChecker {
         const PAGES = this.getState().pages;
         return PAGES[PAGES.length - 1];
     }
+
+    getLastExisting(): string {
+        const existingPages: IMap<ITwinePassage> = this.getStory().passageHash;
+        const PAGES: Array<string> = this.getState().pages;
+
+        let nextPage: string;
+        for (let i = PAGES.length - 1; i >= 0; i--) {
+            nextPage = PAGES[i];
+            if (existingPages[nextPage] != null) return nextPage;
+            else {
+                PAGES.pop(); // удаляем последний несуществующий элемент
+            }
+        }
+
+        return null;
+    }
+
+
 }

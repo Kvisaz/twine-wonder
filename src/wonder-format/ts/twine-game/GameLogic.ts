@@ -239,8 +239,7 @@ export class GameLogic {
      * Start Twine Game
      ***********************/
     private getStartPage(story: ITwineStory, state: IAppState): string {
-        const hPages = state.history.pages;
-        const lastPage = hPages[hPages.length - 1];
+        const lastPage = this.history.getLastExisting();
         return lastPage != null ? lastPage : story.startPassageName;
     }
 
