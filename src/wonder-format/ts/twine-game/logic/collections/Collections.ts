@@ -13,6 +13,7 @@ export class Collections {
     private collectionsView: CollectionsView;
 
     constructor() {
+        this.rules = [];
         this.collectionsView = new CollectionsView();
     }
 
