@@ -1,5 +1,5 @@
 import {ITwinePassage} from '../../../abstract/TwineModels';
-import {PRELOAD_PAGE_TEMPLATE, WONDER} from '../../../Constants';
+import {BT_START_TEMPLATE, PRELOAD_PAGE_TEMPLATE, WONDER} from '../../../Constants';
 import {IStartScreenOptions} from './StartScreenInterfaces';
 import {WonderButtonCommand} from '../LogicConstants';
 
@@ -75,8 +75,12 @@ export class StartScreen {
         return str == null ? def.trim() : str;
     }
 
-    private getButtonCode(title: string, id: string, command: WonderButtonCommand): string {
-        return `<div id="${id}" class="${WONDER.buttonClass}" data-command="${command}">${title}</div>`;
+    private getButtonCode(label: string, id: string, command: WonderButtonCommand): string {
+        const code = BT_START_TEMPLATE
+            .replace(WONDER.replace.button.id, id)
+            .replace(WONDER.replace.button.command, command)
+            .replace(WONDER.replace.button.label, label)
+        return code;
     }
 
     private getNewGameButtonCode(options: Partial<IStartScreenOptions>): string {

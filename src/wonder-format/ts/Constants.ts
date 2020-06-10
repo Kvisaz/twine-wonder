@@ -50,7 +50,6 @@ export const WONDER = {
     },
     passages: {
         config: "wonder.config",
-        // todo
         pageFormat: "wonder.format.page",
         choiceFormat: "wonder.format.choice",
         textFormat: "wonder.format.text",
@@ -58,6 +57,14 @@ export const WONDER = {
     markLang: {
         varStart: "var",
         commandSplitter: ":",
+    },
+    replace: {
+        button: {
+            id:  '#id#',
+            command:  '#command#',
+            label:  '#label#',
+        }
+
     },
     inlineStart: "=",
 
@@ -81,18 +88,19 @@ export const PAGE_TEMPLATE = `<div class="${WONDER.noSelectClass} ${WONDER.pageC
 
 export const LINK_TEMPLATE = `<button class="${WONDER.linkClass}  ${WONDER.linkAloneClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</button>`;
 
-export const LINK_INLINE_TEMPLATE = `<span class="${WONDER.linkClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`
+export const LINK_INLINE_TEMPLATE = `<span  class="${WONDER.inlineClass}" ><button class="${WONDER.linkClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</button></span>`
 
 export const BACK_TEMPLATE = `<button class="${WONDER.backClass}">Назад</button>`;
+
+export const BT_START_TEMPLATE = `<button id="${WONDER.replace.button.id}" class="${WONDER.buttonClass}" data-command="${WONDER.replace.button.command}">${WONDER.replace.button.label}</button>`;
 
 // done 0 скрипты через {{}}
 // todo 1 произвольное создание параметров, инжектирование в params
 // rejected 2 общий шаблон Passage-Template - конфликт display: none с flex
 // done 3 flex css для page
 export const PASSAGE_TEMPLATE = `<div class="${WONDER.pageContentClass}">
-${BACK_TEMPLATE}
 <div class="${WONDER.paramClass}" ><div id="gold"></div></div>
-<div class="${WONDER.textClass}"><text/></div>
+<div class="${WONDER.textClass}"><text/>${BACK_TEMPLATE}</div>
 </div>`;
 
 //language=CSS
@@ -103,6 +111,7 @@ export const DEFAULT_STYLE = `
     .page .displayNone, .displayNone {
         display: none; 
     }
+    
     html, body{height: 100%}
     .pointerOver {
         cursor: pointer;
@@ -125,9 +134,9 @@ export const DEFAULT_STYLE = `
         align-items: start;
     }
     
-    
     button {
         border: none;
+        font-family: "Verdana", "Roboto", "Open Sans", sans-serif;
     }
     
     .${WONDER.shadowScreenClass} {
@@ -164,13 +173,20 @@ export const DEFAULT_STYLE = `
         
     .${WONDER.paramClass}{
         margin-bottom: 12px;
-    }
+    }        
         
-        
-    .${WONDER.textClass} {
+    .${WONDER.textClass}, .${WONDER.textClass} button {
         margin: 0;
         font-size: 18px;
         line-height: 26px;
+    }
+    
+    .${WONDER.textClass} p {
+        margin: 1em 0;
+    }
+    
+    #${WONDER.startScreenId} button {
+        margin: 0 auto 1em; 
     }
     
     .${WONDER.linkClass}{
@@ -180,13 +196,9 @@ export const DEFAULT_STYLE = `
         border-radius: 5px;
         background: #d5c695;
     }   
-    
+        
     .${WONDER.inlineClass} .${WONDER.linkClass}{
         display: inline;
-        cursor: pointer;
-        padding: 5px 35px;
-        border-radius: 5px;
-        background: #d5c695;
     }  
     
         
@@ -211,7 +223,7 @@ export const DEFAULT_STYLE = `
         margin-left: 0;
         margin-right: auto;
         margin-bottom: 4px;
-        padding: 4px;
+        padding: 5px 35px 5px 17px;
         border-radius: 5px;
         background: #eae2c5;
         color: #6c6c6c;
@@ -225,7 +237,7 @@ export const DEFAULT_STYLE = `
         cursor: pointer;
         display: block;
         margin: 4px auto 0.65em;
-        width: 8em;
+        width: 12em;
         text-align: center;
         background: #c6c3b2;
         padding: 12px;
@@ -247,8 +259,7 @@ export const DEFAULT_STYLE = `
     }
     
     .${WONDER.linkAloneClass}:hover{
-        margin-top: -2px;
-        margin-bottom: 2px;
+        transform: translateY(-2px);
         box-shadow: 2px 2px 1px #414141;
     }
     
