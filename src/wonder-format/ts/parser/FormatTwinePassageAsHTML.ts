@@ -45,8 +45,12 @@ function wrapLineReturnsAsParagraphs(content: string): string {
     const lines = content.split(/(?:\r\n|\r|\n)/);
 
     const paragraphs = lines
-        .filter(line => line.trim().length > 0)
-        .map((line, i) => `<p>${line}</p>`);
+        .map((line, i) => {
+                line = line.trim();
+                if (line.length == 0) return '';
+                return `<p>${line}</p>`;
+            }
+        );
 
     return paragraphs.join('\n');
 }
