@@ -27,7 +27,7 @@ export function formatTwinePassageAsHTML(content: string, template: string): str
         .trim();
 
     // переводы строк в br
-    content = content.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    content = wrapLineReturnsAsParagraphs(content);
 
 
     // 99. вставляем текст
@@ -35,6 +35,20 @@ export function formatTwinePassageAsHTML(content: string, template: string): str
     code = code.replace(MARKER.text, content.trim());
 
     return code;
+}
+
+function formatLineReturnsAsBreaks(content: string): string {
+    return content.replace(/(?:\r\n|\r|\n)/g, '<br>');
+}
+
+function wrapLineReturnsAsParagraphs(content: string): string {
+    const lines = content.split(/(?:\r\n|\r|\n)/);
+
+    const paragraphs = lines
+        .filter(line => line.trim().length > 0)
+        .map((line, i) => `<p>${line}</p>`);
+
+    return paragraphs.join('\n');
 }
 
 /**
