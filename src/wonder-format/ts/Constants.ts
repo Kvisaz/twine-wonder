@@ -123,6 +123,9 @@ export const DEFAULT_STYLE = `
         list-style: none;
     }
     
+    h1:first-letter, .${WONDER.textClass} p:first-letter { text-transform: uppercase; }
+    h1::first-letter, .${WONDER.textClass} p::first-letter { text-transform: uppercase; }
+    
     body {
         margin: 0;
         padding: 0;
