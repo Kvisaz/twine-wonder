@@ -79,11 +79,11 @@ export const PRELOAD_PAGE_TEMPLATE = `<div id=${WONDER.preloadAnchorId}></div>`;
 
 export const PAGE_TEMPLATE = `<div class="${WONDER.noSelectClass} ${WONDER.pageClass}"></div>`;
 
-export const LINK_TEMPLATE = `<span class="${WONDER.linkClass}  ${WONDER.linkAloneClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`;
+export const LINK_TEMPLATE = `<button class="${WONDER.linkClass}  ${WONDER.linkAloneClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</button>`;
 
 export const LINK_INLINE_TEMPLATE = `<span class="${WONDER.linkClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</span>`
 
-export const BACK_TEMPLATE = `<div class="${WONDER.backClass}">Назад</div>`;
+export const BACK_TEMPLATE = `<button class="${WONDER.backClass}">Назад</button>`;
 
 // done 0 скрипты через {{}}
 // todo 1 произвольное создание параметров, инжектирование в params
@@ -123,6 +123,11 @@ export const DEFAULT_STYLE = `
         display: flex;
         justify-content: center;
         align-items: start;
+    }
+    
+    
+    button {
+        border: none;
     }
     
     .${WONDER.shadowScreenClass} {

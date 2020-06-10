@@ -1,5 +1,5 @@
 var SOURCE = '<!DOCTYPE html>\n' +
-    '    <html>\n' +
+    '    <html lang="ru">\n' +
     '        <head>\n' +
     '            <meta name="viewport" content="width=device-width, initial-scale=1">\n' +
     '            <meta charset="utf-8">\n' +
