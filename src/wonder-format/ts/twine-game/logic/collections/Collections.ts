@@ -81,6 +81,7 @@ export class Collections {
         const collectionsMap = this.buildCollectionMap(collections);
 
         this.calculateAmounts(story, rulesMap, collectionsMap, visitedPageMap);
+        this.removeNullCollections(collectionsMap);
 
         this.rulesMap = rulesMap;
         this.collectionsMap = collectionsMap;
@@ -169,5 +170,12 @@ export class Collections {
 
     private getTags(passage: ITwinePassage): Array<string> {
         return passage.tags.split(' ');
+    }
+
+    private removeNullCollections(collectionsMap: IWonderCollectionMap) {
+        Object.keys(collectionsMap).forEach(key=>{
+            const collection = collectionsMap[key];
+            if(collection.maxAmount<1) delete collectionsMap[key]
+        })
     }
 }
