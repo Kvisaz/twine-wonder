@@ -3,21 +3,21 @@ import {CollectionCSS} from './CollectionCSS';
 import {IWonderCollection, IWonderCollectionMap} from './CollectionInterfaces';
 import {DomUtils} from '../../../app-core/DomUtils';
 import {WONDER} from '../../../Constants';
+import {SideBarView} from '../../SideBarView';
 
 type ViewMap = { [collectionName: string]: SingleCollectionView };
 
 export class CollectionsView {
     private readonly viewMap: ViewMap;
-    private readonly buttonWrapper: HTMLElement;
     private readonly shadow: HTMLElement;
 
     private isViewCreated = false;
 
     constructor() {
         this.viewMap = {};
-        this.buttonWrapper = document.createElement('div');
-        this.buttonWrapper.id = CollectionCSS.wrapperId;
-        this.buttonWrapper.addEventListener('mouseup', (event) => this.findButton(event));
+
+        const sideBarElement = SideBarView.getSideBar1();
+        sideBarElement.addEventListener('mouseup', (event) => this.findButton(event));
 
         this.shadow = document.createElement('div');
         this.shadow.id = CollectionCSS.shadowId;
@@ -29,7 +29,8 @@ export class CollectionsView {
     }
 
     createButtons(collectionMap: IWonderCollectionMap) {
-        this.buttonWrapper.innerHTML = ''; // clear
+
+        const sideBarElement = SideBarView.getSideBar1();
 
         Object.keys(collectionMap).forEach(collectionName => {
             const collection = collectionMap[collectionName];
@@ -37,12 +38,11 @@ export class CollectionsView {
             this.viewMap[collectionName] = view;
             view.update(collection);
             view.onCollectionShow(collectionName => this.onCollectionShow(collectionName))
-            view.attach(this.buttonWrapper);
+            view.attach(sideBarElement);
         })
 
         this.isViewCreated = true;
 
-        document.body.appendChild(this.buttonWrapper);
     }
 
     updateButtons(collectionMap: IWonderCollectionMap) {

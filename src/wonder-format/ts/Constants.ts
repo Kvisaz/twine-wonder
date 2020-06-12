@@ -17,6 +17,9 @@ export const COMMON_CSS = {
 export const WONDER = {
     shadowScreenClass: 'scr-shadow',
     preloadId: 'preload',
+    wrapperId: 'wrapperId',
+    sideBarId: 'sideBarId',
+    sideBar2Id: 'sideBar2Id',
     preloadAnchorId: 'preload-anchor',
     startScreenId: 'start-screen',
     newGameBtId: 'new-game-button',

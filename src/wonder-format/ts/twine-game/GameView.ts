@@ -7,6 +7,7 @@ import {VisibleParams} from "./logic/GameConfig";
 import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
 import {IMap} from '../abstract/WonderInterfaces';
 import {DEFAULT_STYLE} from '../CSSdefault';
+import {SideBarView} from './SideBarView';
 
 export class GameView {
     private readonly el: Element;
@@ -15,9 +16,20 @@ export class GameView {
     constructor(storyStyle: string) {
         this.injectStyle(DEFAULT_STYLE);
         this.injectStyle(storyStyle);
+
+        const wrapper = document.createElement("div");
+        wrapper.id = WONDER.wrapperId;
+
+        const sideBar1 = SideBarView.createSideBar1();
+        const sideBar2 = SideBarView.createSideBar2();
+
         this.el = document.createElement("div");
         this.el.id = WONDER.contentId;
-        document.body.appendChild(this.el);
+
+        wrapper.appendChild(sideBar1);
+        wrapper.appendChild(this.el);
+        wrapper.appendChild(sideBar2);
+        document.body.appendChild(wrapper);
 
         this.el.addEventListener("click", this);
 
@@ -52,11 +64,11 @@ export class GameView {
 
         // нашли элемент?
         const hasElement = linkElement != null;
-        if(!hasElement) return false;
+        if (!hasElement) return false;
 
         // защита от двойных кликов
         const notPressedYet = !linkElement.classList.contains(WONDER.pressedClass);
-        if(notPressedYet){
+        if (notPressedYet) {
             linkElement.classList.add(WONDER.pressedClass);
             callback(linkElement, e);
         }

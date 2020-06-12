@@ -12,6 +12,10 @@ export const DEFAULT_STYLE = `
         display: none; 
     }
     
+    tw-story, tw-storydata {
+        display: none;
+    }
+    
     html, body{height: 100%}
     
     ul, li {
@@ -29,13 +33,20 @@ export const DEFAULT_STYLE = `
         background: #ceceb7;
         font-family: "Verdana", "Roboto", "Open Sans", sans-serif;
         position: relative;
+        
+    }
+    
+    #${WONDER.wrapperId}{
+        width: 100%;
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
+        flex-direction: row;
         align-items: start;
     }
     
     button {
         border: none;
+        padding: 0;
         font-family: "Verdana", "Roboto", "Open Sans", sans-serif;
     }
     
@@ -45,6 +56,8 @@ export const DEFAULT_STYLE = `
         height: 100%;
         background: #000;
         opacity: 0.3;
+        top:0;
+        left: 0;
     }
     
     .${WONDER.newLineClass} {
@@ -160,28 +173,32 @@ export const DEFAULT_STYLE = `
     .${WONDER.linkAloneClass}:hover{
         transform: translateY(-2px);
         box-shadow: 2px 2px 1px #414141;
-    }
+    }    
     
-    #${CollectionCSS.wrapperId}{
-        position: absolute;
-        top: 0;
-        left: 0;
+    #${WONDER.sideBarId}{
         display: flex;
         flex-direction: column;
     }
     
-    .${CollectionCSS.button}{
-        width: 96px;     
-        line-height: 1em;
-        background: antiquewhite;
-        margin-top: 24px;
-        text-align: center;
-        cursor: pointer;
-        box-shadow: 1px 2px 6px black;
+    #${WONDER.sideBarId} button {
+        width: 96px;
+        margin-right: 0;
+        margin-top: 16px;
+        box-shadow: none;
+        border-radius: 0 8px 8px 0;
+        border: 1px slategrey solid;
+        overflow: hidden;
+    }   
+    
+    #${WONDER.sideBarId} button:hover {
+        transform: translateY(-2px);
     }
     
-    .${CollectionCSS.button}:hover {
-        transform: scale(1.09) translateX(4px);
+    .${CollectionCSS.button}{
+        line-height: 1em;
+        background: antiquewhite;
+        text-align: center;
+        cursor: pointer;
         box-shadow: 1px 2px 6px black;
     }
     
@@ -190,7 +207,8 @@ export const DEFAULT_STYLE = `
         text-align: center;
         height: 1em;
         line-height: 1em;
-        background: #b66e13;
+        background: #643903;
+        color: #dedede;
         margin-bottom: 12px;
         padding: 2px;
     }
@@ -296,7 +314,7 @@ export const DEFAULT_STYLE = `
     }
     
     #${GameMenuCSS.mainButtonId}{
-        position: fixed;
+        order: 0;
         background: #c6c3b2;
         cursor: pointer; 
         width: 96px;
@@ -306,22 +324,8 @@ export const DEFAULT_STYLE = `
         align-items: center;
         padding: 0;
         margin: 0;
-        border-radius: 0 0 0 10px;
-        border: 1px slategrey solid;
     }
     
-    .${GameMenuCSS.mainButtonClass}{
-        top: -132px;
-        right: -132px;
-        transform: scale(0.1);
-        transition:all 0.35s ease-out;
-    }
-    
-    .${GameMenuCSS.mainButtonVisibleClass}{
-        top: -1px;
-        right: -1px;
-        transform: scale(1);
-    }
     
     #${GameMenuCSS.mainButtonId} svg{
         

@@ -4,18 +4,19 @@ import {IKvisazLibDialogOptions, IKvisazLibrary} from 'kvisaz-dialog/src/kvisaz'
 import {IcSvgSettings} from '../../../ConstantsSvg';
 import {DomUtils} from '../../../app-core/DomUtils';
 import {GAME_MENU_BUTTON_TEMPLATE} from '../../../Constants';
+import {SideBarView} from '../../SideBarView';
 
 export class GameMenu {
     private readonly buttonEl: HTMLElement;
-    private parent: HTMLElement;
     private windowOptions: IKvisazLibDialogOptions;
 
     constructor() {
         console.log('GameMenu constructor....');
-        this.parent = document.body;
         this.buttonEl = this.createButton(GameMenuCSS.mainButtonClass);
         this.buttonEl.addEventListener('click', e => this.onMainButtonClick(e))
-        this.parent.appendChild(this.buttonEl);
+
+        const sideBarElement = SideBarView.getSideBar1();
+        sideBarElement.appendChild(this.buttonEl);
     }
 
     setup(options: IGameMenuOptions) {

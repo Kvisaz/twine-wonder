@@ -63,7 +63,8 @@ export class SingleCollectionView {
      *  create elements
      *******************/
     private createButton(className: string): HTMLElement {
-        const bt = this.createDiv(className);
+        const bt = document.createElement('button');
+        bt.className = className;
 
         this.buttonTitleEl = this.createDiv(CollectionCSS.buttonTitle);
         this.buttonContentEl = this.createDiv(CollectionCSS.buttonContent);
