@@ -1,8 +1,8 @@
-//language=CSS
 import {CollectionCSS} from './twine-game/logic/collections/CollectionCSS';
 import {WONDER} from './Constants';
 import {GameMenuCSS} from './twine-game/logic/menu/GameMenuCSS';
 
+//language=CSS
 const DEFAULT_CSS = `
      * {user-select: none;}
     .noselect { user-select: none; }    
@@ -83,7 +83,7 @@ const DEFAULT_CSS = `
         margin: 1em 0;
     }
     
-    #${WONDER.startScreenId} button {
+    #${WONDER.startScreenId} .w-button {
         margin: 0 auto 1em; 
     }
     
@@ -294,43 +294,46 @@ const DEFAULT_CSS = `
           border: 2px solid #efd0a6; 
     }
     
-    .${GameMenuCSS.mainButtonClass}{
-        font-size: 24px;
+    #${GameMenuCSS.mainButtonId}{
         position: fixed;
         background: #c6c3b2;
-        cursor: pointer;    
+        cursor: pointer; 
+        width: 96px;
+        height: 68px;
+        display: flex;
+        justify-content:center;
+        align-items: center;
+        padding: 0;
+        margin: 0;
+        border-radius: 0 0 0 10px;
+        border: 1px slategrey solid;
+    }
+    
+    .${GameMenuCSS.mainButtonClass}{
         top: -132px;
         right: -132px;
         transform: scale(0.1);
-        transition:all 0.21s ease-out;
-        width: 132px;
-        height: 132px;
-        box-shadow: -2px 2px 6px rgba(0,0,0,0.5);   
-        border-radius: 0px 0px 0px 128px;
+        transition:all 0.35s ease-out;
     }
     
     .${GameMenuCSS.mainButtonVisibleClass}{
-        top: -4px;
-        right: -4px;
+        top: -1px;
+        right: -1px;
         transform: scale(1);
     }
     
-    .${GameMenuCSS.mainButtonClass} svg{
-        position: absolute;
-        left: 44px;
-        bottom: 44px;
-        width: 64px;
-        height: 64px;
+    #${GameMenuCSS.mainButtonId} svg{
+        
     }
     
-    .${GameMenuCSS.mainButtonClass} svg path{
+    #${GameMenuCSS.mainButtonId} svg path{
         stroke: #534633;
         stroke-width: 2px;
         fill: #362e23;
         stroke-opacity: 0.5;
     }
     
-    .${GameMenuCSS.mainButtonClass} svg circle{
+    #${GameMenuCSS.mainButtonId} svg circle{
         fill: beige;
     }
     

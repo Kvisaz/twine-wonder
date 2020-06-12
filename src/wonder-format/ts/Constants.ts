@@ -1,5 +1,7 @@
 // twine tags
 
+import {GameMenuCSS} from './twine-game/logic/menu/GameMenuCSS';
+
 export const STORY_SELECTOR = "tw-storydata";
 export const PASSAGE_SELECTOR = "tw-passagedata";
 
@@ -90,6 +92,8 @@ export const LINK_INLINE_TEMPLATE = `<span  class="${WONDER.inlineClass}" ><butt
 export const BACK_TEMPLATE = `<button class="${WONDER.backClass}">Назад</button>`;
 
 export const BT_START_TEMPLATE = `<button id="${WONDER.replace.button.id}" class="${WONDER.buttonClass}" data-command="${WONDER.replace.button.command}">${WONDER.replace.button.label}</button>`;
+
+export const GAME_MENU_BUTTON_TEMPLATE = `<button id="${GameMenuCSS.mainButtonId}" class="${GameMenuCSS.mainButtonClass}">${WONDER.replace.button.label}</button>`;
 
 // done 0 скрипты через {{}}
 // todo 1 произвольное создание параметров, инжектирование в params

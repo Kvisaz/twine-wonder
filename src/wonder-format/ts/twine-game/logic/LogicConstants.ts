@@ -4,7 +4,7 @@ export const SavePrefixUser = 'w-user-';
 export const SaveNameDefault = 'data';
 export const SaveNameAuto = 'save';
 
-export const GameMenuButtonDelay = 2500;
+export const GameMenuButtonDelay = 0;
 
 export const enum PassageType {
     none = 'none',

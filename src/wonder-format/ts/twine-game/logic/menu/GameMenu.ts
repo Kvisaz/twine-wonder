@@ -2,6 +2,8 @@ import {GameMenuCSS} from './GameMenuCSS';
 import {IGameMenuOptions} from './GameMenuInterfaces';
 import {IKvisazLibDialogOptions, IKvisazLibrary} from 'kvisaz-dialog/src/kvisaz';
 import {IcSvgSettings} from '../../../ConstantsSvg';
+import {DomUtils} from '../../../app-core/DomUtils';
+import {GAME_MENU_BUTTON_TEMPLATE} from '../../../Constants';
 
 export class GameMenu {
     private readonly buttonEl: HTMLElement;
@@ -33,14 +35,9 @@ export class GameMenu {
     /********************
      *  create elements
      *******************/
-    private createDiv(className: string): HTMLElement {
-        const div = document.createElement('div');
-        div.className = className;
-        return div;
-    }
-
     private createButton(className: string): HTMLElement {
-        const el = this.createDiv(className);
+        const el = <HTMLElement>DomUtils.elementFromTemplate(GAME_MENU_BUTTON_TEMPLATE);
+        el.className = className;
         el.innerHTML = IcSvgSettings;
         return el;
     }
