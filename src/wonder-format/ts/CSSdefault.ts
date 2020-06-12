@@ -346,28 +346,7 @@ const DEFAULT_CSS = `
     }
     
     .${GameMenuCSS.winClass}{
-        position: absolute;
-        height: 95%;
-        width: 800px;        
-        top: 3%;
-        right: 0;
-        transform: translate(-100%, 0);        
-        background: beige;
-        transition-duration: 0.45s;
-        animation-timing-function: ease-out;
-        box-shadow: 1px 2px 6px rgba(0,0,0,0.65);
-    }
-    
-    .${GameMenuCSS.winVisibleClass}{
-        left: 50%;
-        transform: translate(-52%, 0);
-    }
-    
-    .${GameMenuCSS.winButtonClass}{
-        cursor: pointer;    
-        background: #5D7CC8;
-        width: 300px;
-        height: 125px;
+        
     }
     
     @media screen and (max-width: 800px){

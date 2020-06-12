@@ -606,7 +606,7 @@ export class GameLogic {
 
     private getMenuCommonOptions(): Partial<IKvisazLibDialogOptions> {
         return {
-            addClass: 'game-menu-window',
+            addClass: GameMenuCSS.winClass,
             title: Strings.settingsTitle
         }
     }
