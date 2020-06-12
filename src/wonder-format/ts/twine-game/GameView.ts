@@ -1,11 +1,12 @@
 import {EventBus} from "../app-core/EventBus";
 import {GameEvents, PageViewData} from "./GameEvents";
-import {DEFAULT_STYLE, WONDER} from "../Constants";
+import {WONDER} from "../Constants";
 import {WonderPageView} from "./view/WonderPageView";
 import {DomUtils} from "../app-core/DomUtils";
 import {VisibleParams} from "./logic/GameConfig";
 import {ITwinePassage, ITwineStory} from "../abstract/TwineModels";
 import {IMap} from '../abstract/WonderInterfaces';
+import {DEFAULT_STYLE} from '../CSSdefault';
 
 export class GameView {
     private readonly el: Element;
