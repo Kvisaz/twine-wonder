@@ -1,5 +1,5 @@
-import {IWonderButtonData} from '../../LogicInterfaces';
-import {WonderButtonCommand} from '../../LogicConstants';
+import {IWonderButtonData} from '../LogicInterfaces';
+import {WonderButtonCommand} from '../LogicConstants';
 
 export const MenuGameButtonLabel = 'Настройки';
 export const MenuGamTitleLabel = 'Настройки';

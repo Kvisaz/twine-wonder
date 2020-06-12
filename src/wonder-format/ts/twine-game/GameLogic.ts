@@ -28,17 +28,18 @@ import {
 } from './logic/LogicConstants';
 import {IPassagePreparedCallback, IWonderButtonData} from './logic/LogicInterfaces';
 import {StartScreen} from './logic/start/StartScreen';
-import {GameMenu} from './logic/collections/menu/GameMenu';
+import {GameMenu} from './logic/menu/GameMenu';
 import {PostMessages} from './PostMessages';
 import {
     BrowserMenuButtons,
     DesktopMenuButtons,
     MenuGameButtonLabel,
     MenuGamTitleLabel
-} from './logic/collections/menu/GameMenuConstants';
+} from './logic/menu/GameMenuConstants';
 import {IKvisazLibButton, IKvisazLibDialogOptions} from 'kvisaz-dialog/src/kvisaz';
 import {Strings} from '../../Strings';
 import {UserStateUtils} from './UserStateUtils';
+import {GameMenuCSS} from './logic/menu/GameMenuCSS';
 
 export class GameLogic {
     private readonly gameConfig;

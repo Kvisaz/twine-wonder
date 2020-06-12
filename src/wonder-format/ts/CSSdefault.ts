@@ -1,7 +1,7 @@
 //language=CSS
 import {CollectionCSS} from './twine-game/logic/collections/CollectionCSS';
-import {GameMenuCSS} from './twine-game/logic/collections/menu/GameMenuCSS';
 import {WONDER} from './Constants';
+import {GameMenuCSS} from './twine-game/logic/menu/GameMenuCSS';
 
 const DEFAULT_CSS = `
      * {user-select: none;}

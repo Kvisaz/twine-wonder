@@ -1,7 +1,7 @@
 import {GameMenuCSS} from './GameMenuCSS';
 import {IGameMenuOptions} from './GameMenuInterfaces';
-import {IcSvgSettings} from '../../../../ConstantsSvg';
 import {IKvisazLibDialogOptions, IKvisazLibrary} from 'kvisaz-dialog/src/kvisaz';
+import {IcSvgSettings} from '../../../ConstantsSvg';
 
 export class GameMenu {
     private readonly buttonEl: HTMLElement;
