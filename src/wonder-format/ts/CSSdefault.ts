@@ -1,9 +1,10 @@
 import {CollectionCSS} from './twine-game/logic/collections/CollectionCSS';
 import {WONDER} from './Constants';
 import {GameMenuCSS} from './twine-game/logic/menu/GameMenuCSS';
+import {CSSDefaultMobileStyle} from './CSSDefaultMobileStyle';
 
 //language=CSS
-const DEFAULT_CSS = `
+export const DEFAULT_STYLE = `
      * {user-select: none;}
     .noselect { user-select: none; }    
     .select {  user-select: text; }
@@ -162,11 +163,8 @@ const DEFAULT_CSS = `
     }
     
     #${CollectionCSS.wrapperId}{
-        position: absolute;
         display: flex;
         flex-direction: column;
-        top: 0;
-        left: 0;
     }
     
     .${CollectionCSS.button}{
@@ -352,13 +350,5 @@ const DEFAULT_CSS = `
         
     }
     
-    @media screen and (max-width: 800px){
-        .${WONDER.contentId} {
-             width: 100%;
-             margin: 0;
-             border-radius: 0;
-        }
-    }
+    ${CSSDefaultMobileStyle}
 `;
-
-export const DEFAULT_STYLE = DEFAULT_CSS.trim();
