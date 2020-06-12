@@ -208,7 +208,7 @@ const DEFAULT_CSS = `
         width: 800px;        
         top: 10%;
         left: 0;
-        transform: translate(-100%, 0);
+        transform: translate(-110%, 0);
         background: #876b38;
         transition-duration: 0.45s;
         animation-timing-function: ease-out;
@@ -266,7 +266,7 @@ const DEFAULT_CSS = `
         width: 800px;        
         top: 3%;
         left: 0;
-        transform: translate(-100%, 0);        
+        transform: translate(-110%, 0);        
         background: beige;
         transition-duration: 0.45s;
         animation-timing-function: ease-out;
