@@ -239,9 +239,8 @@ export class SingleCollectionView {
     }
 
     private getItemTemplate(title: string, name: string): string {
-        return `<div class=${CollectionCSS.listItem} data-name="${name}">${title}</div>`
+        return `<button class=${CollectionCSS.listItem} data-name="${name}">${title}</button>`
     }
-
 
 }
 
