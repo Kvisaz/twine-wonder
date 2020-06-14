@@ -9,8 +9,8 @@ export const COMMON_CSS = {
     displayNone: "displayNone",
     pointerOver: "pointerOver",
     visited: "visited",
-    back: "back"
-
+    back: "back",
+    back2: "back2"
 };
 
 // wonder selector
@@ -41,6 +41,7 @@ export const WONDER = {
     paramClass: 'params',
     visitedClass: COMMON_CSS.visited,
     backClass: COMMON_CSS.back,
+    backClass2: COMMON_CSS.back2,
     invisibleClass: COMMON_CSS.displayNone,
     template: {
         text: "<text/>",
@@ -93,6 +94,7 @@ export const LINK_TEMPLATE = `<button class="${WONDER.linkClass}  ${WONDER.linkA
 export const LINK_INLINE_TEMPLATE = `<span  class="${WONDER.inlineClass}" ><button class="${WONDER.linkClass}" data-id="${WONDER.template.choiceId}">${WONDER.template.choiceText}</button></span>`
 
 export const BACK_TEMPLATE = `<button class="${WONDER.backClass}">Назад</button>`;
+export const BACK_COLLECTION_TEMPLATE = `<button class="${WONDER.backClass} ${WONDER.backClass2}">Закрыть</button>`;
 
 export const BT_START_TEMPLATE = `<button id="${WONDER.replace.button.id}" class="${WONDER.buttonClass}" data-command="${WONDER.replace.button.command}">${WONDER.replace.button.label}</button>`;
 
@@ -107,3 +109,6 @@ export const PASSAGE_TEMPLATE = `<div class="${WONDER.pageContentClass}">
 <div class="${WONDER.textClass}"><text/>${BACK_TEMPLATE}</div>
 </div>`;
 
+export const PASSAGE_COLLECTION_TEMPLATE = `<div class="${WONDER.pageContentClass}">
+${BACK_COLLECTION_TEMPLATE}<div class="${WONDER.textClass}"><text/>${BACK_TEMPLATE}</div>
+</div>`;

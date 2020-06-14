@@ -1,10 +1,10 @@
 import {GameMenuCSS} from './GameMenuCSS';
 import {IGameMenuOptions} from './GameMenuInterfaces';
-import {IKvisazLibDialogOptions, IKvisazLibrary} from 'kvisaz-dialog/src/kvisaz';
 import {IcSvgSettings} from '../../../ConstantsSvg';
 import {DomUtils} from '../../../app-core/DomUtils';
 import {GAME_MENU_BUTTON_TEMPLATE} from '../../../Constants';
 import {SideBarView} from '../../SideBarView';
+import {IKvisazLibDialogOptions, IKvisazLibrary} from 'kvisaz-dialog/src/kvisaz';
 
 export class GameMenu {
     private readonly buttonEl: HTMLElement;
@@ -29,7 +29,7 @@ export class GameMenu {
      *  click
      *******************/
     private onMainButtonClick(e: MouseEvent) {
-        const Kvisaz:IKvisazLibrary = window['Kvisaz'];
+        const Kvisaz: IKvisazLibrary = window['Kvisaz'];
         Kvisaz.dialog(this.windowOptions);
     }
 

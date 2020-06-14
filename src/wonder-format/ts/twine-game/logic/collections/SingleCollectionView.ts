@@ -3,7 +3,6 @@
  *
  *   1. each turn
  *      - update buttons
- *      - update lists
  *   2. on button click
  *      - show list
  *   3. on list click
@@ -14,45 +13,42 @@ import {ITwinePassage} from '../../../abstract/TwineModels';
 import {ICollectionShowCallback, IWonderCollection} from './CollectionInterfaces';
 import {STORY_STORE} from '../../Stores';
 import {formatTwinePassageAsHTML} from '../../../parser/FormatTwinePassageAsHTML';
-import {PASSAGE_TEMPLATE, REGEXP} from '../../../Constants';
+import {PASSAGE_COLLECTION_TEMPLATE, REGEXP} from '../../../Constants';
 import {DomUtils} from '../../../app-core/DomUtils';
+import {IKvisazLibDialogOptions, IKvisazLibrary} from 'kvisaz-dialog/src/kvisaz';
+
+const itemSelector = '.' + CollectionCSS.listItem;
+const closeButtonSelector = '.' + CollectionCSS.listCloseButton;
 
 export class SingleCollectionView {
     private readonly buttonEl: HTMLElement;
     private buttonTitleEl: HTMLElement;
     private buttonContentEl: HTMLElement;
 
-    private readonly listEl: HTMLElement;
-    private listTitleEl: HTMLElement;
-    private listContentEl: HTMLElement;
-
-    private readonly pageEl: HTMLElement;
-
     private collectionName: string;
+    private collection: IWonderCollection;
 
     private onButtonClickCallback: ICollectionShowCallback;
 
     constructor(
         private buttonClass = CollectionCSS.button,
-        private listClass = CollectionCSS.list,
-        private pageClass = CollectionCSS.page
     ) {
         this.buttonEl = this.createButton(buttonClass);
-        this.listEl = this.createList(listClass);
-        this.pageEl = this.createPage(pageClass);
     }
 
     attach(el?: HTMLElement) {
         el = el || document.body;
-        document.body.appendChild(this.listEl);
-        document.body.appendChild(this.pageEl);
+        /*        document.body.appendChild(this.listEl);
+                document.body.appendChild(this.pageEl);*/
         el.appendChild(this.buttonEl);
     }
 
     update(collection: IWonderCollection) {
         this.updateButton(collection);
-        this.updateListTitle(collection);
-        this.updateList(collection);
+        this.collection = collection;
+
+        // this.updateListTitle(collection);
+        // this.updateList(collection);
     }
 
     onCollectionShow(callback: ICollectionShowCallback) {
@@ -73,28 +69,6 @@ export class SingleCollectionView {
         bt.appendChild(this.buttonContentEl);
 
         return bt;
-    }
-
-    private createList(className: string): HTMLElement {
-        const list = this.createDiv(className);
-
-        list.addEventListener('click', (e) => this.findItem(e));
-        //list.addEventListener('mouseup', () => this.closeCollection());
-
-
-        this.listTitleEl = this.createDiv(CollectionCSS.listTitle);
-        this.listContentEl = this.createDiv(CollectionCSS.listContent);
-
-        list.appendChild(this.listTitleEl);
-        list.appendChild(this.listContentEl);
-
-        return list;
-    }
-
-    private createPage(className: string): HTMLElement {
-        const page = this.createDiv(className);
-        page.addEventListener('mouseup', () => this.closePage());
-        return page;
     }
 
     /********************
@@ -127,19 +101,62 @@ export class SingleCollectionView {
             ' ' + completedClass;
     }
 
-    private updateListTitle(collection: IWonderCollection) {
-        this.listTitleEl.innerHTML = collection.title;
+    /********************
+     *  SHOW LIST
+     *******************/
+    showCollection() {
+        console.log('ToDo showCollection....');
+
+        // @ts-ignore
+        const winOptions: IKvisazLibDialogOptions = {
+            addClass: CollectionCSS.list,
+            html: this.getListHtml(this.collection),
+            onClick: e => this.onCollectionClick(e)
+        }
+
+        this.showKvisazWindow(winOptions);
+
+        if (this.onCollectionShow) this.onButtonClickCallback(this.collectionName);
     }
 
-    private updateList(collection: IWonderCollection) {
+    private onCollectionClick(e) {
+        console.log('ToDo onCollectionClick....');
 
-        const LIST = this.listEl;
-        const LIST_CONTENT = this.listContentEl;
+        // @ts-ignore
+        const closeButton: HTMLElement = DomUtils.closest(e.target, closeButtonSelector);
+        if (closeButton) {
+            this.closeKvisazWindow(e);
+        }
 
-        // clear list
-        LIST_CONTENT.innerHTML = '';
+        // @ts-ignore
+        const listItem: HTMLElement = DomUtils.closest(e.target, itemSelector);
+        if (listItem) {
+            const name = listItem.dataset.name;
+            this.onItemClick(name);
+            return;
+        }
 
-        // create code
+    }
+
+    private getListHtml(collection: IWonderCollection): string {
+        console.log('ToDo getListHtml....');
+
+        const closeButton: string = this.getCloseButton();
+        const listTitle: string = `<h1 class="${CollectionCSS.listTitle}">${collection.title}</h1>`
+        const listHeader: string = `<div class="${CollectionCSS.listHeader}">${listTitle} ${closeButton}</div>`
+
+
+        const listItems: string = this.getItemsHTML(collection);
+        const listContent: string = `<div class="${CollectionCSS.listContent}">${listItems}</div>`;
+
+        return listHeader + listContent;
+    }
+
+    private getCloseButton():string {
+        return `<button class="${CollectionCSS.listCloseButton}">Закрыть</button>`;
+    }
+
+    private getItemsHTML(collection: IWonderCollection): string {
         const passageMap = STORY_STORE.story.passageHash;
         let newList = '';
         collection.collected.forEach((name) => {
@@ -149,62 +166,30 @@ export class SingleCollectionView {
             newList += itemTemplate;
         });
 
-        // fill list
-        LIST_CONTENT.innerHTML = newList;
-
-        // list classes
-        LIST.className = CollectionCSS.list + ' ' + this.collectionName;
-    }
-
-    private updatePage(passage: ITwinePassage) {
-        const PAGE = this.pageEl;
-
-        // clear
-        PAGE.innerHTML = '';
-
-        // parse content
-        // чистим контент от возможных скриптов
-        const cleanedContent = passage.content.replace(REGEXP.exeScript,
-            '');
-        const PAGE_TEMPLATE = PASSAGE_TEMPLATE;
-        const html = formatTwinePassageAsHTML(cleanedContent, PAGE_TEMPLATE);
-
-        console.log('updatePage', html, passage);
-
-        // fill list
-        PAGE.innerHTML = html;
-    }
-
-    /********************
-     *  SHOW LIST
-     *******************/
-    showCollection() {
-        this.listEl.classList.add(CollectionCSS.listShow);
-        if (this.onCollectionShow) this.onButtonClickCallback(this.collectionName);
+        return newList;
     }
 
     closeCollection() {
-        this.listEl.classList.remove(CollectionCSS.listShow);
         this.closePage(); // если была открыта страница - убираем и её
     }
 
     /********************
      *  FIND PAGE
      *******************/
-    private findItem(e: MouseEvent) {
-        const item: HTMLElement = <HTMLElement>DomUtils.closest(e.target as HTMLElement, `.${CollectionCSS.listItem}`);
-        if (item) this.onItemClick(item.dataset.name);
-    }
 
     private onItemClick(name: string) {
         const passage = STORY_STORE.story.passageHash[name];
+
+        console.log('onItemClick', passage);
+
+
         if (passage == null) {
             console.warn('SingleCollectionView.onItemClick: cannot find' + name);
             return;
         }
 
-        this.updatePage(passage);
-        this.showPage();
+        // this.updatePage(passage);
+        this.showPage(passage);
     }
 
     /********************
@@ -214,19 +199,53 @@ export class SingleCollectionView {
         let title = innerText(passageContent, '<h1>', '</h1>');
         if (title == null || title.length == 0) {
             title = getFirstLine(passageContent);
-            }
+        }
         return title;
     }
 
     /********************
      *  SHOW PAGE
      *******************/
-    private showPage() {
-        this.pageEl.classList.add(CollectionCSS.pageShow);
+    private showPage(passage: ITwinePassage) {
+        //this.pageEl.classList.add(CollectionCSS.pageShow);
+
+        // parse content
+        // чистим контент от возможных скриптов
+        const pageHTML: string = this.getPassageHTML(passage);
+
+        // @ts-ignore
+        const winOptions: IKvisazLibDialogOptions = {
+            html: pageHTML,
+            addClass: CollectionCSS.page,
+            onClick: e => this.onPageClick(e)
+        }
+
+        this.showKvisazWindow(winOptions);
+    }
+
+    private onPageClick(e: MouseEvent) {
+        this.closeKvisazWindow(e);
+    }
+
+    private getPassageHTML(passage: ITwinePassage): string {
+        const cleanedContent = passage.content.replace(REGEXP.exeScript,
+            '');
+        return formatTwinePassageAsHTML(cleanedContent, PASSAGE_COLLECTION_TEMPLATE);
     }
 
     private closePage() {
-        this.pageEl.classList.remove(CollectionCSS.pageShow);
+        // this.pageEl.classList.remove(CollectionCSS.pageShow);
+    }
+
+    private showKvisazWindow(options: IKvisazLibDialogOptions) {
+        const Kvisaz: IKvisazLibrary = window['Kvisaz'];
+        Kvisaz.dialog(options);
+    }
+
+    private closeKvisazWindow(e: MouseEvent) {
+        const kvisazWrapper = e.currentTarget as HTMLElement;
+        const Kvisaz: IKvisazLibrary = window['Kvisaz'];
+        Kvisaz.close(kvisazWrapper);
     }
 
     /********************

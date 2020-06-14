@@ -218,16 +218,29 @@ export const DEFAULT_STYLE = `
     }
     
     .${CollectionCSS.list}{
-        position: absolute;
-        height: 89%;
-        width: 800px;        
-        top: 10%;
+        /*position: absolute;
+        height: 89%;*/
+        width: 800px;
+        height: 100%;        
+        /*top: 10%;
         left: 0;
-        transform: translate(-110%, 0);
-        background: #876b38;
-        transition-duration: 0.45s;
-        animation-timing-function: ease-out;
-        box-shadow: 1px 2px 6px rgba(0,0,0,0.65);
+        transform: translate(-110%, 0);*/
+        background: beige;
+       /* transition-duration: 0.45s;
+        animation-timing-function: ease-out;*/
+        box-shadow: 1px 2px 6px rgba(0,0,0,0.65);       
+    }
+    
+    .kvisaz-createWindow-content {
+        height: 100%;
+        display: flex;
+        flex-direction: column;  
+    }
+    
+    .${CollectionCSS.list} .kvisaz-createWindow-content {
+        padding: 12px;
+        color: antiquewhite;
+        background: #815f3d;   
     }
     
     .${CollectionCSS.listShow}{
@@ -235,19 +248,34 @@ export const DEFAULT_STYLE = `
         transform: translate(-49%, 0);
     }
     
+    .${CollectionCSS.listHeader}{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+     }    
+     
     .${CollectionCSS.listTitle}{
-        font-size: 32px;    
-         color: antiquewhite;   
-        margin: 12px;
+        font-size: 32px;
+        margin: 2px;
+     }
+     
+     .${CollectionCSS.listCloseButton}{
+        border-radius: 8px;
+        font-size: 12px;
+        height: 32px;
+        background: beige;
      }
         
-    .${CollectionCSS.listContent}{
-        
+    .${CollectionCSS.listContent}{        
         padding: 12px;
         background: #d7d7c5;
+        color: black;
         border: 1px solid #afafaf;
-        height: 90%;
+        overflow: auto;
+        flex: 1;
     }
+    
     button.${CollectionCSS.listItem}{
          font-size: 24px;
          width: 100%;
@@ -280,25 +308,24 @@ export const DEFAULT_STYLE = `
     }
     
     .${CollectionCSS.page}{
-        position: absolute;
         height: 95%;
         width: 800px;        
-        top: 3%;
-        left: 0;
-        transform: translate(-110%, 0);        
         background: beige;
-        transition-duration: 0.45s;
-        animation-timing-function: ease-out;
         box-shadow: 1px 2px 6px rgba(0,0,0,0.65);
     }
     
-    .${CollectionCSS.pageContent}{
-        margin: 12px 12px 16px;
+    .${CollectionCSS.page} h1{
+        margin: 0;
     }
     
-    .${CollectionCSS.pageShow}{
-        left: 50%;
-        transform: translate(-47%, 0);
+    .${CollectionCSS.page} .${WONDER.pageContentClass} {
+        overflow: auto;
+    }
+    
+    .${CollectionCSS.page} .${WONDER.backClass2} {
+        position: absolute;
+        right: 4px;
+        top: 4px;
     }
     
     .${CollectionCSS.page}::-webkit-scrollbar { width: 32px; }
@@ -354,6 +381,10 @@ export const DEFAULT_STYLE = `
     
     .${GameMenuCSS.winClass}{
         
+    }
+    
+    .kvisaz-createWindow button{
+        min-width: 100px;
     }
     
     ${CSSDefaultMobileStyle}

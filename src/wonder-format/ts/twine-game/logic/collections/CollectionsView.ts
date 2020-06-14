@@ -2,14 +2,13 @@ import {SingleCollectionView} from './SingleCollectionView';
 import {CollectionCSS} from './CollectionCSS';
 import {IWonderCollection, IWonderCollectionMap} from './CollectionInterfaces';
 import {DomUtils} from '../../../app-core/DomUtils';
-import {WONDER} from '../../../Constants';
 import {SideBarView} from '../../SideBarView';
 
 type ViewMap = { [collectionName: string]: SingleCollectionView };
 
 export class CollectionsView {
     private readonly viewMap: ViewMap;
-    private readonly shadow: HTMLElement;
+    // private readonly shadow: HTMLElement;
 
     private isViewCreated = false;
 
@@ -19,13 +18,6 @@ export class CollectionsView {
         const sideBarElement = SideBarView.getSideBar1();
         sideBarElement.addEventListener('mouseup', (event) => this.findButton(event));
 
-        this.shadow = document.createElement('div');
-        this.shadow.id = CollectionCSS.shadowId;
-        this.shadow.style.display = 'none';
-        this.shadow.className = WONDER.shadowScreenClass;
-        this.shadow.addEventListener('mouseup', (event) => this.closeAll());
-
-        document.body.appendChild(this.shadow);
     }
 
     createButtons(collectionMap: IWonderCollectionMap) {
@@ -75,29 +67,21 @@ export class CollectionsView {
 
     private findButton(e: MouseEvent) {
         const button: HTMLElement = <HTMLElement>DomUtils.closest(e.target as HTMLElement, `.${CollectionCSS.button}`);
+        if (button == null) return;
 
-        if (button) {
-            const collectionName = button.dataset.collection;
-            console.log('findButton ', collectionName);
-            Object.keys(this.viewMap).forEach(name => {
-                const view = this.viewMap[name];
-                if (view == null) {
-                    console.warn('Collections.findButton - null view', collectionName);
-                    return;
-                }
-
-                if (name == collectionName) {
-                    this.shadow.style.display = 'block';
-                    view.showCollection();
-                } else view.closeCollection();
-            })
-        }
-    }
-
-    private closeAll() {
+        const collectionName = button.dataset.collection;
+        console.log('findButton ', collectionName);
         Object.keys(this.viewMap).forEach(name => {
-            this.viewMap[name].closeCollection();
-        });
-        this.shadow.style.display = 'none';
+            const view = this.viewMap[name];
+            if (view == null) {
+                console.warn('Collections.findButton - null view', collectionName);
+                return;
+            }
+
+            if (name == collectionName) {
+                //this.shadow.style.display = 'block';
+                view.showCollection();
+            } else view.closeCollection();
+        })
     }
 }

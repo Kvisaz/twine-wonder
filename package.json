@@ -28,6 +28,6 @@
     "zip-a-folder": "0.0.12"
   },
   "dependencies": {
-    "kvisaz-dialog": "^0.2.0"
+    "kvisaz-dialog": "^0.2.2"
   }
 }
