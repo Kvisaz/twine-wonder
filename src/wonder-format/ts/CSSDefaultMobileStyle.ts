@@ -19,29 +19,36 @@ export const CSSDefaultMobileStyle = `
         align-items: center;
     }
     
+             
+    #${WONDER.contentId} {
+         order: 0;   
+         width: 100%;
+         margin: 0;
+         border-radius: 0;
+         flex: 1;
+    }
+    
     #${WONDER.sideBarId}{
+        order: 1;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         top: 0;
         left: 0;
+        justify-content: center;
+        align-items: center;
       }
       
     #${WONDER.sideBarId} button {
         width: 96px;
         height: 72px;
         margin-right: 8px;
-        margin-top: 0;
-        margin-bottom: 8px;
+        margin-top: 4px;
+        margin-bottom: 4px;
         border-radius: 8px;
         box-shadow: none;
     }    
-            
-    #${WONDER.contentId} {
-         width: 100%;
-         margin: 0;
-         border-radius: 0;
-    }
+   
             
     .${CollectionCSS.list}, .${CollectionCSS.page} {
          width: 100%;

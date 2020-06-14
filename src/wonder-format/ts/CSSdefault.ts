@@ -38,6 +38,7 @@ export const DEFAULT_STYLE = `
     
     #${WONDER.wrapperId}{
         width: 100%;
+        height: 100%;
         display: flex;
         justify-content: space-between;
         flex-direction: row;
@@ -48,6 +49,7 @@ export const DEFAULT_STYLE = `
         border: none;
         padding: 0;
         font-family: "Verdana", "Roboto", "Open Sans", sans-serif;
+        cursor: pointer;
     }
     
     .${WONDER.shadowScreenClass} {
@@ -67,6 +69,7 @@ export const DEFAULT_STYLE = `
     #${WONDER.contentId} {
         width: 800px;
         border-radius: 0 0 8px 8px;
+        overflow: auto;
     }
     
     .${WONDER.pageClass} {
@@ -88,13 +91,12 @@ export const DEFAULT_STYLE = `
     }        
         
     .${WONDER.textClass}, .${WONDER.textClass} button {
-        margin: 0;
-        font-size: 18px;
-        line-height: 26px;
+        margin: 0;    
+        font-size: 18px;    
     }
     
     .${WONDER.textClass} p {
-        margin: 1em 0;
+        margin: 1em 0;        
     }
     
     #${WONDER.startScreenId} .w-button {
@@ -103,7 +105,6 @@ export const DEFAULT_STYLE = `
     
     .${WONDER.linkClass}{
         display: block;
-        cursor: pointer;
         padding: 5px 35px;
         border-radius: 5px;
         background: #d5c695;
@@ -130,8 +131,6 @@ export const DEFAULT_STYLE = `
      }
     
     .${WONDER.backClass} {
-        cursor: pointer;
-        display: inline-block;
         margin-left: 0;
         margin-right: auto;
         margin-bottom: 4px;
@@ -146,7 +145,6 @@ export const DEFAULT_STYLE = `
      }
      
      .${WONDER.buttonClass} {
-        cursor: pointer;
         display: block;
         margin: 4px auto 0.65em;
         width: 12em;
@@ -159,7 +157,6 @@ export const DEFAULT_STYLE = `
      
      .${WONDER.pressedClass}{
         opacity: 0.55;
-        cursor: auto;
      }
     
     .${WONDER.buttonClass}:not(.${WONDER.pressedClass}):active {
@@ -198,7 +195,6 @@ export const DEFAULT_STYLE = `
         line-height: 1em;
         background: antiquewhite;
         text-align: center;
-        cursor: pointer;
         box-shadow: 1px 2px 6px black;
     }
     
@@ -246,13 +242,17 @@ export const DEFAULT_STYLE = `
      }
         
     .${CollectionCSS.listContent}{
-        font-size: 24px;
+        
         padding: 12px;
         background: #d7d7c5;
         border: 1px solid #afafaf;
         height: 90%;
     }
-    .${CollectionCSS.listItem}{ 
+    button.${CollectionCSS.listItem}{
+         font-size: 24px;
+         width: 100%;
+         text-align: left;
+         display: block;    
          padding: 12px;
          border: 1px solid #afafaf;
          cursor: pointer;
@@ -316,7 +316,6 @@ export const DEFAULT_STYLE = `
     #${GameMenuCSS.mainButtonId}{
         order: 0;
         background: #c6c3b2;
-        cursor: pointer; 
         width: 96px;
         height: 68px;
         display: flex;
