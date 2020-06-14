@@ -40,6 +40,9 @@ export class GameMenu {
         const el = <HTMLElement>DomUtils.elementFromTemplate(GAME_MENU_BUTTON_TEMPLATE);
         el.className = className;
         el.innerHTML = IcSvgSettings;
+        const BUTTON_LABEL = "Меню игры";
+        el.setAttribute('aria-label', BUTTON_LABEL)
+        el.setAttribute('title', BUTTON_LABEL)
         return el;
     }
 
